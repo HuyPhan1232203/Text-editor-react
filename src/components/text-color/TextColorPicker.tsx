@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Editor } from '@tiptap/react'
+import { Editor, useEditorState } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Check, X } from 'lucide-react'
@@ -26,8 +26,14 @@ export function TextColorPicker ({ editor }: TextColorPickerProps) {
   const [open, setOpen] = useState(false)
   const [customColor, setCustomColor] = useState('#000000')
 
-  const currentColor = editor.getAttributes('textStyle').color || '#000000'
+  const editorState = useEditorState({
+    editor,
+    selector: ctx => ({
+      currentColor: ctx.editor.getAttributes('textStyle').color || '#000000'
+    })
+  })
 
+  const currentColor = editorState.currentColor
   const handleColorSelect = (color: string) => {
     editor.chain().focus().setColor(color).run()
     setOpen(false)

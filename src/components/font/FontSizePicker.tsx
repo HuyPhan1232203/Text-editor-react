@@ -1,6 +1,6 @@
 // FontSizePicker.tsx
 import { useState } from 'react'
-import { Editor } from '@tiptap/react'
+import { Editor, useEditorState } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
@@ -12,24 +12,37 @@ interface FontSizePickerProps {
 
 const FONT_SIZES = [
   { label: '8pt', value: '8pt' },
+  { label: '9pt', value: '9pt' },
   { label: '10pt', value: '10pt' },
+  { label: '11pt', value: '11pt' },
   { label: '12pt', value: '12pt' },
+  { label: '13pt', value: '13pt' },
   { label: '14pt', value: '14pt' },
+  { label: '15pt', value: '15pt' },
   { label: '16pt', value: '16pt' },
+  { label: '17pt', value: '17pt' },
   { label: '18pt', value: '18pt' },
+  { label: '19pt', value: '19pt' },
   { label: '20pt', value: '20pt' },
   { label: '24pt', value: '24pt' },
-  { label: '28pt', value: '28pt' },
-  { label: '32pt', value: '32pt' },
-  { label: '36pt', value: '36pt' },
-  { label: '48pt', value: '48pt' }
+  { label: '28pt', value: '28pt' }
+
 ]
+
+const DEFAULT_FONT_SIZE = '11pt'
 
 export function FontSizePicker ({ editor }: FontSizePickerProps) {
   const [open, setOpen] = useState(false)
   const [customSize, setCustomSize] = useState('')
 
-  const currentSize = editor.getAttributes('textStyle').fontSize || '16pt'
+  const editorState = useEditorState({
+    editor,
+    selector: ctx => ({
+      currentSize: ctx.editor.getAttributes('textStyle').fontSize || DEFAULT_FONT_SIZE
+    })
+  })
+
+  const currentSize = editorState.currentSize
 
   const handleSizeSelect = (size: string) => {
     editor.chain().focus().setFontSize(size).run()
@@ -80,6 +93,36 @@ export function FontSizePicker ({ editor }: FontSizePickerProps) {
 
       <PopoverContent className='w-48 p-2' align='start'>
         <div className='space-y-1 max-h-64 overflow-y-auto'>
+          <div className='border-t pt-2 mt-2'>
+            <div className='flex gap-2'>
+              <input
+                type='text'
+                placeholder='Tùy chỉnh'
+                value={customSize}
+                onChange={(e) => setCustomSize(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleCustomSize()}
+                className='flex-1 px-2 py-1 text-sm border rounded'
+              />
+              <Button
+                onClick={handleCustomSize}
+                size='sm'
+                variant='outline'
+              >
+                OK
+              </Button>
+            </div>
+          </div>
+          {/* Nếu currentSize không nằm trong danh sách, hiển thị nó riêng */}
+          {!FONT_SIZES.some(f => f.value === currentSize) && (
+            <button
+              onClick={() => handleSizeSelect(currentSize)}
+              className='w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors hover:bg-gray-100 bg-blue-50 text-blue-700'
+            >
+              <span className='flex-1 text-left'>{currentSize}pt</span>
+              <Check className='w-4 h-4 text-blue-700 shrink-0' />
+            </button>
+          )}
+
           {FONT_SIZES.map((size) => {
             const isActive = currentSize === size.value
 
@@ -99,26 +142,6 @@ export function FontSizePicker ({ editor }: FontSizePickerProps) {
             )
           })}
 
-          <div className='border-t pt-2 mt-2'>
-            <div className='flex gap-2'>
-              <input
-                type='text'
-                placeholder='Tùy chỉnh'
-                value={customSize}
-                onChange={(e) => setCustomSize(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleCustomSize()}
-                className='flex-1 px-2 py-1 text-sm border rounded'
-              />
-              <Button
-                onClick={handleCustomSize}
-                size='sm'
-                variant='outline'
-              >
-                OK
-              </Button>
-            </div>
-            <p className='text-xs text-gray-500 mt-1 px-2'>VD: 20px, 1.5rem</p>
-          </div>
         </div>
       </PopoverContent>
     </Popover>

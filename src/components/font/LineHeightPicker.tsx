@@ -32,9 +32,9 @@ export function LineHeightPicker ({ editor }: LineHeightPickerProps) {
     const node = $from.node($from.depth)
 
     if (node && (node.type.name === 'paragraph' || node.type.name === 'heading')) {
-      return node.attrs.lineHeight || 'normal'
+      return node.attrs.lineHeight || '1'
     }
-    return 'normal'
+    return '1'
   }
 
   const currentLineHeight = getCurrentLineHeight()
