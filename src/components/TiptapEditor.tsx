@@ -9,17 +9,14 @@ import { Link } from '@tiptap/extension-link'
 import { Highlight } from '@tiptap/extension-highlight'
 import { ImageUploadNode } from './tiptap-node/image-upload-node'
 import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
-import '@/components/tiptap-node/image-upload-node/image-upload-node.scss'
 import { Color } from '@tiptap/extension-color'
-import { LinkPopover } from './tiptap-ui/link-popover'
 import { TableCellToolbar } from './tableTiptap/TableCellToolbar'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Button } from './ui/button'
-import { FileJson } from 'lucide-react'
+import { FileCode } from 'lucide-react'
 import { PageSettingsDialog } from './PageSettingDialog'
-import { convertTiptapToDocModel } from '@/helper/tiptap-to-docx'
+import { mmToPx } from '@/utils/convertUnit'
 
-// Configure extensions
 const extensions = [
   TextStyle,
   StarterKit,
@@ -63,15 +60,13 @@ const extensions = [
     types: ['textStyle']
   }),
   TextAlign.configure({
-    types: ['heading', 'paragraph'], // Áp dụng cho heading và paragraph
+    types: ['heading', 'paragraph'],
     alignments: ['left', 'center', 'right', 'justify'],
     defaultAlignment: 'left'
   }),
-
   Highlight.configure({
     multicolor: true
   }),
-  // Link.configure({ openOnClick: false }),
   ImageUploadNode.configure({
     accept: 'image/*',
     maxSize: MAX_FILE_SIZE,
@@ -93,139 +88,147 @@ export default function TiptapEditor () {
     rightMargin: 25.4
   })
 
-  const [showJsonPreview, setShowJsonPreview] = useState(false)
-  const [generatedJson, setGeneratedJson] = useState<string>('')
+  const [showHtmlPreview, setShowHtmlPreview] = useState(false)
+  const [generatedHtml, setGeneratedHtml] = useState<string>('')
+
   const editor = useEditor({
     extensions,
     content: `
-      <h2>Tiptap Editor với Table</h2>
-      <p>Click vào icon <strong>Table</strong> trên toolbar để tạo table.</p>
-      <p>Khi cursor ở trong table, icon <strong>Settings</strong> sẽ xuất hiện để truy cập các chức năng table.</p>
+      <table class="tiptap-table" style="min-width: 178px;"><colgroup><col style="width: 128px;"><col style="width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr class="tiptap-table-row"><th class="tiptap-table-header" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">adssad</p></th><th class="tiptap-table-header" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;"></p></th><th class="tiptap-table-header" colspan="1" rowspan="1"><p style="text-align: left;">jn</p></th></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">kjn</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">jkb</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">k</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">h</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">kb</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">hkjb</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">hj</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">bhj</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">b</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">hjb</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">jh</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">bjh</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">bjh</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">b</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">jb</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">b</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;"></p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;"></p></td></tr></tbody></table><h2 style="text-align: left;">Tiptap Editor với Table</h2><p style="text-align: left;">Click vào icon <strong>Table</strong> trên toolbar để tạo table.</p><p style="text-align: left;">Khi cursor ở trong table, icon <strong>Settings</strong> sẽ xuất hiện để truy cập các chức năng table.</p>
     `,
     editorProps: {
       attributes: {
-        class: 'prose prose-sm max-w-none focus:outline-none p-4 min-h-[400px]'
+        class: 'tiptap-editor-content focus:outline-none'
       }
     }
   })
 
+  const editorPadding = useMemo(() => {
+    const mmToPx = (mm: number) => (mm / 25.4) * 96
+
+    return {
+      top: mmToPx(pageSettings.topMargin),
+      right: mmToPx(pageSettings.rightMargin),
+      bottom: mmToPx(pageSettings.bottomMargin),
+      left: mmToPx(pageSettings.leftMargin)
+    }
+  }, [pageSettings])
+
   if (!editor) {
     return null
   }
-  const handleExportDocModel = () => {
-    // Lấy Tiptap JSON
-    const tiptapJSON = editor.getJSON()
 
-    // Convert sang DocModel format
-    const docModelJSON = convertTiptapToDocModel(tiptapJSON, {
-      topMargin: pageSettings.topMargin,
-      bottomMargin: pageSettings.bottomMargin,
-      leftMargin: pageSettings.leftMargin,
-      rightMargin: pageSettings.rightMargin
-    })
+  const handleExportHtml = () => {
+    // ✅ Sử dụng getHTML() thay vì getJSON()
+    const htmlContent = editor.getHTML()
 
-    // Format JSON đẹp
-    const jsonString = JSON.stringify(docModelJSON, null, 2)
+    setGeneratedHtml(htmlContent)
+    setShowHtmlPreview(true)
 
-    // Hiển thị preview
-    setGeneratedJson(jsonString)
-    setShowJsonPreview(true)
-
-    // Download file
-    const blob = new Blob([jsonString], { type: 'application/json' })
+    // Download HTML file
+    const blob = new Blob([htmlContent], { type: 'text/html' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
 
     a.href = url
-    a.download = `document-${Date.now()}.json`
+    a.download = `document-${Date.now()}.html`
     a.click()
     URL.revokeObjectURL(url)
 
-    console.log('DocModel JSON:', docModelJSON)
+    console.log('HTML Content:', htmlContent)
   }
 
-  // Copy JSON to clipboard
-  const handleCopyJson = () => {
-    navigator.clipboard.writeText(generatedJson)
-    alert('Đã copy JSON vào clipboard!')
+  const handleCopyHtml = () => {
+    navigator.clipboard.writeText(generatedHtml)
+    alert('Đã copy HTML vào clipboard!')
   }
 
   return (
     <EditorContext.Provider value={{ editor }}>
-      <div className='max-w-5xl mx-auto my-8 p-4'>
-        <div className='border border-gray-200 rounded-lg shadow-lg overflow-hidden bg-white'>
-          {/* Toolbar */}
-          <div className='border-b border-gray-200 bg-gray-50 p-3 sticky top-0 z-10'>
-            <TextToolbar editor={editor} />
+      <div className='flex flex-col h-screen bg-gray-200'>
+        {/* Toolbar */}
+        <div className='border-b border-gray-300 bg-white p-3 sticky top-0 z-10 shadow-sm'>
+          <TextToolbar
+            editor={editor}
+            topMargin={mmToPx(pageSettings.topMargin)}
+            bottomMargin={mmToPx(pageSettings.bottomMargin)}
+            leftMargin={mmToPx(pageSettings.leftMargin)}
+            rightMargin={mmToPx(pageSettings.rightMargin)}
+          />
+        </div>
+
+        {/* Editor Content - Document View */}
+        <div className='flex-1 overflow-auto p-8 flex justify-center'>
+          <div
+            className='bg-white shadow-xl relative document-page'
+            style={{
+              width: '794px',
+              minHeight: '1123px',
+              padding: `${editorPadding.top}px ${editorPadding.right}px ${editorPadding.bottom}px ${editorPadding.left}px`
+            }}
+          >
+            <EditorContent editor={editor} />
+            <TableCellToolbar editor={editor} />
           </div>
+        </div>
 
-          {/* Editor Content */}
-          <div className='relative bg-gray-100 p-8'>
-            <div
-              className='mx-auto bg-white shadow-lg'
-              style={{
-                width: '794px',
-                minHeight: '1123px',
-                padding: '96px'  // 1 inch margins
-              }}
-            >
-              <EditorContent editor={editor} />
-              <TableCellToolbar editor={editor} />
-            </div>
-          </div>
-
-          {/* Link Popover */}
-          <LinkPopover editor={editor} />
-
-          {/* Export Controls */}
-          <div className='border-t border-gray-200 bg-gray-50 p-3'>
-            <div className='flex gap-2 flex-wrap items-center'>
+        {/* Footer Controls */}
+        <div className='border-t border-gray-300 bg-white p-4 shadow-lg'>
+          <div className='flex gap-3 flex-wrap items-center justify-between max-w-7xl mx-auto'>
+            <div className='flex gap-3 items-center'>
               <PageSettingsDialog
                 settings={pageSettings}
                 onSettingsChange={setPageSettings}
               />
-
-              <div className='flex-1' />
-
+              <div className='text-xs text-gray-500'>
+                Lề: T:{pageSettings.topMargin}mm |
+                P:{pageSettings.rightMargin}mm |
+                D:{pageSettings.bottomMargin}mm |
+                T:{pageSettings.leftMargin}mm
+              </div>
+            </div>
+            <div className='flex gap-2'>
               <Button
-                onClick={handleExportDocModel}
+                onClick={handleExportHtml}
                 variant='default'
                 size='sm'
               >
-                <FileJson className='w-4 h-4 mr-2' />
-                Export JSON cho Backend
+                <FileCode className='w-4 h-4 mr-2' />
+                Export HTML
               </Button>
             </div>
           </div>
+        </div>
 
-          {/* ✅ JSON Preview */}
-          {showJsonPreview && (
-            <div className='border-t border-gray-200 p-4 bg-gray-50'>
-              <div className='flex items-center justify-between mb-2'>
-                <h3 className='text-lg font-semibold'>JSON Output (DocModel format):</h3>
+        {/* HTML Preview Modal */}
+        {showHtmlPreview && (
+          <div className='fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4'>
+            <div className='bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-auto'>
+              <div className='flex items-center justify-between p-4 border-b border-gray-200 sticky top-0 bg-white'>
+                <h3 className='text-lg font-semibold'>HTML Output</h3>
                 <div className='flex gap-2'>
                   <Button
-                    onClick={handleCopyJson}
+                    onClick={handleCopyHtml}
                     variant='outline'
                     size='sm'
                   >
-                    Copy JSON
+                    Copy
                   </Button>
                   <Button
-                    onClick={() => setShowJsonPreview(false)}
+                    onClick={() => setShowHtmlPreview(false)}
                     variant='ghost'
                     size='sm'
                   >
-                    Ẩn
+                    Close
                   </Button>
                 </div>
               </div>
-              <pre className='bg-gray-900 text-green-400 p-4 rounded overflow-x-auto text-sm max-h-96 overflow-y-auto'>
-                {generatedJson}
+              <pre className='bg-gray-50 p-4 overflow-auto text-sm font-mono text-gray-800'>
+                {generatedHtml}
               </pre>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </EditorContext.Provider>
   )

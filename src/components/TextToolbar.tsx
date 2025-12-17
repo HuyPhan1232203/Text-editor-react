@@ -1,7 +1,7 @@
 // TextToolbar.tsx
 import { Editor, useEditorState } from '@tiptap/react'
 import { ToolbarButton } from './ToolbarButton'
-import { Bold, Code, Image, Italic, LinkIcon, Quote, Redo, Strikethrough, Table, Undo } from 'lucide-react'
+import { Bold, Code, Download, File, Image, Italic, LinkIcon, Quote, Redo, Strikethrough, Table, Underline, Undo } from 'lucide-react'
 import { Divider } from './Devider'
 import { TextAlignButton } from './tiptap-ui/text-align-button'
 import { ColorHighlightButton } from './tiptap-ui/color-highlight-button'
@@ -12,16 +12,27 @@ import { Button } from './ui/button'
 import { HeadingPopover } from './header/HeadingPopover'
 import { TextColorPicker } from './text-color/TextColorPicker'
 import { FontFamilyPicker } from './font/FontFamilyPicker'
-
+import { exportToDocx } from '@/utils/exportDocx'
 import { FontSizePicker } from './font/FontSizePicker'
 import { LineHeightPicker } from './font/LineHeightPicker'
+import { exportToPdf } from '@/utils/exportPDF'
 
-export function TextToolbar ({ editor }: { editor: Editor }) {
+interface TextToolbarProps {
+  editor: Editor
+  topMargin: number
+  bottomMargin: number
+  leftMargin: number
+  rightMargin: number
+}
+
+export function TextToolbar ({ editor, topMargin, bottomMargin, leftMargin, rightMargin }: TextToolbarProps) {
   const editorState = useEditorState({
     editor,
     selector: ctx => ({
       isBold: ctx.editor.isActive('bold'),
       canBold: ctx.editor.can().chain().toggleBold().run(),
+      isUnderline: ctx.editor.isActive('underline'),
+      canUnderline: ctx.editor.can().chain().toggleUnderline().run(),
       isItalic: ctx.editor.isActive('italic'),
       canItalic: ctx.editor.can().chain().toggleItalic().run(),
       isStrike: ctx.editor.isActive('strike'),
@@ -35,7 +46,29 @@ export function TextToolbar ({ editor }: { editor: Editor }) {
       canRedo: ctx.editor.can().chain().redo().run()
     })
   })
-
+  const handleExportDocx = async () => {
+    await exportToDocx(editor, {
+      fileName: 'my-document.docx',
+      pageSettings: {
+        topMargin,
+        bottomMargin,
+        leftMargin,
+        rightMargin
+      }
+    })
+  }
+  const handleExportPDF = async () => {
+    await exportToPdf(editor, {
+      fileName: 'my-document.pdf',
+      pageFormat: 'A4',
+      pageSettings: {
+        topMargin,
+        bottomMargin,
+        leftMargin,
+        rightMargin
+      }
+    })
+  }
   const handleCreateTable = (payload: CreateTablePayload) => {
     editor.chain().focus().insertTable(payload).run()
   }
@@ -80,6 +113,14 @@ export function TextToolbar ({ editor }: { editor: Editor }) {
         icon={Italic}
         label='Italic'
         tooltip='In nghiêng (Ctrl+I)'
+      />
+      <ToolbarButton
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        isActive={editorState.isUnderline}
+        disabled={!editorState.canUnderline}
+        icon={Underline}
+        label='Underline'
+        tooltip='Gạch chân (Ctrl+U)'
       />
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleStrike().run()}
@@ -240,6 +281,17 @@ export function TextToolbar ({ editor }: { editor: Editor }) {
         label='Redo'
         tooltip='Làm lại (Ctrl+Y)'
       />
+      <Divider />
+
+      {/* Export DOCX Button */}
+      <Button onClick={handleExportDocx} variant='ghost' title='Xuất file DOCX'>
+        <Download className='w-4 h-4 mr-2' />
+        Export DOCX
+      </Button>
+      <Button onClick={handleExportPDF} variant='ghost' title='Xuất file PDF'>
+        <File className='w-4 h-4 mr-2' />
+        Export PDF
+      </Button>
     </div>
   )
 }

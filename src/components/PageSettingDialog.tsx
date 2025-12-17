@@ -1,3 +1,4 @@
+// PageSettingDialog.tsx
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
@@ -19,20 +20,35 @@ interface PageSettingsDialogProps {
 
 export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettingsDialogProps) {
   const [localSettings, setLocalSettings] = useState(settings)
+  const [open, setOpen] = useState(false) // ✅ Thêm state để control dialog
 
   const handleSave = () => {
     onSettingsChange(localSettings)
+    setOpen(false) // ✅ Đóng dialog sau khi save
+  }
+
+  const handleCancel = () => {
+    setLocalSettings(settings) // Reset về settings ban đầu
+    setOpen(false) // ✅ Đóng dialog
+  }
+
+  // ✅ Sync localSettings khi dialog mở
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen)
+    if (isOpen) {
+      setLocalSettings(settings) // Load settings hiện tại khi mở
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}> {/* ✅ Control dialog state */}
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
           <Settings className='w-4 h-4 mr-2' />
           Cài đặt trang
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent className='sm:max-w-106.25'> {/* ✅ Fix typo: 106.25 → 425px */}
         <DialogHeader>
           <DialogTitle>Cài đặt trang A4</DialogTitle>
         </DialogHeader>
@@ -45,7 +61,7 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
               id='topMargin'
               type='number'
               value={localSettings.topMargin}
-              onChange={(e) => setLocalSettings({ ...localSettings, topMargin: parseFloat(e.target.value) })}
+              onChange={(e) => setLocalSettings({ ...localSettings, topMargin: parseFloat(e.target.value) || 0 })}
               className='col-span-3'
             />
           </div>
@@ -57,7 +73,7 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
               id='bottomMargin'
               type='number'
               value={localSettings.bottomMargin}
-              onChange={(e) => setLocalSettings({ ...localSettings, bottomMargin: parseFloat(e.target.value) })}
+              onChange={(e) => setLocalSettings({ ...localSettings, bottomMargin: parseFloat(e.target.value) || 0 })}
               className='col-span-3'
             />
           </div>
@@ -69,7 +85,7 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
               id='leftMargin'
               type='number'
               value={localSettings.leftMargin}
-              onChange={(e) => setLocalSettings({ ...localSettings, leftMargin: parseFloat(e.target.value) })}
+              onChange={(e) => setLocalSettings({ ...localSettings, leftMargin: parseFloat(e.target.value) || 0 })}
               className='col-span-3'
             />
           </div>
@@ -81,13 +97,13 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
               id='rightMargin'
               type='number'
               value={localSettings.rightMargin}
-              onChange={(e) => setLocalSettings({ ...localSettings, rightMargin: parseFloat(e.target.value) })}
+              onChange={(e) => setLocalSettings({ ...localSettings, rightMargin: parseFloat(e.target.value) || 0 })}
               className='col-span-3'
             />
           </div>
         </div>
         <div className='flex justify-end gap-2'>
-          <Button variant='outline' onClick={() => setLocalSettings(settings)}>
+          <Button variant='outline' onClick={handleCancel}> {/* ✅ Đổi từ reset sang cancel */}
             Hủy
           </Button>
           <Button onClick={handleSave}>
