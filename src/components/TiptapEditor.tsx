@@ -93,9 +93,8 @@ export default function TiptapEditor () {
 
   const editor = useEditor({
     extensions,
-    content: `
-      <table class="tiptap-table" style="min-width: 178px;"><colgroup><col style="width: 128px;"><col style="width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr class="tiptap-table-row"><th class="tiptap-table-header" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">adssad</p></th><th class="tiptap-table-header" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;"></p></th><th class="tiptap-table-header" colspan="1" rowspan="1"><p style="text-align: left;">jn</p></th></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">kjn</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">jkb</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">k</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">h</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">kb</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">hkjb</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">hj</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">bhj</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">b</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">hjb</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">jh</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">bjh</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">bjh</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;">b</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;">jb</p></td></tr><tr class="tiptap-table-row"><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="128"><p style="text-align: left;">b</p></td><td class="tiptap-table-cell" colspan="1" rowspan="1" colwidth="25"><p style="text-align: left;"></p></td><td class="tiptap-table-cell" colspan="1" rowspan="1"><p style="text-align: left;"></p></td></tr></tbody></table><h2 style="text-align: left;">Tiptap Editor với Table</h2><p style="text-align: left;">Click vào icon <strong>Table</strong> trên toolbar để tạo table.</p><p style="text-align: left;">Khi cursor ở trong table, icon <strong>Settings</strong> sẽ xuất hiện để truy cập các chức năng table.</p>
-    `,
+    autofocus: 'end',
+    content: ``,
     editorProps: {
       attributes: {
         class: 'tiptap-editor-content focus:outline-none'
@@ -165,6 +164,11 @@ export default function TiptapEditor () {
               width: '794px',
               minHeight: '1123px',
               padding: `${editorPadding.top}px ${editorPadding.right}px ${editorPadding.bottom}px ${editorPadding.left}px`
+            }}
+            onClick={() => {
+              if (!editor?.isFocused) {
+                editor?.commands.focus('end')
+              }
             }}
           >
             <EditorContent editor={editor} />
