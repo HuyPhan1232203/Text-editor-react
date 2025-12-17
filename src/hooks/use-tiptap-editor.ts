@@ -1,6 +1,6 @@
-import type { Editor } from "@tiptap/react"
-import { useCurrentEditor, useEditorState } from "@tiptap/react"
-import { useMemo } from "react"
+import type { Editor } from '@tiptap/react'
+import { useCurrentEditor, useEditorState } from '@tiptap/react'
+import { useMemo } from 'react'
 
 /**
  * Hook that provides access to a Tiptap editor instance.
@@ -13,10 +13,10 @@ import { useMemo } from "react"
  * @param providedEditor - Optional editor instance to use instead of the context editor
  * @returns The provided editor or the editor from context, whichever is available
  */
-export function useTiptapEditor(providedEditor?: Editor | null): {
+export function useTiptapEditor (providedEditor?: Editor | null): {
   editor: Editor | null
-  editorState?: Editor["state"]
-  canCommand?: Editor["can"]
+  editorState?: Editor['state']
+  canCommand?: Editor['can']
 } {
   const { editor: coreEditor } = useCurrentEditor()
   const mainEditor = useMemo(
@@ -26,21 +26,21 @@ export function useTiptapEditor(providedEditor?: Editor | null): {
 
   const editorState = useEditorState({
     editor: mainEditor,
-    selector(context) {
+    selector (context) {
       if (!context.editor) {
         return {
           editor: null,
           editorState: undefined,
-          canCommand: undefined,
+          canCommand: undefined
         }
       }
 
       return {
         editor: context.editor,
         editorState: context.editor.state,
-        canCommand: context.editor.can,
+        canCommand: context.editor.can
       }
-    },
+    }
   })
 
   return editorState || { editor: null }

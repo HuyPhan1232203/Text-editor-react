@@ -55,7 +55,6 @@ export interface LinkHandlerProps {
 export function canSetLink (editor: Editor | null): boolean {
   if (!editor || !editor.isEditable) return false
 
-  // The third argument 'true' checks whether the current selection is inside an image caption, and prevents setting a link there
   // If the selection is inside an image caption, we can't set a link
   if (isNodeTypeSelected(editor, ['image'], true)) return false
   return editor.can().setMark('link')
@@ -105,6 +104,7 @@ export function useLinkHandler (props: LinkHandlerProps) {
     const { href } = editor.getAttributes('link')
 
     if (isLinkActive(editor) && url === null) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUrl(href || '')
     }
   }, [editor, url])

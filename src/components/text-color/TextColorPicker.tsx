@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Editor } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { Palette, Check, X } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap-ui-primitive/tooltip'
 
 interface TextColorPickerProps {

@@ -1,62 +1,62 @@
-import type { Node as PMNode } from "@tiptap/pm/model"
-import type { Transaction } from "@tiptap/pm/state"
+import type { Node as PMNode } from '@tiptap/pm/model'
+import type { Transaction } from '@tiptap/pm/state'
 import {
   AllSelection,
   NodeSelection,
   Selection,
-  TextSelection,
-} from "@tiptap/pm/state"
-import { cellAround, CellSelection } from "@tiptap/pm/tables"
+  TextSelection
+} from '@tiptap/pm/state'
+import { cellAround, CellSelection } from '@tiptap/pm/tables'
 import {
   findParentNodeClosestToPos,
   type Editor,
-  type NodeWithPos,
-} from "@tiptap/react"
+  type NodeWithPos
+} from '@tiptap/react'
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
 export const MAC_SYMBOLS: Record<string, string> = {
-  mod: "⌘",
-  command: "⌘",
-  meta: "⌘",
-  ctrl: "⌃",
-  control: "⌃",
-  alt: "⌥",
-  option: "⌥",
-  shift: "⇧",
-  backspace: "Del",
-  delete: "⌦",
-  enter: "⏎",
-  escape: "⎋",
-  capslock: "⇪",
+  mod: '⌘',
+  command: '⌘',
+  meta: '⌘',
+  ctrl: '⌃',
+  control: '⌃',
+  alt: '⌥',
+  option: '⌥',
+  shift: '⇧',
+  backspace: 'Del',
+  delete: '⌦',
+  enter: '⏎',
+  escape: '⎋',
+  capslock: '⇪'
 } as const
 
 export const SR_ONLY = {
-  position: "absolute",
-  width: "1px",
-  height: "1px",
+  position: 'absolute',
+  width: '1px',
+  height: '1px',
   padding: 0,
-  margin: "-1px",
-  overflow: "hidden",
-  clip: "rect(0, 0, 0, 0)",
-  whiteSpace: "nowrap",
-  borderWidth: 0,
+  margin: '-1px',
+  overflow: 'hidden',
+  clip: 'rect(0, 0, 0, 0)',
+  whiteSpace: 'nowrap',
+  borderWidth: 0
 } as const
 
-export function cn(
+export function cn (
   ...classes: (string | boolean | undefined | null)[]
 ): string {
-  return classes.filter(Boolean).join(" ")
+  return classes.filter(Boolean).join(' ')
 }
 
 /**
  * Determines if the current platform is macOS
  * @returns boolean indicating if the current platform is Mac
  */
-export function isMac(): boolean {
+export function isMac (): boolean {
   return (
-    typeof navigator !== "undefined" &&
-    navigator.platform.toLowerCase().includes("mac")
+    typeof navigator !== 'undefined'
+    && navigator.platform.toLowerCase().includes('mac')
   )
 }
 
@@ -74,6 +74,7 @@ export const formatShortcutKey = (
 ) => {
   if (isMac) {
     const lowerKey = key.toLowerCase()
+
     return MAC_SYMBOLS[lowerKey] || (capitalize ? key.toUpperCase() : key)
   }
 
@@ -92,7 +93,7 @@ export const parseShortcutKeys = (props: {
   delimiter?: string
   capitalize?: boolean
 }) => {
-  const { shortcutKeys, delimiter = "+", capitalize = true } = props
+  const { shortcutKeys, delimiter = '+', capitalize = true } = props
 
   if (!shortcutKeys) return []
 
@@ -135,19 +136,21 @@ export const isNodeInSchema = (
  * @param editor - The editor instance
  * @returns boolean indicating if the focus was moved
  */
-export function focusNextNode(editor: Editor) {
+export function focusNextNode (editor: Editor) {
   const { state, view } = editor
   const { doc, selection } = state
 
   const nextSel = Selection.findFrom(selection.$to, 1, true)
+
   if (nextSel) {
     view.dispatch(state.tr.setSelection(nextSel).scrollIntoView())
     return true
   }
 
   const paragraphType = state.schema.nodes.paragraph
+
   if (!paragraphType) {
-    console.warn("No paragraph node type found in schema.")
+    console.warn('No paragraph node type found in schema.')
     return false
   }
 
@@ -157,6 +160,7 @@ export function focusNextNode(editor: Editor) {
 
   // Place the selection inside the new paragraph
   const $inside = tr.doc.resolve(end + 1)
+
   tr = tr.setSelection(TextSelection.near($inside)).scrollIntoView()
   view.dispatch(tr)
   return true
@@ -167,8 +171,8 @@ export function focusNextNode(editor: Editor) {
  * @param value - The value to check
  * @returns boolean indicating if the value is a valid number
  */
-export function isValidPosition(pos: number | null | undefined): pos is number {
-  return typeof pos === "number" && pos >= 0
+export function isValidPosition (pos: number | null | undefined): pos is number {
+  return typeof pos === 'number' && pos >= 0
 }
 
 /**
@@ -177,7 +181,7 @@ export function isValidPosition(pos: number | null | undefined): pos is number {
  * @param extensionNames - A single extension name or an array of names to check
  * @returns True if at least one of the extensions is available, false otherwise
  */
-export function isExtensionAvailable(
+export function isExtensionAvailable (
   editor: Editor | null,
   extensionNames: string | string[]
 ): boolean {
@@ -193,7 +197,7 @@ export function isExtensionAvailable(
 
   if (!found) {
     console.warn(
-      `None of the extensions [${names.join(", ")}] were found in the editor schema. Ensure they are included in the editor configuration.`
+      `None of the extensions [${names.join(', ')}] were found in the editor schema. Ensure they are included in the editor configuration.`
     )
   }
 
@@ -206,9 +210,10 @@ export function isExtensionAvailable(
  * @param position The position in the document to find the node
  * @returns The node at the specified position, or null if not found
  */
-export function findNodeAtPosition(editor: Editor, position: number) {
+export function findNodeAtPosition (editor: Editor, position: number) {
   try {
     const node = editor.state.doc.nodeAt(position)
+
     if (!node) {
       console.warn(`No node found at position ${position}`)
       return null
@@ -228,11 +233,11 @@ export function findNodeAtPosition(editor: Editor, position: number) {
  * @param props.nodePos The position of the node to find (optional if node is provided)
  * @returns An object with the position and node, or null if not found
  */
-export function findNodePosition(props: {
+export function findNodePosition (props: {
   editor: Editor | null
   node?: PMNode | null
   nodePos?: number | null
-}): { pos: number; node: PMNode } | null {
+}): { pos: number, node: PMNode } | null {
   const { editor, node, nodePos } = props
 
   if (!editor || !editor.state?.doc) return null
@@ -268,8 +273,11 @@ export function findNodePosition(props: {
 
   // If we have a valid position, use findNodeAtPosition
   if (hasValidPos) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const nodeAtPos = findNodeAtPosition(editor, nodePos!)
+
     if (nodeAtPos) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return { pos: nodePos!, node: nodeAtPos }
     }
   }
@@ -284,7 +292,7 @@ export function findNodePosition(props: {
  * @param nodeTypeNames List of node type names to match against
  * @param checkAncestorNodes Whether to check ancestor node types up the depth chain
  */
-export function isNodeTypeSelected(
+export function isNodeTypeSelected (
   editor: Editor | null,
   nodeTypeNames: string[] = [],
   checkAncestorNodes: boolean = false
@@ -292,19 +300,23 @@ export function isNodeTypeSelected(
   if (!editor || !editor.state.selection) return false
 
   const { selection } = editor.state
+
   if (selection.empty) return false
 
   // Direct node selection check
   if (selection instanceof NodeSelection) {
     const selectedNode = selection.node
+
     return selectedNode ? nodeTypeNames.includes(selectedNode.type.name) : false
   }
 
   // Depth-based ancestor node check
   if (checkAncestorNodes) {
     const { $from } = selection
+
     for (let depth = $from.depth; depth > 0; depth--) {
       const ancestorNode = $from.node(depth)
+
       if (nodeTypeNames.includes(ancestorNode.type.name)) {
         return true
       }
@@ -321,7 +333,7 @@ export function isNodeTypeSelected(
  * - NodeSelection → checks the selected node.
  * - Text/AllSelection → ensures all textblocks within [from, to) are allowed.
  */
-export function selectionWithinConvertibleTypes(
+export function selectionWithinConvertibleTypes (
   editor: Editor,
   types: string[] = []
 ): boolean {
@@ -333,11 +345,13 @@ export function selectionWithinConvertibleTypes(
 
   if (selection instanceof NodeSelection) {
     const nodeType = selection.node?.type?.name
+
     return !!nodeType && allowed.has(nodeType)
   }
 
   if (selection instanceof TextSelection || selection instanceof AllSelection) {
     let valid = true
+
     state.doc.nodesBetween(selection.from, selection.to, (node) => {
       if (node.isTextblock && !allowed.has(node.type.name)) {
         valid = false
@@ -365,7 +379,7 @@ export const handleImageUpload = async (
 ): Promise<string> => {
   // Validate file
   if (!file) {
-    throw new Error("No file provided")
+    throw new Error('No file provided')
   }
 
   if (file.size > MAX_FILE_SIZE) {
@@ -378,13 +392,13 @@ export const handleImageUpload = async (
   // with your own upload implementation.
   for (let progress = 0; progress <= 100; progress += 10) {
     if (abortSignal?.aborted) {
-      throw new Error("Upload cancelled")
+      throw new Error('Upload cancelled')
     }
     await new Promise((resolve) => setTimeout(resolve, 500))
     onProgress?.({ progress })
   }
 
-  return "/images/tiptap-ui-placeholder-image.jpg"
+  return '/images/tiptap-ui-placeholder-image.jpg'
 }
 
 type ProtocolOptions = {
@@ -406,31 +420,29 @@ type ProtocolOptions = {
 
 type ProtocolConfig = Array<ProtocolOptions | string>
 
-const ATTR_WHITESPACE =
-  // eslint-disable-next-line no-control-regex
-  /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g
+// eslint-disable-next-line no-control-regex
+const ATTR_WHITESPACE = /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g
 
-export function isAllowedUri(
+export function isAllowedUri (
   uri: string | undefined,
   protocols?: ProtocolConfig
 ) {
   const allowedProtocols: string[] = [
-    "http",
-    "https",
-    "ftp",
-    "ftps",
-    "mailto",
-    "tel",
-    "callto",
-    "sms",
-    "cid",
-    "xmpp",
+    'http',
+    'https',
+    'ftp',
+    'ftps',
+    'mailto',
+    'tel',
+    'callto',
+    'sms',
+    'cid',
+    'xmpp'
   ]
 
   if (protocols) {
     protocols.forEach((protocol) => {
-      const nextProtocol =
-        typeof protocol === "string" ? protocol : protocol.scheme
+      const nextProtocol = typeof protocol === 'string' ? protocol : protocol.scheme
 
       if (nextProtocol) {
         allowedProtocols.push(nextProtocol)
@@ -439,18 +451,18 @@ export function isAllowedUri(
   }
 
   return (
-    !uri ||
-    uri.replace(ATTR_WHITESPACE, "").match(
+    !uri
+    || uri.replace(ATTR_WHITESPACE, '').match(
       new RegExp(
         // eslint-disable-next-line no-useless-escape
-        `^(?:(?:${allowedProtocols.join("|")}):|[^a-z]|[a-z0-9+.\-]+(?:[^a-z+.\-:]|$))`,
-        "i"
+        `^(?:(?:${allowedProtocols.join('|')}):|[^a-z]|[a-z0-9+.\-]+(?:[^a-z+.\-:]|$))`,
+        'i'
       )
     )
   )
 }
 
-export function sanitizeUrl(
+export function sanitizeUrl (
   inputUrl: string,
   baseUrl: string,
   protocols?: ProtocolConfig
@@ -464,7 +476,7 @@ export function sanitizeUrl(
   } catch {
     // If URL creation fails, it's considered invalid
   }
-  return "#"
+  return '#'
 }
 
 /**
@@ -477,7 +489,7 @@ export function sanitizeUrl(
  *               Pass `undefined` to remove the attribute.
  * @returns true if at least one node was updated, false otherwise
  */
-export function updateNodesAttr<A extends string = string, V = unknown>(
+export function updateNodesAttr<A extends string = string, V = unknown> (
   tr: Transaction,
   targets: readonly NodeWithPos[],
   attrName: A,
@@ -490,19 +502,20 @@ export function updateNodesAttr<A extends string = string, V = unknown>(
   for (const { pos } of targets) {
     // Always re-read from the transaction's current doc
     const currentNode = tr.doc.nodeAt(pos)
+
     if (!currentNode) continue
 
     const prevValue = (currentNode.attrs as Record<string, unknown>)[
       attrName
     ] as V | undefined
-    const resolvedNext =
-      typeof next === "function"
-        ? (next as (p: V | undefined) => V | undefined)(prevValue)
-        : next
+    const resolvedNext = typeof next === 'function'
+      ? (next as (p: V | undefined) => V | undefined)(prevValue)
+      : next
 
     if (prevValue === resolvedNext) continue
 
     const nextAttrs: Record<string, unknown> = { ...currentNode.attrs }
+
     if (resolvedNext === undefined) {
       // Remove the key entirely instead of setting null
       delete nextAttrs[attrName]
@@ -522,7 +535,7 @@ export function updateNodesAttr<A extends string = string, V = unknown>(
  * If the selection is not empty, it does nothing.
  * @param editor The Tiptap editor instance
  */
-export function selectCurrentBlockContent(editor: Editor) {
+export function selectCurrentBlockContent (editor: Editor) {
   const { selection, doc } = editor.state
 
   if (!selection.empty) return
@@ -564,7 +577,7 @@ export function selectCurrentBlockContent(editor: Editor) {
  * @param allowedNodeTypes An array of node type names to look for (e.g., ["image", "table"])
  * @returns An array of objects containing the node and its position
  */
-export function getSelectedNodesOfType(
+export function getSelectedNodesOfType (
   selection: Selection,
   allowedNodeTypes: string[]
 ): NodeWithPos[] {
@@ -582,6 +595,7 @@ export function getSelectedNodesOfType(
 
   if (selection instanceof NodeSelection) {
     const { node, from: pos } = selection
+
     if (node && allowed.has(node.type.name)) {
       results.push({ node, pos })
     }
@@ -593,6 +607,7 @@ export function getSelectedNodesOfType(
 
   if (cell) {
     const cellNode = selection.$anchor.doc.nodeAt(cell.pos)
+
     if (cellNode && allowed.has(cellNode.type.name)) {
       results.push({ node: cellNode, pos: cell.pos })
       return results

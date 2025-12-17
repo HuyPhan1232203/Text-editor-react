@@ -1,29 +1,29 @@
-import { forwardRef, useCallback, useMemo } from "react"
+import { forwardRef, useCallback, useMemo } from 'react'
 
 // --- Lib ---
-import { parseShortcutKeys } from "@/lib/tiptap-utils"
+import { parseShortcutKeys } from '@/lib/tiptap-utils'
 
 // --- Hooks ---
-import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
+import { useTiptapEditor } from '@/hooks/use-tiptap-editor'
 
 // --- Tiptap UI ---
-import type { UseColorHighlightConfig } from "@/components/tiptap-ui/color-highlight-button"
+import type { UseColorHighlightConfig } from '@/components/tiptap-ui/color-highlight-button'
 import {
   COLOR_HIGHLIGHT_SHORTCUT_KEY,
-  useColorHighlight,
-} from "@/components/tiptap-ui/color-highlight-button"
+  useColorHighlight
+} from '@/components/tiptap-ui/color-highlight-button'
 
 // --- UI Primitives ---
-import type { ButtonProps } from "@/components/tiptap-ui-primitive/button"
-import { Button } from "@/components/tiptap-ui-primitive/button"
-import { Badge } from "@/components/tiptap-ui-primitive/badge"
+import type { ButtonProps } from '@/components/tiptap-ui-primitive/button'
+import { Button } from '@/components/tiptap-ui-primitive/button'
+import { Badge } from '@/components/tiptap-ui-primitive/badge'
 
 // --- Styles ---
-import "@/components/tiptap-ui/color-highlight-button/color-highlight-button.scss"
+import '@/components/tiptap-ui/color-highlight-button/color-highlight-button.scss'
 
 export interface ColorHighlightButtonProps
-  extends Omit<ButtonProps, "type">,
-    UseColorHighlightConfig {
+  extends Omit<ButtonProps, 'type'>,
+  UseColorHighlightConfig {
   /**
    * Optional text to display alongside the icon.
    */
@@ -35,8 +35,8 @@ export interface ColorHighlightButtonProps
   showShortcut?: boolean
 }
 
-export function ColorHighlightShortcutBadge({
-  shortcutKeys = COLOR_HIGHLIGHT_SHORTCUT_KEY,
+export function ColorHighlightShortcutBadge ({
+  shortcutKeys = COLOR_HIGHLIGHT_SHORTCUT_KEY
 }: {
   shortcutKeys?: string
 }) {
@@ -81,7 +81,7 @@ export const ColorHighlightButton = forwardRef<
       highlightColor,
       text,
       hideWhenUnavailable = false,
-      mode = "mark",
+      mode = 'mark',
       onApplied,
       showShortcut = false,
       onClick,
@@ -98,14 +98,14 @@ export const ColorHighlightButton = forwardRef<
       isActive,
       handleColorHighlight,
       label,
-      shortcutKeys,
+      shortcutKeys
     } = useColorHighlight({
       editor,
       highlightColor,
       label: text || `Toggle highlight (${highlightColor})`,
       hideWhenUnavailable,
       mode,
-      onApplied,
+      onApplied
     })
 
     const handleClick = useCallback(
@@ -121,7 +121,7 @@ export const ColorHighlightButton = forwardRef<
       () =>
         ({
           ...style,
-          "--highlight-color": highlightColor,
+          '--highlight-color': highlightColor
         }) as React.CSSProperties,
       [highlightColor, style]
     )
@@ -132,10 +132,10 @@ export const ColorHighlightButton = forwardRef<
 
     return (
       <Button
-        type="button"
-        data-style="ghost"
-        data-active-state={isActive ? "on" : "off"}
-        role="button"
+        type='button'
+        data-style='ghost'
+        data-active-state={isActive ? 'on' : 'off'}
+        role='button'
         tabIndex={-1}
         disabled={!canColorHighlight}
         data-disabled={!canColorHighlight}
@@ -150,12 +150,12 @@ export const ColorHighlightButton = forwardRef<
         {children ?? (
           <>
             <span
-              className="tiptap-button-highlight"
+              className='tiptap-button-highlight'
               style={
-                { "--highlight-color": highlightColor } as React.CSSProperties
+                { '--highlight-color': highlightColor } as React.CSSProperties
               }
             />
-            {text && <span className="tiptap-button-text">{text}</span>}
+            {text && <span className='tiptap-button-text'>{text}</span>}
             {showShortcut && (
               <ColorHighlightShortcutBadge shortcutKeys={shortcutKeys} />
             )}
@@ -166,4 +166,4 @@ export const ColorHighlightButton = forwardRef<
   }
 )
 
-ColorHighlightButton.displayName = "ColorHighlightButton"
+ColorHighlightButton.displayName = 'ColorHighlightButton'
