@@ -28,7 +28,7 @@ const DEFAULT_PAGE_SETTINGS: PageSettings = {
 
 const DOCX_API_ENDPOINT = 'http://localhost:5002/docx/convert'
 
-export async function exportToDocx(
+export async function exportToDocx (
   editor: Editor,
   options: ExportOptions = {}
 ): Promise<ExportResult> {
@@ -58,31 +58,35 @@ export async function exportToDocx(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ message: 'Unknown error' }))
+
       throw new Error(errorData?.message || 'Failed to export DOCX')
     }
 
     // Tải file xuống
     const blob = await response.blob()
+
     downloadBlob(blob, fileName)
 
     return { success: true }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+
     console.error('Export DOCX error:', errorMessage)
     return { success: false, error: errorMessage }
   }
 }
 
 // Helper function để download blob
-function downloadBlob(blob: Blob, filename: string): void {
+function downloadBlob (blob: Blob, filename: string): void {
   const url = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
+
   link.href = url
   link.download = filename
-  
+
   document.body.appendChild(link)
   link.click()
-  
+
   // Cleanup
   document.body.removeChild(link)
   window.URL.revokeObjectURL(url)
