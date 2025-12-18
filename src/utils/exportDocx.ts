@@ -1,36 +1,47 @@
-// utils/exportDocx.ts
+// utils/exportDocx.ts - Optimized
 import { Editor } from '@tiptap/react'
 import { inlineStyles } from './inlineStyles'
 
-interface ExportOptions {
-  fileName?: string
-  pageSettings?: {
-    topMargin: number
-    bottomMargin: number
-    leftMargin: number
-    rightMargin: number
-  }
+interface PageSettings {
+  topMargin: number
+  bottomMargin: number
+  leftMargin: number
+  rightMargin: number
 }
 
-export async function exportToDocx (
+interface ExportOptions {
+  fileName?: string
+  pageSettings?: PageSettings
+}
+
+interface ExportResult {
+  success: boolean
+  error?: string
+}
+
+const DEFAULT_PAGE_SETTINGS: PageSettings = {
+  topMargin: 25.4,
+  bottomMargin: 25.4,
+  leftMargin: 25.4,
+  rightMargin: 25.4
+}
+
+const DOCX_API_ENDPOINT = 'http://localhost:5002/docx/convert'
+
+export async function exportToDocx(
   editor: Editor,
   options: ExportOptions = {}
-): Promise<{ success: boolean, error?: Error | string }> {
+): Promise<ExportResult> {
   const {
     fileName = 'document.docx',
-    pageSettings = {
-      topMargin: 25.4,
-      bottomMargin: 25.4,
-      leftMargin: 25.4,
-      rightMargin: 25.4
-    }
+    pageSettings = DEFAULT_PAGE_SETTINGS
   } = options
 
   try {
     const htmlContent = editor.getHTML()
     const styledHtml = inlineStyles(htmlContent)
 
-    const response = await fetch('http://localhost:5002/docx/convert', {
+    const response = await fetch(DOCX_API_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -38,10 +49,7 @@ export async function exportToDocx (
       body: JSON.stringify({
         html: styledHtml,
         fileName,
-        topMargin: pageSettings.topMargin,
-        bottomMargin: pageSettings.bottomMargin,
-        leftMargin: pageSettings.leftMargin,
-        rightMargin: pageSettings.rightMargin,
+        ...pageSettings,
         title: 'Tài liệu kỹ thuật',
         creator: 'T.A CONSULTANTS',
         orientation: 'portrait'
@@ -49,28 +57,33 @@ export async function exportToDocx (
     })
 
     if (!response.ok) {
-      const errorData = await response.json()
-
+      const errorData = await response.json().catch(() => ({ message: 'Unknown error' }))
       throw new Error(errorData?.message || 'Failed to export DOCX')
     }
 
     // Tải file xuống
     const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement('a')
-
-    link.href = url
-    link.download = fileName
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
+    downloadBlob(blob, fileName)
 
     return { success: true }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-
     console.error('Export DOCX error:', errorMessage)
     return { success: false, error: errorMessage }
   }
+}
+
+// Helper function để download blob
+function downloadBlob(blob: Blob, filename: string): void {
+  const url = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  
+  document.body.appendChild(link)
+  link.click()
+  
+  // Cleanup
+  document.body.removeChild(link)
+  window.URL.revokeObjectURL(url)
 }

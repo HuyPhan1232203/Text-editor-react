@@ -1,38 +1,70 @@
-// utils/exportPdf.ts - Updated
+// utils/exportPdf.ts - Optimized
 import { Editor } from '@tiptap/react'
 import { inlineStyles } from './inlineStyles'
+import { API_ENDPOINTS } from '@/config/constants'
+
+type PageFormat = 'A4' | 'A3' | 'Letter'
+
+interface PageSettings {
+  topMargin?: number
+  bottomMargin?: number
+  leftMargin?: number
+  rightMargin?: number
+}
 
 interface ExportPdfOptions {
   fileName?: string
-  pageFormat?: 'A4' | 'A3' | 'Letter'
-  pageSettings?: {
-    topMargin?: number
-    bottomMargin?: number
-    leftMargin?: number
-    rightMargin?: number
-  }
+  pageFormat?: PageFormat
+  pageSettings?: PageSettings
+}
+
+interface ExportResult {
+  success: boolean
+  error?: string
+}
+
+const DEFAULT_PAGE_SETTINGS: Required<PageSettings> = {
+  topMargin: 20,
+  bottomMargin: 20,
+  leftMargin: 20,
+  rightMargin: 20
 }
 
 export async function exportToPdf (
   editor: Editor,
   options: ExportPdfOptions = {}
-): Promise<{ success: boolean, error?: Error | string }> {
+): Promise<ExportResult> {
   const {
     fileName = 'document.pdf',
     pageFormat = 'A4',
-    pageSettings = {
-      topMargin: 20,
-      bottomMargin: 20,
-      leftMargin: 20,
-      rightMargin: 20
-    }
+    pageSettings = {}
   } = options
 
+  const margins = { ...DEFAULT_PAGE_SETTINGS, ...pageSettings }
+
   try {
-    const htmlContent = editor.getHTML()
+    let htmlContent = editor.getHTML()
+
+    // Preserve no-border class từ DOM
+    const domTables = document.querySelectorAll('.tiptap table')
+
+    if (domTables.length > 0) {
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(htmlContent, 'text/html')
+      const exportTables = doc.querySelectorAll('table')
+
+      domTables.forEach((table, index) => {
+        if (table.classList.contains('no-border') && exportTables[index]) {
+          exportTables[index].classList.add('no-border')
+        }
+      })
+
+      htmlContent = doc.body.innerHTML
+    }
+
     const styledHtml = inlineStyles(htmlContent)
 
-    const response = await fetch('http://localhost:5002/pdf/generate', {
+    const response = await fetch(API_ENDPOINTS.GENERATE_PDF, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -42,30 +74,23 @@ export async function exportToPdf (
         format: pageFormat,
         filename: fileName,
         margins: {
-          top: `${pageSettings.topMargin}px`,
-          bottom: `${pageSettings.bottomMargin}px`,
-          left: `${pageSettings.leftMargin}px`,
-          right: `${pageSettings.rightMargin}px`
+          top: `${margins.topMargin}px`,
+          bottom: `${margins.bottomMargin}px`,
+          left: `${margins.leftMargin}px`,
+          right: `${margins.rightMargin}px`
         }
       })
     })
 
     if (!response.ok) {
-      const errorData = await response.json()
+      const errorData = await response.json().catch(() => ({ message: 'Unknown error' }))
 
       throw new Error(errorData?.message || 'Failed to export PDF')
     }
 
     const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement('a')
 
-    link.href = url
-    link.download = fileName
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
+    downloadBlob(blob, fileName)
 
     return { success: true }
   } catch (error) {
@@ -74,4 +99,20 @@ export async function exportToPdf (
     console.error('Export PDF error:', errorMessage)
     return { success: false, error: errorMessage }
   }
+}
+
+// Helper function để download blob
+function downloadBlob (blob: Blob, filename: string): void {
+  const url = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+
+  link.href = url
+  link.download = filename
+
+  document.body.appendChild(link)
+  link.click()
+
+  // Cleanup
+  document.body.removeChild(link)
+  window.URL.revokeObjectURL(url)
 }

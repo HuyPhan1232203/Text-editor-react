@@ -19,7 +19,8 @@ const FONT_FAMILIES = [
   { name: 'Verdana', value: 'Verdana, sans-serif' },
   { name: 'Tahoma', value: 'Tahoma, sans-serif' },
   { name: 'Comic Sans MS', value: 'Comic Sans MS, cursive' },
-  { name: 'Impact', value: 'Impact, fantasy' }
+  { name: 'Impact', value: 'Impact, fantasy' },
+  { name: 'Play', value: 'Play, sans-serif' }
 ]
 
 export function FontFamilyPicker ({ editor }: FontFamilyPickerProps) {

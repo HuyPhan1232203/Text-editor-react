@@ -1,4 +1,3 @@
-// utils/inlineStyles.ts
 export function inlineStyles (html: string): string {
   const styleSheet = `
     <style>
@@ -9,11 +8,12 @@ export function inlineStyles (html: string): string {
         color: #000;
         margin: 0;
         padding: 0;
+        background-color: transparent;
       }
       
       p {
         color: #000;
-        margin: 0 0 12pt 0;
+        margin: 0;
         line-height: 1.5;
         font-size: 11pt;
       }
@@ -48,12 +48,18 @@ export function inlineStyles (html: string): string {
         margin-bottom: 3pt;
       }
       ul ul ul { list-style-type: square; }
+      
       ol ol { 
         list-style-type: lower-alpha;
         margin-top: 3pt;
         margin-bottom: 3pt;
       }
       ol ol ol { list-style-type: lower-roman; }
+      
+      ul > li > ol,
+      ol > li > ul {
+        margin-top: 0.5rem;
+      }
       
       li {
         margin: 3pt 0;
@@ -99,6 +105,7 @@ export function inlineStyles (html: string): string {
       a {
         color: #0563c1;
         text-decoration: underline;
+        cursor: pointer;
       }
       
       a:hover {
@@ -109,30 +116,30 @@ export function inlineStyles (html: string): string {
         border-collapse: collapse;
         table-layout: fixed;
         width: 100%;
-        margin: 1.5rem 0;
         overflow: hidden;
-        border-radius: 0.5rem;
       }
       
-      table td, table th {
+      table td,
+      table th {
         min-width: 1em;
         border: 1px solid #e5e7eb;
-        padding: 0.75rem 1rem;
+        padding-right: 5pt;
+        padding-left: 5pt;
         vertical-align: top;
         box-sizing: border-box;
+        position: relative;
         color: #1f2937;
-      }
-      
-      table th {
-        font-weight: 600;
-        text-align: left;
-        background-color: #f9fafb;
-        color: #111827;
-        border-bottom: 2px solid #d1d5db;
-      }
-      
-      table td {
         background-color: #fff;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+      }
+      
+      table.no-border td,
+      table.no-border th {
+        border: none !important;
+        border-bottom: 1px solid transparent !important;
       }
       
       strong, b { font-weight: 700; }
@@ -168,11 +175,7 @@ export function inlineStyles (html: string): string {
           widows: 3;
         }
         
-        img {
-          page-break-inside: avoid;
-        }
-        
-        table {
+        img, table {
           page-break-inside: avoid;
         }
       }
