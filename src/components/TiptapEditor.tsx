@@ -7,16 +7,16 @@ import { TextAlign } from '@tiptap/extension-text-align'
 import { TextToolbar } from './TextToolbar'
 import { Link } from '@tiptap/extension-link'
 import { Highlight } from '@tiptap/extension-highlight'
-import { ImageUploadNode } from './tiptap-node/image-upload-node'
+import { ImageUploadNode } from './tiptap/tiptap-node/image-upload-node'
 import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { Color } from '@tiptap/extension-color'
-import { TableCellToolbar } from './tableTiptap/TableCellToolbar'
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { Button } from './ui/button'
 import { FileCode } from 'lucide-react'
 import { PageSettingsDialog } from './PageSettingDialog'
 import { mmToPx } from '@/utils/convertUnit'
 import PaginationExtension, { BodyNode, PageNode } from '@/paging'
+import { TableCellToolbar } from './tiptap/tableTiptap/TableCellToolbar'
 
 const extensions = [
   TextStyle,

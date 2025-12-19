@@ -1,4 +1,4 @@
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/tiptap-ui-primitive/tooltip'
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
 import type { LucideIcon } from 'lucide-react'
 
 interface ToolbarButtonProps {
