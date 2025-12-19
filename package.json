@@ -37,11 +37,15 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.561.0",
     "neostandard": "^0.12.2",
+    "prosemirror-model": "^1.25.4",
+    "prosemirror-state": "^1.4.4",
+    "prosemirror-view": "^1.41.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hotkeys-hook": "^5.2.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
+    "tiptap-extension-pagination": "^2.1.4",
     "vite-tsconfig-paths": "^6.0.1"
   },
   "devDependencies": {

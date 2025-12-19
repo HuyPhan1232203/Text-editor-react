@@ -16,11 +16,15 @@ import { Button } from './ui/button'
 import { FileCode } from 'lucide-react'
 import { PageSettingsDialog } from './PageSettingDialog'
 import { mmToPx } from '@/utils/convertUnit'
+import PaginationExtension, { BodyNode, PageNode } from '@/paging'
 
 const extensions = [
   TextStyle,
   StarterKit,
   Image,
+  PaginationExtension,
+  PageNode,
+  BodyNode,
   Color.configure({
     types: ['textStyle']
   }),
@@ -314,12 +318,12 @@ export default function TiptapEditor () {
         <div className='flex-1 overflow-auto p-8 flex justify-center'>
           <div
             className='bg-white shadow-xl relative document-page'
-            style={{
-              width: '794px',
-              minHeight: '1123px',
-              height: 'max-content',
-              padding: `${editorPadding.top}px ${editorPadding.right}px ${editorPadding.bottom}px ${editorPadding.left}px`
-            }}
+            // style={{
+            //   width: '794px',
+            //   minHeight: '1123px',
+            //   height: 'max-content',
+            //   padding: `${editorPadding.top}px ${editorPadding.right}px ${editorPadding.bottom}px ${editorPadding.left}px`
+            // }}
             onClick={() => {
               if (!editor?.isFocused) {
                 editor?.commands.focus('end')
