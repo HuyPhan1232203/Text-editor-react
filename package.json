@@ -42,6 +42,7 @@
     "react-hotkeys-hook": "^5.2.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
+    "tiptap-pagination-plus": "^3.0.1",
     "vite-tsconfig-paths": "^6.0.1"
   },
   "devDependencies": {

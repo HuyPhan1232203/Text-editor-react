@@ -1,4 +1,5 @@
 export function inlineStyles (html: string): string {
+  const preservedHtml = html.replace(/<p([^>]*)><\/p>/g, '<p$1>&nbsp;</p>')
   const styleSheet = `
     <style>
       body {
@@ -189,7 +190,7 @@ export function inlineStyles (html: string): string {
   ${styleSheet}
 </head>
 <body>
-  ${html}
+  ${preservedHtml}
 </body>
 </html>`
 }

@@ -189,6 +189,14 @@
   margin: 0;
   cursor: pointer;
 }
+.ProseMirror .page-break {
+  page-break-after: always;
+  break-after: page;
+}
+
+.ProseMirror {
+  background: white;
+}
 /* Table Styles */
 .tiptap table {
   border-collapse: collapse;

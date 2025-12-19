@@ -64,6 +64,9 @@ export async function exportToPdf (
 
     const styledHtml = inlineStyles(htmlContent)
 
+    console.log({
+      html: styledHtml
+    })
     const response = await fetch(API_ENDPOINTS.GENERATE_PDF, {
       method: 'POST',
       headers: {

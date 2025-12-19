@@ -11,11 +11,12 @@ import { ImageUploadNode } from './tiptap-node/image-upload-node'
 import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { Color } from '@tiptap/extension-color'
 import { TableCellToolbar } from './tableTiptap/TableCellToolbar'
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Button } from './ui/button'
 import { FileCode } from 'lucide-react'
 import { PageSettingsDialog } from './PageSettingDialog'
 import { mmToPx } from '@/utils/convertUnit'
+import { PaginationPlus } from 'tiptap-pagination-plus'
 
 const extensions = [
   TextStyle,
@@ -26,6 +27,24 @@ const extensions = [
   }),
   Link.configure({
     openOnClick: false
+  }),
+  PaginationPlus.configure({
+    pageHeight: 1150,
+    pageWidth: 794,
+    pageGap: 16,
+    pageGapBorderSize: 1,
+    pageGapBorderColor: '#d1d5db',
+    pageBreakBackground: '#f3f4f6',
+    footerRight: '',
+    footerLeft: '',
+    headerLeft: '',
+    headerRight: '',
+    marginTop: 96,
+    marginBottom: 96,
+    marginLeft: 96,
+    marginRight: 96,
+    contentMarginTop: 10,
+    contentMarginBottom: 10
   }),
   TableKit.configure({
     table: {
@@ -82,7 +101,7 @@ const extensions = [
 // Main Editor Component
 export default function TiptapEditor () {
   const [pageSettings, setPageSettings] = useState({
-    topMargin: 25.4,    // 1 inch = 25.4mm
+    topMargin: 25.4,
     bottomMargin: 25.4,
     leftMargin: 25.4,
     rightMargin: 25.4
@@ -95,20 +114,13 @@ export default function TiptapEditor () {
   const editor = useEditor({
     extensions,
     autofocus: 'end',
-    content: '',
+    content: "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  \n    <style>\n      body {\n        font-family: 'Calibri', 'Segoe UI', system-ui, sans-serif;\n        font-size: 11pt;\n        line-height: 1.5;\n        color: #000;\n        margin: 0;\n        padding: 0;\n        background-color: transparent;\n      }\n      \n      p {\n        color: #000;\n        margin: 0;\n        line-height: 1.5;\n        font-size: 11pt;\n      }\n      \n      h1, h2, h3, h4, h5, h6 {\n        line-height: 1.3;\n        font-weight: 700;\n        margin: 12pt 0 6pt 0;\n        color: #000;\n        font-family: 'Calibri', 'Segoe UI', system-ui, sans-serif;\n      }\n      \n      h1 { font-size: 26pt; }\n      h2 { font-size: 19pt; }\n      h3 { font-size: 14pt; }\n      h4 { font-size: 13pt; }\n      h5 { font-size: 12pt; }\n      h6 { font-size: 11pt; }\n      \n      ul, ol {\n        padding-left: 36pt;\n        margin: 6pt 0;\n        color: #000;\n      }\n      \n      ul { list-style-type: disc; }\n      ol { list-style-type: decimal; }\n      \n      ul ul { \n        list-style-type: circle;\n        margin-top: 3pt;\n        margin-bottom: 3pt;\n      }\n      ul ul ul { list-style-type: square; }\n      \n      ol ol { \n        list-style-type: lower-alpha;\n        margin-top: 3pt;\n        margin-bottom: 3pt;\n      }\n      ol ol ol { list-style-type: lower-roman; }\n      \n      ul > li > ol,\n      ol > li > ul {\n        margin-top: 0.5rem;\n      }\n      \n      li {\n        margin: 3pt 0;\n        padding-left: 6pt;\n      }\n      \n      li > p {\n        margin: 0;\n        line-height: 1.5;\n      }\n      \n      code {\n        background-color: #f2f2f2;\n        color: #000;\n        padding: 2px 4px;\n        border-radius: 2px;\n        font-size: 10pt;\n        font-family: 'Courier New', monospace;\n      }\n      \n      pre {\n        background-color: #f2f2f2;\n        border: 1px solid #d0d0d0;\n        padding: 8px;\n        border-radius: 2px;\n        overflow-x: auto;\n        margin: 12pt 0;\n      }\n      \n      pre code {\n        background-color: transparent;\n        padding: 0;\n      }\n      \n      blockquote {\n        border-left: 4pt solid #808080;\n        padding-left: 12pt;\n        margin: 12pt 0;\n        color: #404040;\n        font-style: italic;\n      }\n      \n      a {\n        color: #0563c1;\n        text-decoration: underline;\n        cursor: pointer;\n      }\n      \n      a:hover {\n        color: #054399;\n      }\n      \n      table {\n        border-collapse: collapse;\n        table-layout: fixed;\n        width: 100%;\n        overflow: hidden;\n      }\n      \n      table td,\n      table th {\n        min-width: 1em;\n        border: 1px solid #e5e7eb;\n        padding-right: 5pt;\n        padding-left: 5pt;\n        vertical-align: top;\n        box-sizing: border-box;\n        position: relative;\n        color: #1f2937;\n        background-color: #fff;\n        word-wrap: break-word;\n        word-break: break-word;\n        overflow-wrap: break-word;\n        hyphens: auto;\n      }\n      \n      table.no-border td,\n      table.no-border th {\n        border: none !important;\n        border-bottom: 1px solid transparent !important;\n      }\n      \n      strong, b { font-weight: 700; }\n      em, i { font-style: italic; }\n      u { text-decoration: underline; }\n      s, del { text-decoration: line-through; }\n      \n      hr {\n        border: none;\n        border-top: 0.5pt solid #000;\n        margin: 12pt 0;\n        height: 0;\n      }\n      \n      img {\n        max-width: 100%;\n        height: auto;\n        margin: 6pt 0;\n      }\n      \n      @media print {\n        body {\n          -webkit-print-color-adjust: exact;\n          print-color-adjust: exact;\n        }\n        \n        h1, h2, h3, h4, h5, h6 {\n          page-break-after: avoid;\n        }\n        \n        p {\n          orphans: 3;\n          widows: 3;\n        }\n        \n        img, table {\n          page-break-inside: avoid;\n        }\n      }\n    </style>\n  \n</head>\n<body>\n  <h1 style=\"text-align: left;\"><strong>Example | Tiptap Pagination</strong></h1><h3 style=\"text-align: left;\"><strong>Basic Setup</strong></h3><pre><code>import { Editor } from '@tiptap/core';</code></pre><p style=\"text-align: left;\"><code>import StarterKit from '@tiptap/starter-kit';</code></p><p style=\"text-align: left;\"><code>import { PaginationPlus, PAGE_SIZES } from 'tiptap-pagination-plus';</code></p><p style=\"text-align: left;\"><code>import { PaginationTable } from 'tiptap-table-plus';</code></p><p style=\"text-align: left;\"><code>const {</code></p><p style=\"text-align: left;\"><code>TablePlus, TableRowPlus, TableCellPlus, TableHeaderPlus</code></p><p style=\"text-align: left;\"><code>} = PaginationTable;</code></p><p style=\"text-align: left;\"><code>const editor = new Editor({</code></p><p style=\"text-align: left;\"><code>extensions: [</code></p><p style=\"text-align: left;\"><code>StarterKit,</code></p><p style=\"text-align: left;\"><code>TablePlus,</code></p><p style=\"text-align: left;\"><code>TableRowPlus,</code></p><p style=\"text-align: left;\"><code>TableCellPlus,</code></p><p style=\"text-align: left;\"><code>TableHeaderPlus,</code></p><p style=\"text-align: left;\"><code>PaginationPlus.configure({</code></p><p style=\"text-align: left;\"><code>pageHeight: 842,</code></p><p style=\"text-align: left;\"><code>pageWidth: 789,</code></p><p style=\"text-align: left;\"><code>pageGap: 20,</code></p><p style=\"text-align: left;\"><code>pageGapBorderSize: 1,</code></p><p style=\"text-align: left;\"><code>pageGapBorderColor: \"#e5e5e5\",</code></p><p style=\"text-align: left;\"><code>pageBreakBackground: \"#F7F7F8\",</code></p><p style=\"text-align: left;\"><code>pageHeaderHeight: 25,</code></p><p style=\"text-align: left;\"><code>pageFooterHeight: 25,</code></p><p style=\"text-align: left;\"><code>footerRight: \"Made with ❤️ by Romik\",</code></p><p style=\"text-align: left;\"><code>footerLeft: \"Page {page}\",</code></p><p style=\"text-align: left;\"><code>headerLeft: \"Header Left\",</code></p><p style=\"text-align: left;\"><code>headerRight: \"Header Right\",</code></p><p style=\"text-align: left;\"><code>marginTop: 30,</code></p><p style=\"text-align: left;\"></p><p style=\"text-align: left;\"></p><p style=\"text-align: left;\"></p><p style=\"text-align: left;\"></p><p style=\"text-align: left;\"></p><p style=\"text-align: left;\"><code>marginBottom: 50,</code></p><p style=\"text-align: left;\"><code>marginLeft: 70,</code></p><p style=\"text-align: left;\"><code>marginRight: 70,</code></p><p style=\"text-align: left;\"><code>contentMarginTop: 30,</code></p><p style=\"text-align: left;\"><code>contentMarginBottom: 30,</code></p><p style=\"text-align: left;\"><code>}),</code></p><p style=\"text-align: left;\"><code>],</code></p><p style=\"text-align: left;\"><code>})</code></p><h3 style=\"text-align: left;\"><strong>Using Commands</strong></h3><pre><code>// Example: Using predefined page sizes</code></pre><p style=\"text-align: left;\"><code>editor.chain().focus().updatePageSize(PAGE_SIZES.A4).run()</code></p><p style=\"text-align: left;\"><code>// Example: Dynamic updates</code></p><p style=\"text-align: left;\"><code>editor.chain().focus()</code></p><p style=\"text-align: left;\"><code>.updatePageHeight(1000)</code></p><p style=\"text-align: left;\"><code>.updatePageWidth(600)</code></p><p style=\"text-align: left;\"><code>.updateMargins({ top: 30, bottom: 30, left: 60, right: 60 })</code></p><p style=\"text-align: left;\"><code>.updateHeaderContent('Document Title', 'Page {page}')</code></p><p style=\"text-align: left;\"><code>.updateFooterContent('Confidential', 'Page {page} of {total}')</code></p><p style=\"text-align: left;\"><code>.run()</code></p><p style=\"text-align: left;\"><code>// Update page background color</code></p><p style=\"text-align: left;\"><code>editor.chain().focus().updatePageBreakBackground('#f0f0f0').run()</code></p><hr><p style=\"text-align: left;\"><strong>Links:</strong></p><ul><li><p style=\"text-align: left;\"><a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.npmjs.com/package/tiptap-pagination-plus\">NPM</a></p></li><li><p style=\"text-align: left;\"><a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://github.com/RomikMakavana/tiptap-pagination-plus\">GitHub</a></p></li></ul><p style=\"text-align: left;\"></p>\n</body>\n</html>",
     editorProps: {
       attributes: {
         class: 'tiptap-editor-content focus:outline-none'
       }
     }
   })
-
-  const editorPadding = useMemo(() => ({
-    top: mmToPx(pageSettings.topMargin),
-    right: mmToPx(pageSettings.rightMargin),
-    bottom: mmToPx(pageSettings.bottomMargin),
-    left: mmToPx(pageSettings.leftMargin)
-  }), [pageSettings])
 
   // Tối ưu: Dùng useCallback để memoize function
   const updateSwitchUI = useCallback((tableIndex: number, isHidden: boolean) => {
@@ -311,23 +323,19 @@ export default function TiptapEditor () {
         </div>
 
         {/* Editor Content - Document View */}
-        <div className='flex-1 overflow-auto p-8 flex justify-center'>
-          <div
-            className='bg-white shadow-xl relative document-page'
-            style={{
-              width: '794px',
-              minHeight: '1123px',
-              height: 'max-content',
-              padding: `${editorPadding.top}px ${editorPadding.right}px ${editorPadding.bottom}px ${editorPadding.left}px`
-            }}
-            onClick={() => {
-              if (!editor?.isFocused) {
-                editor?.commands.focus('end')
-              }
-            }}
-          >
-            <EditorContent editor={editor} />
-            <TableCellToolbar editor={editor} />
+        <div className='flex-1 overflow-auto p-8 bg-gray-100 flex justify-center'>
+          <div className='w-full max-w-4xl'>
+            <div
+              className='relative'
+              onClick={() => {
+                if (!editor?.isFocused) {
+                  editor?.commands.focus('end')
+                }
+              }}
+            >
+              <EditorContent editor={editor} />
+              <TableCellToolbar editor={editor} />
+            </div>
           </div>
         </div>
 
