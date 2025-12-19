@@ -154,44 +154,46 @@ export default function TiptapEditor () {
     tables.forEach((table, index) => {
       const tableElement = table as HTMLElement
 
-      // Set data attribute
+      // gán index cho table (để debug/trace)
       if (!tableElement.dataset.tableIndex) {
         tableElement.dataset.tableIndex = index.toString()
       }
 
-      // Kiểm tra xem control đã được thêm chưa
-      const existingControl = tableElement.parentElement?.querySelector(`[data-table-control="${index}"]`)
+      // 1) đảm bảo mỗi table có wrapper riêng để đặt overlay (absolute)
+      let wrapper = tableElement.closest('.table-wrap') as HTMLElement | null
+
+      if (!wrapper) {
+        wrapper = document.createElement('div')
+        wrapper.className = 'table-wrap'
+
+        const parent = tableElement.parentElement
+
+        if (!parent) return
+
+        parent.insertBefore(wrapper, tableElement)
+        wrapper.appendChild(tableElement)
+      }
+
+      // 2) tìm control chỉ trong wrapper (tránh dính nhầm table khác)
+      const existingControl = wrapper.querySelector(
+        `[data-table-control="${index}"]`
+      ) as HTMLElement | null
 
       if (!existingControl) {
         const controlsDiv = document.createElement('div')
 
         controlsDiv.className = 'table-controls'
         controlsDiv.setAttribute('data-table-control', index.toString())
-        controlsDiv.style.display = 'flex'
-        controlsDiv.style.alignItems = 'center'
-        controlsDiv.style.gap = '12px'
-        controlsDiv.style.marginTop = '12px'
-        controlsDiv.style.marginBottom = '20px'
-        controlsDiv.style.padding = '12px'
-        controlsDiv.style.backgroundColor = '#f8f9fa'
-        controlsDiv.style.borderRadius = '6px'
-        controlsDiv.style.border = '1px solid #e5e7eb'
 
         // Label
         const label = document.createElement('label')
 
-        label.style.fontSize = '13px'
-        label.style.fontWeight = '500'
-        label.style.color = '#374151'
-        label.style.margin = '0'
-        label.style.cursor = 'pointer'
         label.textContent = 'Hiển thị border:'
 
         // Switch container
         const switchContainer = document.createElement('div')
 
         switchContainer.className = 'switch-wrapper'
-        switchContainer.style.display = 'inline-flex'
 
         // Switch button
         const switchButton = document.createElement('button')
@@ -199,17 +201,12 @@ export default function TiptapEditor () {
         switchButton.setAttribute('data-switch-index', index.toString())
         switchButton.className = 'table-border-toggle'
         switchButton.type = 'button'
-        switchButton.style.backgroundColor = tableBorderStates[index] ? '#d1d5db' : '#10b981'
-        switchButton.style.border = 'none'
-        switchButton.style.cursor = 'pointer'
-        switchButton.style.transition = 'background-color 200ms'
-        switchButton.style.borderRadius = '9999px'
-        switchButton.style.width = '44px'
-        switchButton.style.height = '24px'
-        switchButton.style.display = 'inline-flex'
-        switchButton.style.alignItems = 'center'
-        switchButton.style.padding = '0'
-        switchButton.style.position = 'relative'
+
+        // Thumb
+        const thumb = document.createElement('span')
+
+        thumb.setAttribute('data-thumb-index', index.toString())
+        switchButton.appendChild(thumb)
 
         switchButton.addEventListener('click', (e) => {
           e.preventDefault()
@@ -217,38 +214,21 @@ export default function TiptapEditor () {
           handleToggleTableBorder(index)
         })
 
-        // Thumb
-        const thumb = document.createElement('span')
-
-        thumb.setAttribute('data-thumb-index', index.toString())
-        thumb.style.display = 'inline-block'
-        thumb.style.height = '20px'
-        thumb.style.width = '20px'
-        thumb.style.borderRadius = '9999px'
-        thumb.style.backgroundColor = 'white'
-        thumb.style.transition = 'transform 200ms ease'
-        thumb.style.transform = tableBorderStates[index] ? 'translateX(20px)' : 'translateX(1px)'
-        thumb.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'
-        thumb.style.position = 'absolute'
-        thumb.style.left = '2px'
-
-        switchButton.appendChild(thumb)
-
         controlsDiv.appendChild(label)
         switchContainer.appendChild(switchButton)
         controlsDiv.appendChild(switchContainer)
 
-        tableElement.parentElement?.insertBefore(controlsDiv, tableElement.nextSibling)
-
-        // Áp dụng state hiện tại cho table
-        if (tableBorderStates[index]) {
-          tableElement.classList.add('no-border')
-        } else {
-          tableElement.classList.remove('no-border')
-        }
+        // IMPORTANT: append vào wrapper để overlay (không insert sau table nữa)
+        wrapper.appendChild(controlsDiv)
       }
+
+      // 3) áp dụng state hiện tại cho table + cập nhật UI switch
+      const isHidden = !!tableBorderStates[index]
+
+      tableElement.classList.toggle('no-border', isHidden)
+      updateSwitchUI(index, isHidden)
     })
-  }, [tableBorderStates, handleToggleTableBorder])
+  }, [tableBorderStates, handleToggleTableBorder, updateSwitchUI])
 
   // Tối ưu: useEffect với cleanup để tránh memory leaks
   useEffect(() => {

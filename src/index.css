@@ -355,7 +355,49 @@
     transform: translateY(0);
   }
 }
+.table-wrap {
+  position: relative;
+}
 
+.table-wrap .table-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 30;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 0;              /* không chiếm layout */
+  padding: 8px 10px;
+
+  background: rgba(248, 249, 250, 0.95);
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.10);
+}
+
+/* Optional: chỉ hiện khi hover/focus trong table */
+.table-wrap .table-controls {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+.table-wrap:hover .table-controls,
+.table-wrap:focus-within .table-controls {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* label gọn lại */
+.table-wrap .table-controls label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  user-select: none;
+}
 .animate-in {
   animation-duration: 200ms;
 }
