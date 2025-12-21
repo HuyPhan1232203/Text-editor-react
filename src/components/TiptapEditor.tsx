@@ -13,7 +13,6 @@ import { Color } from '@tiptap/extension-color'
 import { TableCellToolbar } from './tableTiptap/TableCellToolbar'
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { Button } from './ui/button'
-import { FileCode } from 'lucide-react'
 import { PageSettingsDialog } from './PageSettingDialog'
 import { mmToPx } from '@/utils/convertUnit'
 import PaginationExtension, { BodyNode, PageNode } from '@/paging'
@@ -24,11 +23,11 @@ export default function TiptapEditor () {
     topMargin: 25.4,
     bottomMargin: 25.4,
     leftMargin: 25.4,
-    rightMargin: 25.4
+    rightMargin: 25.4,
+    orientation: 'portrait' as 'landscape' | 'portrait'
   })
 
   const [showHtmlPreview, setShowHtmlPreview] = useState(false)
-  const [generatedHtml, setGeneratedHtml] = useState<string>('')
   const [tableBorderStates, setTableBorderStates] = useState<Record<number, boolean>>({})
   const extensions = useMemo(() => [
     TextStyle,
@@ -40,6 +39,10 @@ export default function TiptapEditor () {
         bottom: pageSettings.bottomMargin,
         left: pageSettings.leftMargin,
         right: pageSettings.rightMargin
+      },
+      defaultPaperOrientation: pageSettings.orientation,
+      pageAmendmentOptions: {
+        enableFooter: true
       }
     }),
     PageNode,
@@ -111,13 +114,6 @@ export default function TiptapEditor () {
       }
     }
   })
-
-  const editorPadding = useMemo(() => ({
-    top: mmToPx(pageSettings.topMargin),
-    right: mmToPx(pageSettings.rightMargin),
-    bottom: mmToPx(pageSettings.bottomMargin),
-    left: mmToPx(pageSettings.leftMargin)
-  }), [pageSettings])
 
   // Tối ưu: Dùng useCallback để memoize function
   const updateSwitchUI = useCallback((tableIndex: number, isHidden: boolean) => {
@@ -239,32 +235,18 @@ export default function TiptapEditor () {
   // CHỈ sync khi user thay đổi pageSettings qua dialog
   // CHỈ sync khi user thay đổi pageSettings qua dialog
   useEffect(() => {
-    if (!editor) return
-    if (editor.isDestroyed) return
+    if (!editor || editor.isDestroyed) return
 
-    console.log('🔧 Updating ALL pages margins:', pageSettings)
-
-    // Sử dụng editor.chain() thay vì tạo transaction thủ công
-    editor.chain()
-      .command(({ tr }) => {
-      // Set meta trong chain command
-        tr.setMeta('updatePaginationMargins', {
-          top: pageSettings.topMargin,
-          bottom: pageSettings.bottomMargin,
-          left: pageSettings.leftMargin,
-          right: pageSettings.rightMargin
-        })
-        return true
-      })
+    editor
+      .chain()
       .setDocumentPageMargins({
         top: pageSettings.topMargin,
         bottom: pageSettings.bottomMargin,
         left: pageSettings.leftMargin,
         right: pageSettings.rightMargin
       })
+      .setDocumentPaperOrientation(pageSettings.orientation) // <== thêm dòng này
       .run()
-
-    console.log('✅ Margins updated')
   }, [editor, pageSettings])
 
   // Tối ưu: useEffect với cleanup để tránh memory leaks
@@ -285,38 +267,6 @@ export default function TiptapEditor () {
     }
   }, [editor, handleEditorUpdate])
 
-  // Tối ưu: useCallback cho export handlers
-  const handleExportHtml = useCallback(() => {
-    if (!editor) return
-
-    const htmlContent = editor.getHTML()
-
-    setGeneratedHtml(htmlContent)
-    setShowHtmlPreview(true)
-
-    // Download HTML file
-    const blob = new Blob([htmlContent], { type: 'text/html' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-
-    a.href = url
-    a.download = `document-${Date.now()}.html`
-    a.click()
-    URL.revokeObjectURL(url)
-
-    console.log('HTML Content:', htmlContent)
-  }, [editor])
-
-  const handleCopyHtml = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(generatedHtml)
-      alert('Đã copy HTML vào clipboard!')
-    } catch (error) {
-      console.error('Copy failed:', error)
-      alert('Không thể copy HTML!')
-    }
-  }, [generatedHtml])
-
   return (
     <EditorContext.Provider value={{ editor }}>
       <div className='flex flex-col h-screen bg-gray-200'>
@@ -328,6 +278,7 @@ export default function TiptapEditor () {
             bottomMargin={mmToPx(pageSettings.bottomMargin)}
             leftMargin={mmToPx(pageSettings.leftMargin)}
             rightMargin={mmToPx(pageSettings.rightMargin)}
+            orientation={pageSettings.orientation}
           />
         </div>
 
@@ -358,51 +309,12 @@ export default function TiptapEditor () {
                 Lề: T:{pageSettings.topMargin}mm |
                 P:{pageSettings.rightMargin}mm |
                 D:{pageSettings.bottomMargin}mm |
-                T:{pageSettings.leftMargin}mm
+                T:{pageSettings.leftMargin}mm |
+                Hướng:{pageSettings.orientation === 'portrait' ? 'Dọc' : 'Ngang'}
               </div>
-            </div>
-            <div className='flex gap-2'>
-              <Button
-                onClick={handleExportHtml}
-                variant='default'
-                size='sm'
-              >
-                <FileCode className='w-4 h-4 mr-2' />
-                Export HTML
-              </Button>
             </div>
           </div>
         </div>
-
-        {/* HTML Preview Modal */}
-        {showHtmlPreview && (
-          <div className='fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4'>
-            <div className='bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-auto'>
-              <div className='flex items-center justify-between p-4 border-b border-gray-200 sticky top-0 bg-white'>
-                <h3 className='text-lg font-semibold'>HTML Output</h3>
-                <div className='flex gap-2'>
-                  <Button
-                    onClick={handleCopyHtml}
-                    variant='outline'
-                    size='sm'
-                  >
-                    Copy
-                  </Button>
-                  <Button
-                    onClick={() => setShowHtmlPreview(false)}
-                    variant='ghost'
-                    size='sm'
-                  >
-                    Close
-                  </Button>
-                </div>
-              </div>
-              <pre className='bg-gray-50 p-4 overflow-auto text-sm font-mono text-gray-800'>
-                {generatedHtml}
-              </pre>
-            </div>
-          </div>
-        )}
       </div>
     </EditorContext.Provider>
   )

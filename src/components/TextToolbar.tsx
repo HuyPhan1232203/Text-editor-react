@@ -23,9 +23,18 @@ interface TextToolbarProps {
   bottomMargin: number
   leftMargin: number
   rightMargin: number
+  orientation: 'landscape' | 'portrait'
 }
 
-export function TextToolbar ({ editor, topMargin, bottomMargin, leftMargin, rightMargin }: TextToolbarProps) {
+export function TextToolbar (
+  {
+    editor,
+    topMargin,
+    bottomMargin,
+    leftMargin,
+    rightMargin,
+    orientation
+  }: TextToolbarProps) {
   const editorState = useEditorState({
     editor,
     selector: ctx => ({
@@ -46,17 +55,6 @@ export function TextToolbar ({ editor, topMargin, bottomMargin, leftMargin, righ
       canRedo: ctx.editor.can().chain().redo().run()
     })
   })
-  const handleExportDocx = async () => {
-    await exportToDocx(editor, {
-      fileName: 'my-document.docx',
-      pageSettings: {
-        topMargin,
-        bottomMargin,
-        leftMargin,
-        rightMargin
-      }
-    })
-  }
   const handleExportPDF = async () => {
     await exportToPdf(editor, {
       fileName: 'my-document.pdf',
@@ -65,7 +63,8 @@ export function TextToolbar ({ editor, topMargin, bottomMargin, leftMargin, righ
         topMargin,
         bottomMargin,
         leftMargin,
-        rightMargin
+        rightMargin,
+        orientation
       }
     })
   }
@@ -283,14 +282,9 @@ export function TextToolbar ({ editor, topMargin, bottomMargin, leftMargin, righ
       />
       <Divider />
 
-      {/* Export DOCX Button */}
-      <Button onClick={handleExportDocx} variant='ghost' title='Xuất file DOCX'>
-        <Download className='w-4 h-4 mr-2' />
-        Export DOCX
-      </Button>
       <Button onClick={handleExportPDF} variant='ghost' title='Xuất file PDF'>
         <File className='w-4 h-4 mr-2' />
-        Export PDF
+        Xuất PDF
       </Button>
     </div>
   )

@@ -10,6 +10,7 @@ interface PageSettings {
   bottomMargin?: number
   leftMargin?: number
   rightMargin?: number
+  orientation?: 'landscape' | 'portrait'
 }
 
 interface ExportPdfOptions {
@@ -27,7 +28,8 @@ const DEFAULT_PAGE_SETTINGS: Required<PageSettings> = {
   topMargin: 20,
   bottomMargin: 20,
   leftMargin: 20,
-  rightMargin: 20
+  rightMargin: 20,
+  orientation: 'portrait'
 }
 
 export async function exportToPdf (
@@ -79,7 +81,8 @@ export async function exportToPdf (
           bottom: `${margins.bottomMargin}px`,
           left: `${margins.leftMargin}px`,
           right: `${margins.rightMargin}px`
-        }
+        },
+        orientation: margins.orientation
       })
     })
 
