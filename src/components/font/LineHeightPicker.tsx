@@ -4,7 +4,7 @@ import { Editor } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { AlignVerticalSpaceAround, Check } from 'lucide-react'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap-ui-primitive/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
 import { Input } from '@/components/ui/input'
 
 interface LineHeightPickerProps {
