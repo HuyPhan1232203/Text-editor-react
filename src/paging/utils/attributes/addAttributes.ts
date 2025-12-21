@@ -13,7 +13,7 @@ import type { NodeAttributes } from '../../types/node'
  * @param attributes - The attributes to add to the node.
  * @returns {Attributes} The attributes to add to the node.
  */
-export const addNodeAttributes = <T extends Record<string, any>>(attributes: NodeAttributes<T>): Attributes => {
+export const addNodeAttributes = <T extends Record<string, unknown>>(attributes: NodeAttributes<T>): Attributes => {
   return Object.entries(attributes).reduce(
     (attributes, [key, config]) => ({
       ...attributes,
@@ -44,6 +44,7 @@ const parseHTMLAttribute = <T>(attr: string, fallback: T) =>
     try {
       return JSON.parse(attrValue)
     } catch (error) {
+      console.log(error)
       return fallback
     }
   }

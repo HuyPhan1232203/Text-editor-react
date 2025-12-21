@@ -38,7 +38,11 @@ export const HeaderFooterNode = Node.create({
   },
 
   renderHTML ({ HTMLAttributes }) {
-    return [baseElement, mergeAttributes(HTMLAttributes, { [headerFooterAttribute]: true, class: HEADER_FOOTER_NODE_NAME }), 0]
+    return [
+      baseElement,
+      mergeAttributes(HTMLAttributes,
+                      { [headerFooterAttribute]: true, class: HEADER_FOOTER_NODE_NAME }
+      ), 0]
   },
 
   addNodeView () {

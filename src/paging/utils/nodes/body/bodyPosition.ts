@@ -30,7 +30,8 @@ export const getThisBodyNodePosition = (doc: PMNode, pos: ResolvedPos | number):
  * @param pos - The resolved position in the document or the absolute position of the node.
  * @returns {bodyPos: number, bodyNode: Node} The position and the node of the body.
  */
-export const getBodyNodeAndPosition = (doc: PMNode, pos: ResolvedPos | number): { bodyPos: number, bodyNode: Nullable<PMNode> } => {
+export const getBodyNodeAndPosition = (
+  doc: PMNode, pos: ResolvedPos | number): { bodyPos: number, bodyNode: Nullable<PMNode> } => {
   if (typeof pos === 'number') {
     return getBodyNodeAndPosition(doc, doc.resolve(pos))
   }

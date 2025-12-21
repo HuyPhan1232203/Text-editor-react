@@ -74,7 +74,8 @@ export const calculateShorthandPageBorders = (pageBorders: BorderConfig): string
  * @returns {BorderConfig} The page border config of the specified page or default.
  */
 export const getPageNumPageBorders = (editor: Editor, pageNum: number): BorderConfig =>
-  getPageAttributeByPageNum(editor.state, pageNum, getPaginationExtensionOptions(editor).defaultPageBorders, getPageNodePageBorders)
+  getPageAttributeByPageNum(
+    editor.state, pageNum, getPaginationExtensionOptions(editor).defaultPageBorders, getPageNodePageBorders)
 
 /**
  * Set the page borders of a page node.
@@ -115,7 +116,8 @@ export const setPageNodePosPageBorders = (
  * @param value - The new value of the border.
  * @returns {boolean} True if the border was updated, false otherwise.
  */
-export const updatePageBorder = (tr: Transaction, pagePos: number, pageNode: PMNode, border: MultiAxisSide, value: number): boolean => {
+export const updatePageBorder = (
+  tr: Transaction, pagePos: number, pageNode: PMNode, border: MultiAxisSide, value: number): boolean => {
   return updatePageSideConfig(
     tr,
     pagePos,

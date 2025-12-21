@@ -8,12 +8,12 @@ import CreateTablePopover, { type CreateTablePayload } from './tiptap/tableTipta
 import { ListButton } from './tiptap/tiptap-ui/list-button'
 import { ButtonGroup } from './tiptap/tiptap-ui-primitive/button'
 import { Button } from './ui/button'
-import { HeadingPopover } from './header/HeadingPopover'
 import { TextColorPicker } from './tiptap/text-color/TextColorPicker'
 import { FontFamilyPicker } from './font/FontFamilyPicker'
 import { FontSizePicker } from './font/FontSizePicker'
 import { LineHeightPicker } from './font/LineHeightPicker'
 import { exportToPdf } from '@/utils/exportPDF'
+import { HeadingPopover } from './tiptap/header/HeadingPopover'
 
 interface TextToolbarProps {
   editor: Editor

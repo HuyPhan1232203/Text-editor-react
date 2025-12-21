@@ -90,7 +90,10 @@ const KeymapPlugin = keymap({
       return false
     }
 
-    const { pos: previousParagraphPos, node: previousParagraphNode } = getLastParagraphInPreviousPageBodyBeforePos(doc, paragraphPos)
+    const {
+      pos: previousParagraphPos,
+      node: previousParagraphNode
+    } = getLastParagraphInPreviousPageBodyBeforePos(doc, paragraphPos)
 
     if (!previousParagraphNode) {
       // Handle to prevent cursor moving to header
@@ -147,7 +150,10 @@ const KeymapPlugin = keymap({
       return false
     }
 
-    const { pos: nextParagraphPos, node: nextParagraphNode } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
+    const {
+      pos: nextParagraphPos,
+      node: nextParagraphNode
+    } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
 
     if (!nextParagraphNode) {
       // Handle to prevent cursor moving to footer
@@ -217,7 +223,10 @@ const KeymapPlugin = keymap({
       return false
     }
 
-    const { pos: previousParagraphPos, node: previousParagraphNode } = getLastParagraphInPreviousPageBodyBeforePos(doc, paragraphPos)
+    const {
+      pos: previousParagraphPos,
+      node: previousParagraphNode
+    } = getLastParagraphInPreviousPageBodyBeforePos(doc, paragraphPos)
 
     if (!previousParagraphNode) {
       if (!isPosAtStartOfBody(doc, $pos)) {
@@ -233,7 +242,11 @@ const KeymapPlugin = keymap({
 
     const { lineCount: prevParLineCount } = getParagraphLineInfo(view, previousParagraphPos)
     const prevParagraphLastLineNum = prevParLineCount - 1
-    const cursorOffset = getOffsetForDistanceInLine(view, previousParagraphPos, prevParagraphLastLineNum, offsetDistance) + 1
+    const cursorOffset = getOffsetForDistanceInLine(
+      view,
+      previousParagraphPos,
+      prevParagraphLastLineNum,
+      offsetDistance) + 1
 
     setSelectionToParagraph(tr, previousParagraphPos, previousParagraphNode, cursorOffset)
 
@@ -296,7 +309,10 @@ const KeymapPlugin = keymap({
       return false
     }
 
-    const { pos: nextParagraphPos, node: nextParagraphNode } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
+    const {
+      pos: nextParagraphPos,
+      node: nextParagraphNode
+    } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
 
     if (!nextParagraphNode) {
       if (!isPosAtEndOfBody(doc, $pos)) {
@@ -530,7 +546,10 @@ const KeymapPlugin = keymap({
       return false
     }
 
-    const { pos: nextParagraphPos, node: nextParagraphNode } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
+    const {
+      pos: nextParagraphPos,
+      node: nextParagraphNode
+    } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
 
     if (!nextParagraphNode) {
       // Handle to prevent cursor moving to footer

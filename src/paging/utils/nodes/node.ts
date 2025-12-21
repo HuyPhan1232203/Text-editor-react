@@ -58,7 +58,8 @@ const doesNodeTypeMatch = (node: Nullable<PMNode>, type: string | string[]): boo
  * @param type - The type of the node to search for. Can be string or an array of strings.
  * @returns {ResolvedPos} The position of the parent node of the specified type.
  */
-export const getParentNodePosOfType = (doc: PMNode, $pos: ResolvedPos | number, type: string | string[]): ResolvedPos => {
+export const getParentNodePosOfType = (
+  doc: PMNode, $pos: ResolvedPos | number, type: string | string[]): ResolvedPos => {
   // Base case: If the position is a number, resolve it
   if (typeof $pos !== 'number') {
     const thisNode = doc.nodeAt($pos.pos)
@@ -78,6 +79,7 @@ export const getParentNodePosOfType = (doc: PMNode, $pos: ResolvedPos | number, 
     try {
       return getParentNodePosOfType(doc, $pos.before(), type)
     } catch (error) {
+      console.log(error)
       return getParentNodePosOfType(doc, doc.resolve($pos.pos - 1), type)
     }
   }
@@ -146,7 +148,8 @@ export const isNodeEmpty = (node: PMNode): boolean => {
  * @param preventNestedNodes - True if nested nodes should be prevented, false otherwise.
  * @returns {TagParseRule} The rule that matches the node based on the specified tag and attribute.
  */
-export const parseHTMLNode = (baseElement: string, nodeTagAttribute: string, preventNestedNodes: boolean): TagParseRule => ({
+export const parseHTMLNode = (
+  baseElement: string, nodeTagAttribute: string, preventNestedNodes: boolean): TagParseRule => ({
   tag: `${baseElement}[${nodeTagAttribute}]`,
   getAttrs: parseHTMLNodeGetAttrs(nodeTagAttribute, preventNestedNodes)
 })

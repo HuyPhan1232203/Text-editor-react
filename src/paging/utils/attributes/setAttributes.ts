@@ -16,7 +16,7 @@ import { Transaction } from '@tiptap/pm/state'
  * @param value - The value to set the attribute to.
  * @returns {boolean} True if the attribute was changed, false otherwise.
  */
-export const setNodeAttribute = (tr: Transaction, pos: number, node: PMNode, attr: string, value: any): boolean => {
+export const setNodeAttribute = (tr: Transaction, pos: number, node: PMNode, attr: string, value: unknown): boolean => {
   const nodeAttr = node.attrs[attr]
   const isDifferent = nodeAttr !== value
 

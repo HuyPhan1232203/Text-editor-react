@@ -163,7 +163,6 @@ const measureNodeHeights = (view: EditorView, contentNodes: NodePosArray): numbe
  * @param options - The pagination options.
  * @param contentNodes - The content nodes and their positions.
  * @param nodeHeights - The heights of the content nodes.
- * @returns {newDoc: PMNode, oldToNewPosMap: CursorMap} The new document and the mapping from old positions to new positions.
  */
 const buildNewDocument = (
   editor: Editor,
@@ -183,7 +182,11 @@ const buildNewDocument = (
   let pageNum = 0
   const pages: PMNode[] = []
   let existingPageNode: Nullable<PMNode> = doc.maybeChild(pageNum)
-  let { pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions } = getPaginationNodeAttributes(editor, pageNum, defaultMarginConfig)
+  let {
+    pageNodeAttributes,
+    pageRegionNodeAttributes,
+    bodyPixelDimensions
+  } = getPaginationNodeAttributes(editor, pageNum, defaultMarginConfig)
 
   const constructHeaderFooter = <HF extends HeaderFooter>(pageRegionType: HeaderFooter) =>
     (headerFooterAttrs: HeaderFooterNodeAttributes<HF>): PMNode | undefined => {
@@ -315,7 +318,11 @@ const limitMappedCursorPositions = (oldToNewPosMap: CursorMap, docSize: number):
  * @param newDocContentSize - The size of the new document. Serves as maximum limit for cursor position.
  * @returns {number} The new cursor position.
  */
-const mapCursorPosition = (contentNodes: NodePosArray, oldCursorPos: number, oldToNewPosMap: CursorMap, newDocContentSize: number) => {
+const mapCursorPosition = (
+  contentNodes: NodePosArray,
+  oldCursorPos: number,
+  oldToNewPosMap: CursorMap,
+  newDocContentSize: number) => {
   let newCursorPos: Nullable<number> = null
 
   for (let i = 0; i < contentNodes.length; i++) {

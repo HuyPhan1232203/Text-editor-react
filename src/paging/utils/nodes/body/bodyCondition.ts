@@ -84,7 +84,8 @@ export const isPosAtLastChildOfBody = (doc: PMNode, $pos: ResolvedPos | number):
  * @param checkExactStart - Whether the position must be at the exact start of the body.
  * @returns {boolean} True if the position is at the start of the first page's body, false otherwise.
  */
-export const isPosAtStartOfDocumentBody = (doc: PMNode, $pos: ResolvedPos | number, checkExactStart: boolean): boolean => {
+export const isPosAtStartOfDocumentBody = (
+  doc: PMNode, $pos: ResolvedPos | number, checkExactStart: boolean): boolean => {
   if (typeof $pos === 'number') {
     return isPosAtStartOfDocumentBody(doc, doc.resolve($pos), checkExactStart)
   }
@@ -122,7 +123,8 @@ export const isPosAtEndOfDocumentBody = (doc: PMNode, $pos: ResolvedPos | number
  * @param checkExactStart - Whether the position must be at the exact start of the body.
  * @returns {boolean} True if the position is at the start of the document, false otherwise.
  */
-export const isPosMatchingStartOfBodyCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactStart: boolean): boolean => {
+export const isPosMatchingStartOfBodyCondition = (
+  doc: PMNode, $pos: ResolvedPos | number, checkExactStart: boolean): boolean => {
   // Resolve position if given as a number
   if (typeof $pos === 'number') {
     return isPosMatchingStartOfBodyCondition(doc, doc.resolve($pos), checkExactStart)
@@ -166,7 +168,8 @@ export const isPosMatchingStartOfBodyCondition = (doc: PMNode, $pos: ResolvedPos
  * @param checkExactEnd - Whether to check for the exact end of the body (true) or the last child of the body (false).
  * @returns {boolean} True if the condition is met, false otherwise.
  */
-export const isPosMatchingEndOfBodyCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactEnd: boolean): boolean => {
+export const isPosMatchingEndOfBodyCondition = (
+  doc: PMNode, $pos: ResolvedPos | number, checkExactEnd: boolean): boolean => {
   // Resolve position if given as a number
   if (typeof $pos === 'number') {
     return isPosMatchingEndOfBodyCondition(doc, doc.resolve($pos), checkExactEnd)

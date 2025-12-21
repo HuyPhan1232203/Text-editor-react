@@ -17,6 +17,7 @@ import type { PaginationOptions } from '../PaginationExtension'
  * @param extensionName - The name of the extension whose options are to be retrieved.
  * @returns The options of the specified extension, or undefined if the extension is not found.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getExtensionOptions = (editor: Editor, extensionName: string): Undefinable<Record<string, any>> => {
   const extension = findExtension(editor, extensionName)
 

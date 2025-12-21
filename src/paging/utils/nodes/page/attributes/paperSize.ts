@@ -136,7 +136,8 @@ export const getPageNodePaperSize = (pageNode: PMNode): Nullable<PaperSize> => {
  * @returns {PaperSize} The paper size of the specified page or default.
  */
 export const getPageNumPaperSize = (editor: Editor, pageNum: number): PaperSize =>
-  getPageAttributeByPageNum(editor.state, pageNum, getPaginationExtensionOptions(editor).defaultPaperSize, getPageNodePaperSize)
+  getPageAttributeByPageNum(
+    editor.state, pageNum, getPaginationExtensionOptions(editor).defaultPaperSize, getPageNodePaperSize)
 
 /**
  * Set the paper size for a page node at the specified position.
@@ -147,7 +148,8 @@ export const getPageNumPaperSize = (editor: Editor, pageNum: number): PaperSize 
  * @param paperSize - The paper size to set.
  * @returns {boolean} True if the paper size was set, false otherwise.
  */
-export const setPagePaperSize = (tr: Transaction, dispatch: Dispatch, pagePos: number, paperSize: PaperSize): boolean => {
+export const setPagePaperSize = (
+  tr: Transaction, dispatch: Dispatch, pagePos: number, paperSize: PaperSize): boolean => {
   const pageNode = tr.doc.nodeAt(pagePos)
 
   if (!pageNode) {

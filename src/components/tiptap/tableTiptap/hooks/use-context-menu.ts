@@ -5,7 +5,7 @@ import { calculateMenuPosition, getSelectionInfo, isTableCellElement } from '../
 
 const useContextMenuHandlers = (
   editor: Editor,
-  savedSelectionRef: React.MutableRefObject<any>,
+  savedSelectionRef: React.MutableRefObject<unknown>,
   setPosition: (pos: Position) => void,
   setIsVisible: (visible: boolean) => void
 ) => {

@@ -124,7 +124,8 @@ export const setBodyNodePosPageMargins = (
  * @param value - The new value of the margin.
  * @returns {boolean} True if the margin was updated, false otherwise.
  */
-export const updateBodyMargin = (tr: Transaction, pagePos: number, bodyNode: PMNode, margin: MultiAxisSide, value: number): boolean => {
+export const updateBodyMargin = (
+  tr: Transaction, pagePos: number, bodyNode: PMNode, margin: MultiAxisSide, value: number): boolean => {
   return updatePageSideConfig(
     tr,
     pagePos,

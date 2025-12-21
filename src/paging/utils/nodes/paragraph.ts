@@ -288,7 +288,8 @@ export const getParagraphNodeAndPosition = (doc: PMNode, pos: ResolvedPos | numb
  * @param pos - Any position within the current page's body
  * @returns {NullableNodePos} The previous page body's last paragraph and position, if any.
  */
-export const getLastParagraphInPreviousPageBodyBeforePos = (doc: PMNode, pos: ResolvedPos | number): NullableNodePos => {
+export const getLastParagraphInPreviousPageBodyBeforePos = (
+  doc: PMNode, pos: ResolvedPos | number): NullableNodePos => {
   const previousPageBody = getBodyBeforePos(doc, pos)
 
   if (!previousPageBody.node) {
@@ -665,7 +666,8 @@ export const isPosAtFirstLineOfParagraph = (
  * @param $pos - The [resolved] position in the document.
  * @returns {boolean} True if the position is at the last line of the paragraph, false otherwise.
  */
-export const isPosAtLastLineOfParagraph = (view: EditorView, $pos: ResolvedPos | number): { isAtLastLine: boolean } & ParagraphLineInfo => {
+export const isPosAtLastLineOfParagraph = (
+  view: EditorView, $pos: ResolvedPos | number): { isAtLastLine: boolean } & ParagraphLineInfo => {
   const { lineCount, lineNumber, ...otherLineInfo } = getParagraphLineInfo(view, $pos)
   const isAtLastLine = lineNumber + 1 === lineCount
 

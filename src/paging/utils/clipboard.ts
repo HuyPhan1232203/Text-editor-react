@@ -18,7 +18,10 @@ const constructChildOnlyClipboardSerialiser = (schema: Schema, isNode: (node: PM
   const clipboardSerialiser = Object.create(DOMSerializer.fromSchema(schema))
 
   // Override serializeFragment
-  clipboardSerialiser.serializeFragment = (fragment: Fragment, options = {}, target = document.createDocumentFragment()) => {
+  clipboardSerialiser.serializeFragment = (
+    fragment: Fragment,
+    options = {},
+    target = document.createDocumentFragment()) => {
     const serializer = DOMSerializer.fromSchema(schema)
 
     fragment.forEach((node) => {
@@ -61,7 +64,8 @@ const constructClipboardPlugin = (name: string, serialiser: DOMSerializer): Plug
  * @param isNode - A function that returns true if the node is a page node.
  * @returns {Plugin} The constructed clipboard plugin.
  */
-export const constructChildOnlyClipboardPlugin = (name: string, schema: Schema, isNode: (node: PMNode) => boolean): Plugin => {
+export const constructChildOnlyClipboardPlugin = (
+  name: string, schema: Schema, isNode: (node: PMNode) => boolean): Plugin => {
   const clipboardSerialiser = constructChildOnlyClipboardSerialiser(schema, isNode)
 
   return constructClipboardPlugin(name, clipboardSerialiser)

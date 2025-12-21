@@ -10,7 +10,7 @@
  * @param value - The value to check.
  * @returns {boolean} True if the value needs to be parsed, false otherwise.
  */
-const needsParsing = (value: any): boolean => {
+const needsParsing = (value: unknown): boolean => {
   if (typeof value !== 'string' || value.trim() === '') {
     return false // Exclude non-strings or empty strings
   }
@@ -28,7 +28,7 @@ const needsParsing = (value: any): boolean => {
         || normalized === 'null' // Null value
         || normalized === 'true' // Boolean true
         || normalized === 'false' // Boolean false
-        || !isNaN(normalized as any) // Numeric strings like "123" or "0.5"
+        || !isNaN(normalized as never) // Numeric strings like "123" or "0.5"
   )
 }
 
@@ -39,6 +39,7 @@ const needsParsing = (value: any): boolean => {
  * @param value - The value to parse.
  * @returns - The parsed value or the original value if it does not need to be parsed.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const wrapJSONParse = (value: any): any => {
   if (!needsParsing(value)) {
     return value
@@ -47,6 +48,7 @@ export const wrapJSONParse = (value: any): any => {
   try {
     return JSON.parse(value)
   } catch (e) {
+    console.log(e)
     return value
   }
 }

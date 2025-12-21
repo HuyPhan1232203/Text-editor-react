@@ -19,7 +19,7 @@ import { setNodeAttribute, setNodesTypeAttribute } from '../../../attributes/set
  * @param value - The value to set the attribute to.
  * @returns {boolean} True if any attribute was changed, false otherwise.
  */
-export const setPageNodesAttribute = (tr: Transaction, attr: string, value: any): boolean => {
+export const setPageNodesAttribute = (tr: Transaction, attr: string, value: unknown): boolean => {
   return setNodesTypeAttribute(tr, attr, value, setPageNodeAttribute)
 }
 
@@ -33,7 +33,8 @@ export const setPageNodesAttribute = (tr: Transaction, attr: string, value: any)
  * @param value - The value to set the attribute to.
  * @returns {boolean} True if the attribute was changed, false otherwise.
  */
-export const setPageNodeAttribute = (tr: Transaction, pos: number, node: PMNode, attr: string, value: any): boolean => {
+export const setPageNodeAttribute = (
+  tr: Transaction, pos: number, node: PMNode, attr: string, value: unknown): boolean => {
   if (!isPageNode(node)) {
     return false
   }
@@ -49,7 +50,7 @@ export const setPageNodeAttribute = (tr: Transaction, pos: number, node: PMNode,
  * @param value - The value to set the attribute to.
  * @returns {boolean} True if any attribute was changed, false otherwise.
  */
-export const setBodyNodesAttribute = (tr: Transaction, attr: string, value: any): boolean => {
+export const setBodyNodesAttribute = (tr: Transaction, attr: string, value: unknown): boolean => {
   return setNodesTypeAttribute(tr, attr, value, setBodyNodeAttribute)
 }
 
@@ -63,7 +64,8 @@ export const setBodyNodesAttribute = (tr: Transaction, attr: string, value: any)
  * @param value - The value to set the attribute to.
  * @returns {boolean} True if the attribute was changed, false otherwise.
  */
-export const setBodyNodeAttribute = <T>(tr: Transaction, pagePos: number, pageNode: PMNode, attr: string, value: T): boolean => {
+export const setBodyNodeAttribute = <T>(
+  tr: Transaction, pagePos: number, pageNode: PMNode, attr: string, value: T): boolean => {
   if (!isPageNode(pageNode)) {
     return false
   }

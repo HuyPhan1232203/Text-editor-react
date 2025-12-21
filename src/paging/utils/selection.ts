@@ -112,7 +112,8 @@ export const setSelectionToStartOfParagraph = (tr: Transaction, paragraphPos: nu
  * @param offsetInNode - The offset in the paragraph node. Default is 0.
  * @returns {void}
  */
-export const setSelectionToParagraph = (tr: Transaction, paragraphPos: number, paragraphNode: PMNode, offsetInNode: number = 0): void => {
+export const setSelectionToParagraph = (
+  tr: Transaction, paragraphPos: number, paragraphNode: PMNode, offsetInNode: number = 0): void => {
   if (isNodeEmpty(paragraphNode)) {
     // Node will not have a text selection so move to the start of the paragraph
     setSelectionToStartOfParagraph(tr, paragraphPos, paragraphNode)
@@ -196,7 +197,8 @@ const capOffsetInNode = (tr: Transaction, $pos: ResolvedPos, offsetInNode: numbe
  * @param offsetInNode - The offset in the node. Default is 0. Will cap at the length of the node.
  * @returns {Selection} The new selection.
  */
-export const moveToThisTextBlock = (tr: Transaction, $pos: ResolvedPos | number, bias: Sign = 1, offsetInNode: number = 0): Selection => {
+export const moveToThisTextBlock = (
+  tr: Transaction, $pos: ResolvedPos | number, bias: Sign = 1, offsetInNode: number = 0): Selection => {
   if (typeof $pos === 'number') {
     $pos = tr.doc.resolve($pos)
   }

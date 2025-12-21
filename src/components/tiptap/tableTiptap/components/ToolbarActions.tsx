@@ -1,4 +1,4 @@
-import { ToolbarGroup, ToolbarSeparator } from '@/components/tiptap/tiptap-ui-primitive/toolbar'
+import { ToolbarGroup } from '@/components/tiptap/tiptap-ui-primitive/toolbar'
 import type { Editor } from '@tiptap/core'
 import { TooltipButton } from './TooltipButton'
 import { ArrowDownFromLine, ArrowLeftFromLine, ArrowRightFromLine, ArrowUpFromLine, Merge, Plus, Split, Trash2 } from 'lucide-react'

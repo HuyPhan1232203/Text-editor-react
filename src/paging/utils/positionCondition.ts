@@ -38,7 +38,8 @@ export const isAtStartOfNode = (
  * @param checkExactEnd - Whether the position must be at the exact end of the node.
  * @returns {boolean} True if the condition is met, false otherwise.
  */
-export const isAtEndOfNode = ($pos: ResolvedPos, endOfNodePos: number, endOfParagraphPos: number, checkExactEnd: boolean): boolean => {
+export const isAtEndOfNode = (
+  $pos: ResolvedPos, endOfNodePos: number, endOfParagraphPos: number, checkExactEnd: boolean): boolean => {
   const isLastParagraph = endOfParagraphPos + 1 === endOfNodePos
 
   if (!isLastParagraph) return false

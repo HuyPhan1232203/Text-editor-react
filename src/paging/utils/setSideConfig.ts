@@ -7,7 +7,7 @@
 import { Node as PMNode } from '@tiptap/pm/model'
 import { Transaction } from '@tiptap/pm/state'
 import type { Dispatch } from '@tiptap/core'
-import type { pageSides } from '../constants/pageSides'
+import { pageSides } from '../constants/pageSides'
 import type { PageSide, MultiSide, MultiAxisSide } from '../types/page'
 import type { Nullable } from '../types/record'
 import { isPageNode } from './nodes/page/page'
@@ -28,7 +28,7 @@ type SideConfig<V> = { [key in PageSide]: V }
 export const setDocumentSideConfig = <V, T extends SideConfig<V>>(
   attrKey: string,
   isValidConfig: (config: T) => boolean,
-  setNodesAttribute: (tr: Transaction, attr: string, value: any) => boolean
+  setNodesAttribute: (tr: Transaction, attr: string, value: unknown) => boolean
 ) =>
   (sideConfig: T) =>
     ({ tr, dispatch }: { tr: Transaction, dispatch: Dispatch }): boolean => {
@@ -56,7 +56,8 @@ export const setDocumentSideConfig = <V, T extends SideConfig<V>>(
  */
 export const setPageSideConfig = <V, T extends SideConfig<V>>(
   setNodePosByPageNum: (doc: PMNode, pageNum: number) => Nullable<NodePos>,
-  setGenericPageNodePosSideConfig: (tr: Transaction, dispatch: Dispatch, pagePos: number, pageNode: PMNode, sideConfig: T) => boolean
+  setGenericPageNodePosSideConfig:
+  (tr: Transaction, dispatch: Dispatch, pagePos: number, pageNode: PMNode, sideConfig: T) => boolean
 ) =>
   (pageNum: number, sideConfig: T) =>
     ({ tr, dispatch }: { tr: Transaction, dispatch: Dispatch }): boolean => {

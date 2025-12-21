@@ -80,7 +80,8 @@ export const isPosAtLastChildOfPageAmendment = (doc: PMNode, $pos: ResolvedPos |
  * @param checkExactStart - Whether the position must be at the exact start of the header or footer.
  * @returns {boolean} True if the position is at the start of the first page's header or footer, false otherwise.
  */
-export const isPosMatchingStartOfPageAmendmentCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactStart: boolean): boolean => {
+export const isPosMatchingStartOfPageAmendmentCondition = (
+  doc: PMNode, $pos: ResolvedPos | number, checkExactStart: boolean): boolean => {
   if (typeof $pos === 'number') {
     $pos = doc.resolve($pos)
   }
@@ -116,7 +117,8 @@ export const isPosMatchingStartOfPageAmendmentCondition = (doc: PMNode, $pos: Re
  * @param checkExactEnd - Whether the position must be at the exact end of the header or footer.
  * @returns {boolean} True if the position is at the end of the last page's header or footer, false otherwise.
  */
-export const isPosMatchingEndOfPageAmendmentCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactEnd: boolean): boolean => {
+export const isPosMatchingEndOfPageAmendmentCondition = (
+  doc: PMNode, $pos: ResolvedPos | number, checkExactEnd: boolean): boolean => {
   if (typeof $pos === 'number') {
     $pos = doc.resolve($pos)
   }

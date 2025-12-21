@@ -162,7 +162,6 @@ declare module '@tiptap/core' {
              * Set the paper orientation for the document
              *
              * @param paperOrientation The paper orientation
-             * @example editor.commands.setDocumentPaperOrientation("portrait") | editor.commands.setDocumentPaperOrientation("landscape")
              */
       setDocumentPaperOrientation: (paperOrientation: PaperOrientation) => ReturnType
 
@@ -178,7 +177,6 @@ declare module '@tiptap/core' {
              *
              * @param pageNum The page number (0-indexed)
              * @param paperOrientation The paper orientation
-             * @example editor.commands.setPagePaperOrientation(0, "portrait") | editor.commands.setPagePaperOrientation(0, "landscape")
              */
       setPagePaperOrientation: (pageNum: number, paperOrientation: PaperOrientation) => ReturnType
 
@@ -418,7 +416,8 @@ const PaginationExtension = Extension.create<PaginationOptions>({
                     return setPageNodePosPaperOrientation(tr, dispatch, pagePos, pageNode, paperOrientation)
                   },
 
-      setDocumentPageMargins: setDocumentSideConfig(BODY_NODE_ATTR_KEYS.pageMargins, isValidPageMargins, setBodyNodesAttribute),
+      setDocumentPageMargins:
+      setDocumentSideConfig(BODY_NODE_ATTR_KEYS.pageMargins, isValidPageMargins, setBodyNodesAttribute),
 
       setDocumentDefaultPageMargins:
                 () =>
@@ -430,7 +429,9 @@ const PaginationExtension = Extension.create<PaginationOptions>({
       setDocumentPageMargin:
                 (margin: MultiSide, value: number) =>
                   ({ tr, dispatch, commands }) =>
-                    setDocumentSideValue(commands.setDocumentPageMargins, isMarginValid, updateBodyMargin)(margin, value)({
+                    setDocumentSideValue(
+                      commands.setDocumentPageMargins, isMarginValid, updateBodyMargin
+                    )(margin, value)({
                       tr,
                       dispatch
                     }),
@@ -438,12 +439,15 @@ const PaginationExtension = Extension.create<PaginationOptions>({
       setPagePageMargin:
                 (pageNum: number, margin: MultiSide, value: number) =>
                   ({ tr, dispatch, commands }) =>
-                    setPageSideValue(commands.setPagePageMargins, isMarginValid, updateBodyMargin)(pageNum, margin, value)({
+                    setPageSideValue(
+                      commands.setPagePageMargins, isMarginValid, updateBodyMargin
+                    )(pageNum, margin, value)({
                       tr,
                       dispatch
                     }),
 
-      setDocumentPageBorders: setDocumentSideConfig(PAGE_NODE_ATTR_KEYS.pageBorders, isValidPageBorders, setPageNodesAttribute),
+      setDocumentPageBorders: setDocumentSideConfig(
+        PAGE_NODE_ATTR_KEYS.pageBorders, isValidPageBorders, setPageNodesAttribute),
 
       setDocumentDefaultPageBorders:
                 () =>
@@ -455,7 +459,8 @@ const PaginationExtension = Extension.create<PaginationOptions>({
       setDocumentPageBorder:
                 (border: MultiSide, value: number) =>
                   ({ tr, dispatch, commands }) =>
-                    setDocumentSideValue(commands.setDocumentPageBorders, isBorderValid, updatePageBorder)(border, value)({
+                    setDocumentSideValue(
+                      commands.setDocumentPageBorders, isBorderValid, updatePageBorder)(border, value)({
                       tr,
                       dispatch
                     }),

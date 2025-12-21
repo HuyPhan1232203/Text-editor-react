@@ -104,7 +104,8 @@ export const getPageAttributeByPageNum = <T>(
   const { doc } = state
 
   if (!isPageNumInRange(doc, pageNum)) {
-    return handleOutOfRangePageNum(state, pageNum, (s, p) => getPageAttributeByPageNum(s, p, defaultValue, getNodeAttribute))
+    return handleOutOfRangePageNum(
+      state, pageNum, (s, p) => getPageAttributeByPageNum(s, p, defaultValue, getNodeAttribute))
   }
 
   const pageNode = getPageNodeByPageNum(doc, pageNum)
