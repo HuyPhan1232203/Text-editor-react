@@ -6,7 +6,7 @@
 
 import { EditorState } from '@tiptap/pm/state'
 import { Node as PMNode } from '@tiptap/pm/model'
-import type { PageNodeAttributes } from '../../../../types/page'
+import type { PageNodeAttributes, MarginConfig } from '../../../../types/page'
 import {
   calculatePageContentPixelDimensions as calculateBodyPixelDimensions,
   getPageNodePaperSize,
@@ -64,10 +64,20 @@ const getPageNodeAttributesByPageNum = (editor: Editor, pageNum: number): PageNo
 /**
  * Retrieves the default page region node attributes.
  *
+ * @param defaultMarginConfig - Optional margin config from extension options
  * @returns {PageRegionNodeAttributesObject} The default attributes of the page regions.
  */
-const getDefaultPageRegionNodeAttributes = (): PageRegionNodeAttributesObject => {
-  return { header: HEADER_DEFAULT_ATTRIBUTES, body: BODY_DEFAULT_ATTRIBUTES, footer: FOOTER_DEFAULT_ATTRIBUTES }
+const getDefaultPageRegionNodeAttributes = (defaultMarginConfig?: MarginConfig): PageRegionNodeAttributesObject => {
+  // QUAN TRỌNG: Dùng defaultMarginConfig nếu có, không thì fallback về BODY_DEFAULT_ATTRIBUTES
+  const bodyAttributes = defaultMarginConfig
+    ? { ...BODY_DEFAULT_ATTRIBUTES, pageMargins: defaultMarginConfig }
+    : BODY_DEFAULT_ATTRIBUTES
+
+  return {
+    header: HEADER_DEFAULT_ATTRIBUTES,
+    body: bodyAttributes,
+    footer: FOOTER_DEFAULT_ATTRIBUTES
+  }
 }
 
 /**
@@ -75,17 +85,27 @@ const getDefaultPageRegionNodeAttributes = (): PageRegionNodeAttributesObject =>
  *
  * @param state - The current editor state.
  * @param pageNum - The page number to retrieve the attributes for.
- * @returns {PageNodeAttributes} The attributes of the specified page.
+ * @param defaultMarginConfig - Optional margin config from extension options
+ * @returns {PageRegionNodeAttributesObject} The attributes of the specified page.
  */
-const getPageRegionNodeAttributes = (state: EditorState, pageNum: number): PageRegionNodeAttributesObject => {
+const getPageRegionNodeAttributes = (
+  state: EditorState,
+  pageNum: number,
+  defaultMarginConfig?: MarginConfig
+): PageRegionNodeAttributesObject => {
+  console.log(`📄 Getting page region attributes for page ${pageNum}`)
+  console.log('   defaultMarginConfig:', defaultMarginConfig)
+
   if (!doesDocHavePageNodes(state)) {
-    return getDefaultPageRegionNodeAttributes()
+    console.log('   ⚠️ No page nodes in document, using defaults')
+    return getDefaultPageRegionNodeAttributes(defaultMarginConfig)
   }
 
   const pageNode = getPageNodeByPageNum(state.doc, pageNum)
 
   if (!pageNode) {
-    return getDefaultPageRegionNodeAttributes()
+    console.log(`   ⚠️ Page ${pageNum} not found, using defaults`)
+    return getDefaultPageRegionNodeAttributes(defaultMarginConfig)
   }
 
   const headerNode = getPageRegionNode(pageNode, 'header')
@@ -93,7 +113,17 @@ const getPageRegionNodeAttributes = (state: EditorState, pageNum: number): PageR
   const footerNode = getPageRegionNode(pageNode, 'footer')
 
   const headerAttributes = headerNode ? getHeaderNodeAttributes(headerNode) : HEADER_DEFAULT_ATTRIBUTES
-  const bodyAttributes = bodyNode ? getBodyNodeAttributes(bodyNode) : BODY_DEFAULT_ATTRIBUTES
+
+  // QUAN TRỌNG: Nếu không có bodyNode, dùng defaultMarginConfig
+  const bodyAttributes = bodyNode
+    ? getBodyNodeAttributes(bodyNode)
+    : (defaultMarginConfig
+      ? { ...BODY_DEFAULT_ATTRIBUTES, pageMargins: defaultMarginConfig }
+      : BODY_DEFAULT_ATTRIBUTES
+    )
+
+  console.log(`   ✅ Body attributes for page ${pageNum}:`, bodyAttributes.pageMargins)
+
   const footerAttributes = footerNode ? getFooterNodeAttributes(footerNode) : FOOTER_DEFAULT_ATTRIBUTES
 
   return { body: bodyAttributes, header: headerAttributes, footer: footerAttributes }
@@ -104,13 +134,18 @@ const getPageRegionNodeAttributes = (state: EditorState, pageNum: number): PageR
  *
  * @param editor - The editor instance.
  * @param pageNum - The page number to retrieve the attributes for.
+ * @param defaultMarginConfig - Optional margin config from extension options
  * @returns {PaginationNodeAttributes} The attributes of the page node,
  * body node and the pixel dimensions of the page.
  */
-export const getPaginationNodeAttributes = (editor: Editor, pageNum: number): PaginationNodeAttributes => {
+export const getPaginationNodeAttributes = (
+  editor: Editor,
+  pageNum: number,
+  defaultMarginConfig?: MarginConfig
+): PaginationNodeAttributes => {
   const { state } = editor
   const pageNodeAttributes = getPageNodeAttributesByPageNum(editor, pageNum)
-  const pageRegionNodeAttributes = getPageRegionNodeAttributes(state, pageNum)
+  const pageRegionNodeAttributes = getPageRegionNodeAttributes(state, pageNum, defaultMarginConfig)
   const bodyPixelDimensions = calculateBodyPixelDimensions(pageNodeAttributes, pageRegionNodeAttributes.body)
 
   return { pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions }

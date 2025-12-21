@@ -18,75 +18,10 @@ import { PageSettingsDialog } from './PageSettingDialog'
 import { mmToPx } from '@/utils/convertUnit'
 import PaginationExtension, { BodyNode, PageNode } from '@/paging'
 
-const extensions = [
-  TextStyle,
-  StarterKit,
-  Image,
-  PaginationExtension,
-  PageNode,
-  BodyNode,
-  Color.configure({
-    types: ['textStyle']
-  }),
-  Link.configure({
-    openOnClick: false
-  }),
-  TableKit.configure({
-    table: {
-      resizable: true,
-      HTMLAttributes: {
-        class: 'tiptap-table'
-      }
-    },
-    tableRow: {
-      HTMLAttributes: {
-        class: 'tiptap-table-row'
-      }
-    },
-    tableCell: {
-      HTMLAttributes: {
-        class: 'tiptap-table-cell'
-      }
-    },
-    tableHeader: {
-      HTMLAttributes: {
-        class: 'tiptap-table-header'
-      }
-    }
-  }),
-  FontFamily.configure({
-    types: ['textStyle']
-  }),
-  FontSize.configure({
-    types: ['textStyle']
-  }),
-  LineHeight.configure({
-    types: ['textStyle']
-  }),
-  TextAlign.configure({
-    types: ['heading', 'paragraph'],
-    alignments: ['left', 'center', 'right', 'justify'],
-    defaultAlignment: 'left'
-  }),
-  Highlight.configure({
-    multicolor: true
-  }),
-  ImageUploadNode.configure({
-    accept: 'image/*',
-    maxSize: MAX_FILE_SIZE,
-    limit: 3,
-    upload: handleImageUpload,
-    onError: (error) => console.error('Upload failed:', error),
-    onSuccess (url) {
-      console.log('Upload successful! Image URL:', url)
-    }
-  })
-]
-
 // Main Editor Component
 export default function TiptapEditor () {
   const [pageSettings, setPageSettings] = useState({
-    topMargin: 25.4,    // 1 inch = 25.4mm
+    topMargin: 25.4,
     bottomMargin: 25.4,
     leftMargin: 25.4,
     rightMargin: 25.4
@@ -95,7 +30,77 @@ export default function TiptapEditor () {
   const [showHtmlPreview, setShowHtmlPreview] = useState(false)
   const [generatedHtml, setGeneratedHtml] = useState<string>('')
   const [tableBorderStates, setTableBorderStates] = useState<Record<number, boolean>>({})
-
+  const extensions = useMemo(() => [
+    TextStyle,
+    StarterKit,
+    Image,
+    PaginationExtension.configure({
+      defaultMarginConfig: {
+        top: pageSettings.topMargin,
+        bottom: pageSettings.bottomMargin,
+        left: pageSettings.leftMargin,
+        right: pageSettings.rightMargin
+      }
+    }),
+    PageNode,
+    BodyNode,
+    Color.configure({
+      types: ['textStyle']
+    }),
+    Link.configure({
+      openOnClick: false
+    }),
+    TableKit.configure({
+      table: {
+        resizable: true,
+        HTMLAttributes: {
+          class: 'tiptap-table'
+        }
+      },
+      tableRow: {
+        HTMLAttributes: {
+          class: 'tiptap-table-row'
+        }
+      },
+      tableCell: {
+        HTMLAttributes: {
+          class: 'tiptap-table-cell'
+        }
+      },
+      tableHeader: {
+        HTMLAttributes: {
+          class: 'tiptap-table-header'
+        }
+      }
+    }),
+    FontFamily.configure({
+      types: ['textStyle']
+    }),
+    FontSize.configure({
+      types: ['textStyle']
+    }),
+    LineHeight.configure({
+      types: ['textStyle']
+    }),
+    TextAlign.configure({
+      types: ['heading', 'paragraph'],
+      alignments: ['left', 'center', 'right', 'justify'],
+      defaultAlignment: 'left'
+    }),
+    Highlight.configure({
+      multicolor: true
+    }),
+    ImageUploadNode.configure({
+      accept: 'image/*',
+      maxSize: MAX_FILE_SIZE,
+      limit: 3,
+      upload: handleImageUpload,
+      onError: (error) => console.error('Upload failed:', error),
+      onSuccess (url) {
+        console.log('Upload successful! Image URL:', url)
+      }
+    })
+  ], [pageSettings])
   const editor = useEditor({
     extensions,
     autofocus: 'end',
@@ -147,6 +152,7 @@ export default function TiptapEditor () {
       return newState
     })
   }, [updateSwitchUI])
+
   // Tối ưu: useCallback để memoize function
   const handleEditorUpdate = useCallback(() => {
     const tables = document.querySelectorAll('.tiptap table')
@@ -230,6 +236,37 @@ export default function TiptapEditor () {
     })
   }, [tableBorderStates, handleToggleTableBorder, updateSwitchUI])
 
+  // CHỈ sync khi user thay đổi pageSettings qua dialog
+  // CHỈ sync khi user thay đổi pageSettings qua dialog
+  useEffect(() => {
+    if (!editor) return
+    if (editor.isDestroyed) return
+
+    console.log('🔧 Updating ALL pages margins:', pageSettings)
+
+    // Sử dụng editor.chain() thay vì tạo transaction thủ công
+    editor.chain()
+      .command(({ tr }) => {
+      // Set meta trong chain command
+        tr.setMeta('updatePaginationMargins', {
+          top: pageSettings.topMargin,
+          bottom: pageSettings.bottomMargin,
+          left: pageSettings.leftMargin,
+          right: pageSettings.rightMargin
+        })
+        return true
+      })
+      .setDocumentPageMargins({
+        top: pageSettings.topMargin,
+        bottom: pageSettings.bottomMargin,
+        left: pageSettings.leftMargin,
+        right: pageSettings.rightMargin
+      })
+      .run()
+
+    console.log('✅ Margins updated')
+  }, [editor, pageSettings])
+
   // Tối ưu: useEffect với cleanup để tránh memory leaks
   useEffect(() => {
     if (!editor) return
@@ -297,13 +334,7 @@ export default function TiptapEditor () {
         {/* Editor Content - Document View */}
         <div className='flex-1 overflow-auto p-8 flex justify-center'>
           <div
-            className='bg-white shadow-xl relative document-page'
-            // style={{
-            //   width: '794px',
-            //   minHeight: '1123px',
-            //   height: 'max-content',
-            //   padding: `${editorPadding.top}px ${editorPadding.right}px ${editorPadding.bottom}px ${editorPadding.left}px`
-            // }}
+            className=''
             onClick={() => {
               if (!editor?.isFocused) {
                 editor?.commands.focus('end')

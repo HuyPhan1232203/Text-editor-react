@@ -17,9 +17,31 @@ type PaginationPluginProps = {
   options: PaginationOptions
 }
 
+// Tạo PluginKey bên ngoài để có thể reference
+const paginationPluginKey = new PluginKey('pagination')
+
 const PaginationPlugin = ({ editor, options }: PaginationPluginProps) => {
   return new Plugin({
-    key: new PluginKey('pagination'),
+    key: paginationPluginKey,
+
+    state: {
+      init () {
+        return {
+          currentMargins: options.defaultMarginConfig
+        }
+      },
+      apply (tr, value) {
+        // Đọc margins từ transaction meta nếu có update
+        const newMargins = tr.getMeta('updatePaginationMargins')
+
+        if (newMargins) {
+          console.log('📝 Plugin state updated with new margins:', newMargins)
+          return { currentMargins: newMargins }
+        }
+        return value
+      }
+    },
+
     view () {
       let isPaginating = false
 
@@ -41,10 +63,17 @@ const PaginationPlugin = ({ editor, options }: PaginationPluginProps) => {
 
           isPaginating = true
 
-          buildPageView(editor, view, options)
+          // Đọc margins từ plugin state sử dụng pluginKey
+          const pluginState = paginationPluginKey.getState(state)
+          const currentOptions = {
+            ...options,
+            defaultMarginConfig: pluginState?.currentMargins || options.defaultMarginConfig
+          }
 
-          // Reset paginating flag regardless of success or failure because we do not want to get
-          // stuck out of this loop.
+          console.log('🔄 Building page view with margins:', currentOptions.defaultMarginConfig)
+
+          buildPageView(editor, view, currentOptions)
+
           isPaginating = false
         }
       }

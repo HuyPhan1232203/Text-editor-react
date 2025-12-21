@@ -172,7 +172,7 @@ const buildNewDocument = (
   nodeHeights: number[]
 ): { newDoc: PMNode, oldToNewPosMap: CursorMap } => {
   const { schema, doc } = editor.state
-  const { pageAmendmentOptions } = options
+  const { pageAmendmentOptions, defaultMarginConfig } = options
   const {
     pageNodeType: pageType,
     headerFooterNodeType: headerFooterType,
@@ -183,7 +183,7 @@ const buildNewDocument = (
   let pageNum = 0
   const pages: PMNode[] = []
   let existingPageNode: Nullable<PMNode> = doc.maybeChild(pageNum)
-  let { pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions } = getPaginationNodeAttributes(editor, pageNum)
+  let { pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions } = getPaginationNodeAttributes(editor, pageNum, defaultMarginConfig)
 
   const constructHeaderFooter = <HF extends HeaderFooter>(pageRegionType: HeaderFooter) =>
     (headerFooterAttrs: HeaderFooterNodeAttributes<HF>): PMNode | undefined => {
@@ -253,7 +253,12 @@ const buildNewDocument = (
       currentHeight = 0
       existingPageNode = doc.maybeChild(++pageNum)
       if (isPageNumInRange(doc, pageNum)) {
-        ({ pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions } = getPaginationNodeAttributes(editor, pageNum))
+      // Truyền defaultMarginConfig cho page mới
+        ({ pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions } = getPaginationNodeAttributes(
+          editor,
+          pageNum,
+          defaultMarginConfig
+        ))
       }
 
       // Next page header
