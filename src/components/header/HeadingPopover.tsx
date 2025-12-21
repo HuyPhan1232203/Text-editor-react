@@ -93,7 +93,7 @@ export function HeadingPopover ({ editor }: HeadingPopoverProps) {
                   ${isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:text-gray-900'}
                 `}
               >
-                <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-blue-600' : 'text-gray-500'}`} />
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-600' : 'text-gray-500'}`} />
                 <span className={`flex-1 text-left ${option.fontSize} ${option.level !== 0 ? 'font-semibold' : ''}`}>
                   {option.label}
                 </span>

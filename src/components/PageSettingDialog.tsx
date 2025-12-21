@@ -81,7 +81,7 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='sm:max-w-[520px]'>
+      <DialogContent className='sm:max-w-130'>
         <DialogHeader>
           <DialogTitle>Cài đặt trang A4</DialogTitle>
         </DialogHeader>

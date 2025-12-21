@@ -4,7 +4,6 @@ import StarterKit from '@tiptap/starter-kit'
 import { Image } from '@tiptap/extension-image'
 import { TableKit } from '@tiptap/extension-table'
 import { TextAlign } from '@tiptap/extension-text-align'
-import { TextToolbar } from './TextToolbar'
 import { Link } from '@tiptap/extension-link'
 import { Highlight } from '@tiptap/extension-highlight'
 import { ImageUploadNode } from './tiptap-node/image-upload-node'
@@ -12,13 +11,13 @@ import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { Color } from '@tiptap/extension-color'
 import { TableCellToolbar } from './tableTiptap/TableCellToolbar'
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import { Button } from './ui/button'
 import { PageSettingsDialog } from './PageSettingDialog'
 import { mmToPx } from '@/utils/convertUnit'
 import PaginationExtension, { BodyNode, PageNode } from '@/paging'
+import { TextToolbar } from './TextToolbarBackup'
 
 // Main Editor Component
-export default function TiptapEditor () {
+export default function TiptapEditorBackup () {
   const [pageSettings, setPageSettings] = useState({
     topMargin: 25.4,
     bottomMargin: 25.4,
@@ -27,7 +26,6 @@ export default function TiptapEditor () {
     orientation: 'portrait' as 'landscape' | 'portrait'
   })
 
-  const [showHtmlPreview, setShowHtmlPreview] = useState(false)
   const [tableBorderStates, setTableBorderStates] = useState<Record<number, boolean>>({})
   const extensions = useMemo(() => [
     TextStyle,

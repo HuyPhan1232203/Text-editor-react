@@ -1,4 +1,4 @@
-import TiptapEditor from './components/TiptapEditor'
+import TiptapEditor from './components/TipTapEditor'
 
 const App = () => {
   return (
