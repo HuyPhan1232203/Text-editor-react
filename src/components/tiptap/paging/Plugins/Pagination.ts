@@ -70,8 +70,6 @@ const PaginationPlugin = ({ editor, options }: PaginationPluginProps) => {
             defaultMarginConfig: pluginState?.currentMargins || options.defaultMarginConfig
           }
 
-          console.log('🔄 Building page view with margins:', currentOptions.defaultMarginConfig)
-
           buildPageView(editor, view, currentOptions)
 
           isPaginating = false

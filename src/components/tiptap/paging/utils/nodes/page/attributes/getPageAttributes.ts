@@ -93,18 +93,13 @@ const getPageRegionNodeAttributes = (
   pageNum: number,
   defaultMarginConfig?: MarginConfig
 ): PageRegionNodeAttributesObject => {
-  console.log(`📄 Getting page region attributes for page ${pageNum}`)
-  console.log('   defaultMarginConfig:', defaultMarginConfig)
-
   if (!doesDocHavePageNodes(state)) {
-    console.log('   ⚠️ No page nodes in document, using defaults')
     return getDefaultPageRegionNodeAttributes(defaultMarginConfig)
   }
 
   const pageNode = getPageNodeByPageNum(state.doc, pageNum)
 
   if (!pageNode) {
-    console.log(`   ⚠️ Page ${pageNum} not found, using defaults`)
     return getDefaultPageRegionNodeAttributes(defaultMarginConfig)
   }
 
@@ -121,8 +116,6 @@ const getPageRegionNodeAttributes = (
       ? { ...BODY_DEFAULT_ATTRIBUTES, pageMargins: defaultMarginConfig }
       : BODY_DEFAULT_ATTRIBUTES
     )
-
-  console.log(`   ✅ Body attributes for page ${pageNum}:`, bodyAttributes.pageMargins)
 
   const footerAttributes = footerNode ? getFooterNodeAttributes(footerNode) : FOOTER_DEFAULT_ATTRIBUTES
 

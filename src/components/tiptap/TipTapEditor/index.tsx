@@ -7,15 +7,10 @@ import { EditorContentArea } from './components/EditorContentArea'
 import { EditorFooter } from './components/EditorFooter'
 
 export default function TiptapEditor () {
-  // 1. Tạo editor config trước (không cần pageSettings)
   const editor = useEditorConfig()
-
-  // 2. Quản lý page settings và sync với editor
   const { pageSettings, setPageSettings } = usePageSettings(editor)
 
-  // 3. Quản lý table borders
   useTableBorderManager(editor)
-
   return (
     <EditorContext.Provider value={{ editor }}>
       <div className='flex flex-col h-screen bg-gray-200'>
@@ -25,6 +20,7 @@ export default function TiptapEditor () {
           pageSettings={pageSettings}
           onSettingsChange={setPageSettings}
         />
+
       </div>
     </EditorContext.Provider>
   )

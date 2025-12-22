@@ -13,6 +13,7 @@ export function EditorContentArea ({ editor }: EditorContentAreaProps) {
     }
   }
 
+  console.log('object')
   return (
     <div className='flex-1 overflow-auto p-8 flex justify-center'>
       <div onClick={handleContainerClick}>

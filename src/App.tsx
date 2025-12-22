@@ -1,11 +1,7 @@
 import TiptapEditor from './components/tiptap/TipTapEditor'
 
 const App = () => {
-  return (
-    <div className='card'>
-      <TiptapEditor />
-    </div>
-  )
+  return <TiptapEditor />
 }
 
 export default App

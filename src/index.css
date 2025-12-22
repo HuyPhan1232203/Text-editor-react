@@ -1,4 +1,3 @@
-@import './components/tiptap/tiptap-node/image-upload-node/image-upload-node.scss';
 @import './styles/_variables.scss';
 @import './styles/_keyframe-animations.scss';
 
@@ -388,6 +387,59 @@
 .table-wrap:focus-within .table-controls {
   opacity: 1;
   pointer-events: auto;
+}
+.collaboration-caret {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Line mỏng - luôn hiển thị */
+.caret-line {
+  width: 2px;
+  height: 1.2em;  /* Cao hơn line-height chữ một chút */
+  border-radius: 1px;
+  background: currentColor;  /* Dùng màu từ user.color */
+  flex-shrink: 0;
+}
+
+/* Tooltip tên - ẨN MẶC ĐỊNH */
+.caret-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.15s ease;
+  pointer-events: none;
+  margin-bottom: 4px;
+}
+
+/* HOVER: hiện tooltip */
+.collaboration-caret:hover .caret-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Tùy chọn: thêm triangle nhỏ */
+.caret-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: rgba(0,0,0,0.85);
 }
 
 /* label gọn lại */

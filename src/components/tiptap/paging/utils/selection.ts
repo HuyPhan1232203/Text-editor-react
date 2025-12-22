@@ -59,7 +59,6 @@ export const setSelectionAtPos = (tr: Transaction, anchor: number, head?: number
  * @returns The updated transaction.
  */
 export const setSelection = <S extends Selection>(tr: Transaction, selection: S): Transaction => {
-  console.log('Setting selection to', selection.$anchor.pos, '-', selection.$head.pos)
   return tr.setSelection(selection)
 }
 

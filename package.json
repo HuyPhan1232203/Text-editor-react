@@ -23,6 +23,8 @@
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
     "@tiptap/core": "^3.13.0",
+    "@tiptap/extension-collaboration": "^3.14.0",
+    "@tiptap/extension-collaboration-caret": "^3.14.0",
     "@tiptap/extension-color": "^3.13.0",
     "@tiptap/extension-font-family": "^3.13.0",
     "@tiptap/extension-gapcursor": "^3.13.0",
@@ -50,7 +52,10 @@
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
     "tiptap-extension-pagination": "^2.1.4",
-    "vite-tsconfig-paths": "^6.0.1"
+    "vite-tsconfig-paths": "^6.0.1",
+    "y-webrtc": "^10.3.0",
+    "y-websocket": "^3.0.0",
+    "yjs": "^13.6.28"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
