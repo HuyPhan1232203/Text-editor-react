@@ -54,7 +54,7 @@ export default [
         },
       ],
       "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/react-hooks/set-state-in-effect": "warn",
+     "react-hooks/exhaustive-deps": "warn",
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-non-null-assertion": "warn",
       "@stylistic/indent": [

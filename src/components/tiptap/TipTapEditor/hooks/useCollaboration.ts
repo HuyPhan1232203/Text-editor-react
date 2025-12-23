@@ -3,8 +3,8 @@ import * as Y from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 
 // Singleton instances
-let ydoc = null
-let provider = null
+let ydoc: Y.Doc | null = null
+let provider: WebrtcProvider | null = null
 
 export function useCollaboration (roomName = 'tiptap-collaboration-room-v1') {
   const initialized = useRef(false)
@@ -14,19 +14,6 @@ export function useCollaboration (roomName = 'tiptap-collaboration-room-v1') {
     if (!initialized.current) {
       ydoc = new Y.Doc()
       provider = new WebrtcProvider(roomName, ydoc)
-
-      provider.on('status', (event) => {
-        console.log('🔌 WebRTC Status:', event.status)
-      })
-
-      provider.on('peers', (event) => {
-        console.log('👥 Connected peers:', event.webrtcPeers.length)
-      })
-
-      provider.on('synced', (event) => {
-        console.log('✅ Synced:', event.synced)
-      })
-
       initialized.current = true
     }
 

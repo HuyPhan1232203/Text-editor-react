@@ -49,7 +49,7 @@ export function useEditorConfig () {
     }),
     CollaborationCaret.configure({
       provider,
-      render: (user: any) => {
+      render: (user: { color: string, name?: string }) => {
         const root = document.createElement('div')
 
         root.className = 'collaboration-caret'

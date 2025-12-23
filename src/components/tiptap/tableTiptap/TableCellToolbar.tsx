@@ -12,7 +12,6 @@ import {
 import { BubbleMenu } from '@tiptap/react/menus'
 import { CellSelection } from '@tiptap/pm/tables'
 
-
 export function TableCellToolbar ({ editor }: TableCellToolbarProps) {
   const [showContextMenu, setShowContextMenu] = useState(false)
   const [contextMenuPosition, setContextMenuPosition] = useState({ top: 0, left: 0 })
@@ -30,6 +29,7 @@ export function TableCellToolbar ({ editor }: TableCellToolbarProps) {
   const executeWithSelection = useCallback((command: () => void) => {
     if (savedSelectionRef.current) {
       const { tr } = editor.state
+
       tr.setSelection(savedSelectionRef.current)
       editor.view.dispatch(tr)
     }
@@ -40,14 +40,14 @@ export function TableCellToolbar ({ editor }: TableCellToolbarProps) {
   // Force update khi editor selection thay đổi
   useEffect(() => {
     if (!editor) return
-    
+
     const updateHandler = () => {
       setUpdateKey(prev => prev + 1)
     }
-    
+
     editor.on('selectionUpdate', updateHandler)
     editor.on('update', updateHandler)
-    
+
     return () => {
       editor.off('selectionUpdate', updateHandler)
       editor.off('update', updateHandler)
@@ -102,11 +102,11 @@ export function TableCellToolbar ({ editor }: TableCellToolbarProps) {
         updateDelay={100}
         shouldShow={({ state }) => {
           if (showContextMenu) return false
-          
+
           const { selection } = state
           const isCellSelection = selection instanceof CellSelection
           const isInTable = editor.isActive('table')
-          
+
           return isInTable && isCellSelection
         }}
       >

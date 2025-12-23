@@ -13,8 +13,8 @@ import { TableCellToolbar } from './tiptap/tableTiptap/TableCellToolbar'
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { PageSettingsDialog } from './PageSettingDialog'
 import { mmToPx } from '@/utils/convertUnit'
-import PaginationExtension, { BodyNode, PageNode } from '@/paging'
 import { TextToolbar } from './TextToolbarBackup'
+import PaginationExtension, { BodyNode, PageNode } from './tiptap/paging'
 
 // Main Editor Component
 export default function TiptapEditorBackup () {

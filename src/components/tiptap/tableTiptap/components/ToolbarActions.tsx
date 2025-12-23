@@ -11,6 +11,7 @@ interface ToolbarActionProps {
 const MergeSplitActions = ({ editor, executeWithSelection }: ToolbarActionProps) => {
   const canMergeCells = editor.can().mergeCells()
   const canSplitCell = editor.can().splitCell()
+
   return (
     <ToolbarGroup>
       <TooltipButton
