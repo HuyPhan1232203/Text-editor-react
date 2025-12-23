@@ -122,7 +122,7 @@ export function useEditorConfig () {
 
   return useEditor({
     extensions,
-    autofocus: 'end',
+    autofocus: 'start',
     content: '',
     editorProps: {
       attributes: {

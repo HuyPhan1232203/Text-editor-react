@@ -3,7 +3,7 @@ import type { Editor } from '@tiptap/react'
 import type { PageSettings } from '../types'
 import { TextToolbar } from '@/components/tiptap/TextToolbar'
 
-interface EditorToolbarProps {
+export interface EditorToolbarProps {
   editor: Editor
   pageSettings: PageSettings
 }

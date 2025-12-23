@@ -54,6 +54,7 @@ export default [
         },
       ],
       "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/react-hooks/set-state-in-effect": "warn",
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-non-null-assertion": "warn",
       "@stylistic/indent": [
@@ -82,6 +83,7 @@ export default [
           allowTemplateLiterals: true,
         },
       ],
+      
       "@stylistic/semi": ["error", "never"],
       "@stylistic/comma-spacing": ["error", { before: false, after: true }],
       "@stylistic/key-spacing": [
