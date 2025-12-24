@@ -14,6 +14,7 @@ import { FontSizePicker } from '../../font/FontSizePicker'
 import { LineHeightPicker } from '../../font/LineHeightPicker'
 import { TextColorPicker } from '../text-color/TextColorPicker'
 import { MediaButtons } from './components/MediaButton'
+import { EmojiButton } from './components/EmojiButton'
 
 export function TextToolbar ({
   editor,
@@ -41,7 +42,7 @@ export function TextToolbar ({
 
       <Divider />
       <TextColorPicker editor={editor} />
-
+      <EmojiButton editor={editor} />
       <Divider />
       <HighlightButtons editor={editor} />
 

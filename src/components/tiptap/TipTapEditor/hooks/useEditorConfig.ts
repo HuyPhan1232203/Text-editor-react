@@ -10,6 +10,7 @@ import { Color } from '@tiptap/extension-color'
 import { FontFamily, FontSize, LineHeight, TextStyle } from '@tiptap/extension-text-style'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCaret from '@tiptap/extension-collaboration-caret'
+import Emoji, { gitHubEmojis } from '@tiptap/extension-emoji'
 import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { DEFAULT_PAGE_SETTINGS } from '../constants'
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
@@ -70,7 +71,10 @@ export function useEditorConfig () {
         return root
       }
     }),
-
+    Emoji.configure({
+      emojis: gitHubEmojis,
+      enableEmoticons: true
+    }),
     TextStyle,
     StarterKit.configure({
       undoRedo: false

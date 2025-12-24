@@ -1,6 +1,6 @@
 @import './styles/_variables.scss';
 @import './styles/_keyframe-animations.scss';
-
+@import 'tippy.js/themes/light.css';
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -330,6 +330,29 @@
   float: left;
   height: 0;
   pointer-events: none;
+}
+.tippy-box {
+  background-color: white !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.tippy-content {
+  padding: 0 !important;
+}
+
+.emoji-picker-container {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.emoji-picker-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.emoji-picker-container::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
 }
 
 /* Gapcursor (cursor between nodes) */
