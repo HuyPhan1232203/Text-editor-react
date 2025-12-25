@@ -9,12 +9,13 @@ import { ExportButton } from './components/ExportButton'
 import type { TextToolbarProps } from './types'
 import { HeadingPopover } from '../header/HeadingPopover'
 import { Divider } from '../../Devider'
-import { FontFamilyPicker } from '../../font/FontFamilyPicker'
-import { FontSizePicker } from '../../font/FontSizePicker'
-import { LineHeightPicker } from '../../font/LineHeightPicker'
-import { TextColorPicker } from '../text-color/TextColorPicker'
+import { FontFamilyPicker } from './components/picker/FontFamilyPicker'
+import { FontSizePicker } from './components/picker/FontSizePicker'
+import { LineHeightPicker } from './components/picker/LineHeightPicker'
+import { TextColorPicker } from './components/picker/TextColorPicker'
 import { MediaButtons } from './components/MediaButton'
 import { EmojiButton } from './components/EmojiButton'
+import { MathButtons } from './components/MathButton'
 
 export function TextToolbar ({
   editor,
@@ -45,7 +46,8 @@ export function TextToolbar ({
       <EmojiButton editor={editor} />
       <Divider />
       <HighlightButtons editor={editor} />
-
+      <Divider />
+      <MathButtons editor={editor} />
       <Divider />
       <LinkButton editor={editor} state={state} />
 

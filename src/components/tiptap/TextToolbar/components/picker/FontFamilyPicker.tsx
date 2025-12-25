@@ -81,6 +81,7 @@ export function FontFamilyPicker ({ editor }: FontFamilyPickerProps) {
             return (
               <button
                 key={font.value}
+                type='button'
                 onClick={() => handleFontSelect(font.value)}
                 className={`
                   w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm

@@ -15,8 +15,10 @@ import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { DEFAULT_PAGE_SETTINGS } from '../constants'
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
 import PaginationExtension, { BodyNode, PageNode } from '../../paging'
+import { Mathematics } from '@tiptap/extension-mathematics'
 import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
+import { PreserveMarksOnEnter } from '../../tiptap-extension/PreserveMarksOnEnter'
 
 export function useEditorConfig () {
   const ydoc = useMemo(() => new Y.Doc(), [])
@@ -71,15 +73,23 @@ export function useEditorConfig () {
         return root
       }
     }),
-    Emoji.configure({
-      emojis: gitHubEmojis,
-      enableEmoticons: true
-    }),
+    PreserveMarksOnEnter,
+
     TextStyle,
     StarterKit.configure({
       undoRedo: false
     }),
+    Mathematics.configure({
+      katexOptions: {
+        throwOnError: false,
+        displayMode: false
+      }
+    }),
     Image,
+    Emoji.configure({
+      emojis: gitHubEmojis,
+      enableEmoticons: true
+    }),
     PaginationExtension.configure({
       defaultMarginConfig: {
         top: DEFAULT_PAGE_SETTINGS.topMargin,

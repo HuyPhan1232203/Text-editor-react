@@ -5,6 +5,7 @@ import { usePageSettings } from './hooks/usePageSettings'
 import { EditorToolbar } from './components/EditorToolbar'
 import { EditorContentArea } from './components/EditorContentArea'
 import { EditorFooter } from './components/EditorFooter'
+import 'katex/dist/katex.min.css'
 
 export default function TiptapEditor () {
   const editor = useEditorConfig()
