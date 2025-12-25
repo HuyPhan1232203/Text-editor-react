@@ -1,11 +1,10 @@
-// LineHeightPicker.tsx
 import { useState } from 'react'
 import { Editor } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { AlignVerticalSpaceAround, Check } from 'lucide-react'
+import { Check, ChevronDown } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
-import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
 interface LineHeightPickerProps {
   editor: Editor
@@ -39,6 +38,7 @@ export function LineHeightPicker ({ editor }: LineHeightPickerProps) {
 
   const currentLineHeight = getCurrentLineHeight()
   const currentLabel = LINE_HEIGHTS.find(h => h.value === currentLineHeight)?.label || currentLineHeight
+  const isCustomHeight = !LINE_HEIGHTS.find(h => h.value === currentLineHeight)
 
   const handleLineHeightSelect = (value: string) => {
     if (value === 'normal') {
@@ -50,8 +50,10 @@ export function LineHeightPicker ({ editor }: LineHeightPickerProps) {
   }
 
   const handleCustomValue = () => {
-    if (customValue && customValue.trim()) {
-      editor.chain().focus().setLineHeight(customValue.trim()).run()
+    const trimmedValue = customValue.trim()
+
+    if (trimmedValue) {
+      editor.chain().focus().setLineHeight(trimmedValue).run()
       setCustomValue('')
       setOpen(false)
     }
@@ -65,25 +67,10 @@ export function LineHeightPicker ({ editor }: LineHeightPickerProps) {
             <Button
               variant='ghost'
               size='sm'
-              className='h-8 min-w-[70px] justify-start gap-2 text-sm font-medium'
+              className='h-8 min-w-17.5 justify-between gap-1 px-2 text-sm font-normal hover:bg-accent'
             >
-              <AlignVerticalSpaceAround className='w-4 h-4 flex-shrink-0' />
-              <span className='truncate'>{currentLabel}</span>
-              <svg
-                width='15'
-                height='15'
-                viewBox='0 0 15 15'
-                fill='none'
-                xmlns='http://www.w3.org/2000/svg'
-                className='w-3 h-3 opacity-50 ml-auto'
-              >
-                <path
-                  d='M4.93179 5.43179C4.75605 5.60753 4.75605 5.89245 4.93179 6.06819C5.10753 6.24392 5.39245 6.24392 5.56819 6.06819L7.49999 4.13638L9.43179 6.06819C9.60753 6.24392 9.89245 6.24392 10.0682 6.06819C10.2439 5.89245 10.2439 5.60753 10.0682 5.43179L7.81819 3.18179C7.73379 3.0974 7.61933 3.04999 7.49999 3.04999C7.38064 3.04999 7.26618 3.0974 7.18179 3.18179L4.93179 5.43179ZM10.0682 9.56819C10.2439 9.39245 10.2439 9.10753 10.0682 8.93179C9.89245 8.75606 9.60753 8.75606 9.43179 8.93179L7.49999 10.8636L5.56819 8.93179C5.39245 8.75606 5.10753 8.75606 4.93179 8.93179C4.75605 9.10753 4.75605 9.39245 4.93179 9.56819L7.18179 11.8182C7.35753 11.9939 7.64245 11.9939 7.81819 11.8182L10.0682 9.56819Z'
-                  fill='currentColor'
-                  fillRule='evenodd'
-                  clipRule='evenodd'
-                />
-              </svg>
+              <span className='truncate font-medium'>{currentLabel}</span>
+              <ChevronDown className='h-3.5 w-3.5 opacity-50' />
             </Button>
           </PopoverTrigger>
         </TooltipTrigger>
@@ -92,47 +79,69 @@ export function LineHeightPicker ({ editor }: LineHeightPickerProps) {
         </TooltipContent>
       </Tooltip>
 
-      <PopoverContent className='w-48 p-2' align='start'>
-        <div className='space-y-1'>
-          <div className='border-t pt-2 mt-2'>
+      <PopoverContent className='w-52 p-0' align='start' sideOffset={4}>
+        <div className='flex flex-col'>
+          {/* Custom Size Input */}
+          <div className='border-b p-3 bg-muted/30'>
             <div className='flex gap-2'>
-              <Input
+              <input
                 type='text'
-                placeholder='Tùy chỉnh'
+                placeholder='Tùy chỉnh (vd: 1.8)'
                 value={customValue}
                 onChange={(e) => setCustomValue(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleCustomValue()}
-                className='flex-1 px-2 py-1 text-sm border rounded'
+                className='flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring'
               />
               <Button
                 onClick={handleCustomValue}
                 size='sm'
-                variant='outline'
+                className='h-9 px-3'
+                disabled={!customValue.trim()}
               >
                 OK
               </Button>
             </div>
-            <p className='text-xs text-gray-500 mt-1 px-2'>VD: 1.8, 2.5</p>
           </div>
-          {LINE_HEIGHTS.map((item) => {
-            const isActive = currentLineHeight === item.value
 
-            return (
-              <button
-                key={item.value}
-                onClick={() => handleLineHeightSelect(item.value)}
-                className={`
-                  w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm
-                  transition-colors hover:bg-gray-100
-                  ${isActive ? 'bg-blue-50 text-blue-700' : 'text-gray-700'}
-                `}
-              >
-                <span className='flex-1 text-left'>{item.label}</span>
-                {isActive && <Check className='w-4 h-4 text-blue-700 flex-shrink-0' />}
-              </button>
-            )
-          })}
+          {/* Line Height List */}
+          <div className='max-h-70 overflow-y-auto p-1'>
+            {/* Show current custom height if not in list */}
+            {isCustomHeight && (
+              <>
+                <button
+                  onClick={() => handleLineHeightSelect(currentLineHeight)}
+                  className={cn(
+                    'relative flex w-full cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none transition-colors',
+                    'bg-accent text-accent-foreground'
+                  )}
+                >
+                  <span className='flex-1 text-left font-medium'>{currentLineHeight}</span>
+                  <Check className='h-4 w-4 shrink-0' />
+                </button>
+                <div className='my-1 h-px bg-border' />
+              </>
+            )}
 
+            {/* Predefined heights */}
+            {LINE_HEIGHTS.map((item) => {
+              const isActive = currentLineHeight === item.value
+
+              return (
+                <button
+                  key={item.value}
+                  onClick={() => handleLineHeightSelect(item.value)}
+                  className={cn(
+                    'relative flex w-full cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none transition-colors',
+                    'hover:bg-accent hover:text-accent-foreground',
+                    isActive && 'bg-accent text-accent-foreground font-medium'
+                  )}
+                >
+                  <span className='flex-1 text-left'>{item.label}</span>
+                  {isActive && <Check className='h-4 w-4 shrink-0' />}
+                </button>
+              )
+            })}
+          </div>
         </div>
       </PopoverContent>
     </Popover>
