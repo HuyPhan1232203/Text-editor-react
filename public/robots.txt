@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://text-editor-react-neon.vercel.app/sitemap.xml

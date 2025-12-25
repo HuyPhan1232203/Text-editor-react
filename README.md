@@ -1,4 +1,4 @@
-# E-Office: Rich Text Editor for Document Generation
+# TEXT EDITOR REACT
 
 <div align="center">
 
@@ -100,7 +100,7 @@ The editor is specifically designed to work with a backend JSON-to-DOCX conversi
 
 \`\`\`bash
 git clone <repository-url>
-cd E-office
+cd text-editor-react
 \`\`\`
 
 ### Step 2: Install Dependencies
@@ -261,142 +261,6 @@ src/components/
 - Content area calculated after margin subtraction
 
 ---
-
-## API Documentation
-
-### Document JSON Schema
-
-The editor generates a structured JSON output for backend processing:
-
-\`\`\`typescript
-interface DocumentModel {
-  topMargin: number;        // inches
-  bottomMargin: number;     // inches
-  leftMargin: number;       // inches
-  rightMargin: number;      // inches
-  blocks: Block[];
-}
-
-interface Block {
-  type: 'paragraph' | 'table';
-  paragraph?: ParagraphModel;
-  table?: TableModel;
-}
-\`\`\`
-
-### Paragraph Model
-
-\`\`\`typescript
-interface ParagraphModel {
-  alignment: 'left' | 'center' | 'right' | 'justify';
-  spacing: {
-    before: number;  // points
-    after: number;   // points
-  };
-  runs: TextRun[];
-}
-
-interface TextRun {
-  text: string;
-  bold: boolean;
-  italic: boolean;
-  underline: boolean;
-  font: string;
-  fontSize: number;    // points
-  fontColor: string;   // #RRGGBB
-}
-\`\`\`
-
-### Table Model
-
-\`\`\`typescript
-interface TableModel {
-  preferredWidth: number;   // inches
-  alignment: 'left' | 'center' | 'right' | 'none';
-  cellMargin: {
-    top: number;           // inches
-    bottom: number;
-    left: number;
-    right: number;
-  };
-  rows: TableRow[];
-}
-
-interface TableRow {
-  cells: TableCell[];
-}
-
-interface TableCell {
-  width: number;           // inches
-  paragraphs: ParagraphModel[];
-}
-\`\`\`
-
-### Example Export Data
-
-\`\`\`json
-{
-  "topMargin": 1.0,
-  "bottomMargin": 1.0,
-  "leftMargin": 1.0,
-  "rightMargin": 1.0,
-  "blocks": [
-    {
-      "type": "paragraph",
-      "paragraph": {
-        "alignment": "left",
-        "spacing": { "before": 0, "after": 6 },
-        "runs": [
-          {
-            "text": "Introduction to E-Office",
-            "bold": true,
-            "italic": false,
-            "underline": false,
-            "font": "Arial",
-            "fontSize": 14,
-            "fontColor": "#000000"
-          }
-        ]
-      }
-    }
-  ]
-}
-\`\`\`
-
----
-
-## Configuration
-
-### Editor Constants
-
-Edit `src/components/TipTapEditor/constants.ts` to customize:
-
-\`\`\`typescript
-// Font families
-export const FONTS = ['Arial', 'Times New Roman', 'Courier New', ...];
-
-// Font sizes
-export const FONT_SIZES = [8, 9, 10, 11, 12, 13, 14, 16, 18, 20, ...];
-
-// Colors
-export const TEXT_COLORS = ['#000000', '#FFFFFF', '#FF0000', ...];
-
-// Page sizes
-export const PAGE_SIZES = {
-  A4: { width: 210, height: 297 },
-  Letter: { width: 8.5 * 25.4, height: 11 * 25.4 },
-  ...
-};
-\`\`\`
-
-### Styling
-
-Global styles: `src/styles/`
-
-- `_variables.scss`: Color schemes, spacing units
-- `_keyframe-animations.scss`: Animation definitions
-
-Component-specific styles are co-located with components.
 
 ## Development Commands
 
