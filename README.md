@@ -398,42 +398,6 @@ Global styles: `src/styles/`
 
 Component-specific styles are co-located with components.
 
----
-
-## Troubleshooting
-
-### Common Issues
-
-#### Editor not loading
-- Clear browser cache and reload
-- Check browser console for errors
-- Verify all dependencies installed: `pnpm install`
-
-#### Export generating incorrect formatting
-- Ensure backend is running and accessible
-- Validate JSON schema matches backend expectations
-- Check page margin values (must be in inches)
-
-#### Table cells not rendering properly
-- Verify cell width values are positive numbers
-- Ensure row structure is valid (all rows have equal cells)
-- Check cell margin values don't exceed cell width
-
-#### Performance issues with large documents
-- Reduce zoom level
-- Disable real-time preview if not needed
-- Consider splitting document into multiple pages
-
-### Debug Mode
-
-Enable verbose logging by setting in `src/config/constants.ts`:
-
-\`\`\`typescript
-export const DEBUG_MODE = true;
-\`\`\`
-
----
-
 ## Development Commands
 
 \`\`\`bash
@@ -443,17 +407,8 @@ pnpm run dev
 # Build for production
 pnpm run build
 
-# Preview production build
-pnpm run preview
-
 # Run linter
 pnpm run lint
-
-# Format code
-pnpm run format
-
-# Type check
-pnpm run type-check
 \`\`\`
 
 ---
@@ -486,16 +441,6 @@ pnpm run type-check
 - Use React DevTools Profiler for component performance
 - Check Network tab for asset loading times
 - Monitor memory usage with browser DevTools
-
----
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature/your-feature`
-3. Commit changes: `git commit -m 'Add feature'`
-4. Push to branch: `git push origin feature/your-feature`
-5. Submit Pull Request
 
 ---
 
