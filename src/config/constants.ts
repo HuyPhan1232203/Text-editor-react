@@ -1,6 +1,5 @@
-const BASE_URL = 'http://localhost:5003'
+const BASE_URL = import.meta.env.VITE_API_URL
 
 export const API_ENDPOINTS = {
-  GENERATE_PDF: `${BASE_URL}/pdf/generate`,
-  CONVERT_DOCX: `${BASE_URL}/docx/convert`
+  GENERATE_PDF: `${BASE_URL}/pdf/generate`
 }

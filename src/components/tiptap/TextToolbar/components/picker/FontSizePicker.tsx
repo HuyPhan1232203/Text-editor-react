@@ -66,7 +66,7 @@ export function FontSizePicker ({ editor }: FontSizePickerProps) {
             <Button
               variant='ghost'
               size='sm'
-              className='h-8 min-w-[70px] justify-between gap-1 px-2 text-sm font-normal hover:bg-accent'
+              className='h-8 min-w-17.5 justify-between gap-1 px-2 text-sm font-normal hover:bg-accent'
             >
               <span className='truncate font-medium'>{currentSize}</span>
               <ChevronDown className='h-3.5 w-3.5 opacity-50' />
@@ -103,7 +103,7 @@ export function FontSizePicker ({ editor }: FontSizePickerProps) {
           </div>
 
           {/* Font Size List */}
-          <div className='max-h-[280px] overflow-y-auto p-1'>
+          <div className='max-h-70 overflow-y-auto p-1'>
             {/* Show current custom size if not in list */}
             {isCustomSize && (
               <>

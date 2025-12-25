@@ -7,7 +7,7 @@ export const PreserveMarksOnEnter = Extension.create({
   addKeyboardShortcuts () {
     return {
       Enter: () => {
-        const { state, view } = this.editor
+        const { state } = this.editor
         const { selection, storedMarks } = state
         const { $from } = selection
 
