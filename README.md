@@ -64,13 +64,9 @@ The editor is specifically designed to work with a backend JSON-to-DOCX conversi
 ### 🎨 UI/UX Features
 - **Real-time Preview**: WYSIWYG editing with accurate page representation
 - **Responsive Design**: Adaptive toolbar and interface for different screen sizes
-- **Zoom Control**: Document scaling (50%, 75%, 100%, 150%, 200%)
-- **Dark Mode Support**: Professional dark theme for extended editing sessions
 - **Keyboard Shortcuts**: Standard shortcuts for common formatting operations
 
 ### 📊 Export & Integration
-- **DOCX Export**: Generate fully formatted Microsoft Word documents
-- **JSON Schema**: Structured JSON output for server-side processing
 - **Page Settings Dialog**: Quick access to page size, orientation, and margins
 - **Format Preservation**: Maintains all formatting in exported documents
 

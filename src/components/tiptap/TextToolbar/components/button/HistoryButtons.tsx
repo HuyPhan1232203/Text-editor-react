@@ -1,5 +1,5 @@
 import { Redo, Undo } from 'lucide-react'
-import type { EditorToolbarState, ToolbarSectionProps } from '../types'
+import type { EditorToolbarState, ToolbarSectionProps } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
 
 interface HistoryButtonsProps extends ToolbarSectionProps {

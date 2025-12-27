@@ -1,5 +1,5 @@
 import { Bold, Code, Italic, Strikethrough, Underline } from 'lucide-react'
-import type { ToolbarSectionProps, EditorToolbarState } from '../types'
+import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
 
 interface FormattingButtonsProps extends ToolbarSectionProps {

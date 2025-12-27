@@ -1,5 +1,5 @@
 import { Image, Table } from 'lucide-react'
-import type { ToolbarSectionProps } from '../types'
+import type { ToolbarSectionProps } from '../../types'
 import { Button } from '@/components/ui/button'
 import type { CreateTablePayload } from '@/components/tiptap/tableTiptap/CreateTablePopover'
 import CreateTablePopover from '@/components/tiptap/tableTiptap/CreateTablePopover'

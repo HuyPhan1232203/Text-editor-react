@@ -1,6 +1,6 @@
 import { ToolbarButton } from '@/components/ToolbarButton'
 import { Plus, Sigma } from 'lucide-react'
-import type { ToolbarSectionProps } from '../types'
+import type { ToolbarSectionProps } from '../../types'
 
 export function MathButtons ({ editor }: ToolbarSectionProps) {
   const handleInlineMath = () => {

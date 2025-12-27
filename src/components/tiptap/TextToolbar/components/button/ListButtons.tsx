@@ -1,5 +1,5 @@
 import { Quote } from 'lucide-react'
-import type { ToolbarSectionProps, EditorToolbarState } from '../types'
+import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ListButton } from '@/components/tiptap/tiptap-ui/list-button'
 import { ToolbarButton } from '@/components/ToolbarButton'
 

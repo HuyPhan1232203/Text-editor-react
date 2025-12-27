@@ -1,5 +1,5 @@
 import { LinkIcon } from 'lucide-react'
-import type { ToolbarSectionProps, EditorToolbarState } from '../types'
+import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
 
 interface LinkButtonProps extends ToolbarSectionProps {

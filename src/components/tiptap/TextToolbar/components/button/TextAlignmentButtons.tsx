@@ -1,6 +1,6 @@
 import { TextAlignButton } from '@/components/tiptap/tiptap-ui/text-align-button'
-import { TEXT_ALIGNMENTS } from '../constants'
-import type { ToolbarSectionProps } from '../types'
+import { TEXT_ALIGNMENTS } from '../../constants'
+import type { ToolbarSectionProps } from '../../types'
 
 export function TextAlignmentButtons ({ editor }: ToolbarSectionProps) {
   return (
