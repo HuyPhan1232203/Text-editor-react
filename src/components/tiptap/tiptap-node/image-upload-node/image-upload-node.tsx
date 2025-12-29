@@ -446,7 +446,18 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
     maxSize,
     limit,
     accept,
-    upload: extension.options.upload,
+    upload: async (file, onProgress, _signal) => {
+    // validate
+      if (file.size > maxSize && maxSize > 0) {
+        throw new Error(`File size exceeds maximum allowed`)
+      }
+
+      // vì không upload thật, coi như xong luôn
+      onProgress({ progress: 100 })
+      const blobUrl = URL.createObjectURL(file)
+
+      return blobUrl
+    },
     onSuccess: extension.options.onSuccess,
     onError: extension.options.onError
   }
