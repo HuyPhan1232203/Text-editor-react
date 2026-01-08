@@ -19,6 +19,7 @@ export function inlineStyles (html: string): string {
       font-size: 11pt;
       /* quan trọng: cho phép wrap trong print */
       white-space: normal;
+      min-height: 1em;
     }
 
     /* --- WRAP/BREAK an toàn khi in --- */
