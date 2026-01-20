@@ -66,7 +66,6 @@ export async function exportToPdf (
 
     const styledHtml = inlineStyles(htmlContent)
 
-    console.log({ html: styledHtml })
     const response = await fetch(API_ENDPOINTS.GENERATE_PDF, {
       method: 'POST',
       headers: {
@@ -87,7 +86,9 @@ export async function exportToPdf (
     })
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ message: 'Unknown error' }))
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: 'Unknown error' }))
 
       throw new Error(errorData?.message || 'Failed to export PDF')
     }

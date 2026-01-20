@@ -2,17 +2,20 @@ import { TableCellToolbar } from '@/components/tiptap/tableTiptap/TableCellToolb
 import { EditorContent } from '@tiptap/react'
 import type { Editor } from '@tiptap/react'
 import TextBubbleToolbar from './TextBubbleToolbar'
+import { memo, useCallback } from 'react'
 
 export interface EditorContentAreaProps {
   editor: Editor
 }
 
-export function EditorContentArea ({ editor }: EditorContentAreaProps) {
-  const handleContainerClick = () => {
+export const EditorContentArea = memo(function EditorContentArea ({
+  editor
+}: EditorContentAreaProps) {
+  const handleContainerClick = useCallback(() => {
     if (!editor?.isFocused) {
       editor?.commands.focus('end')
     }
-  }
+  }, [editor])
 
   if (!editor) return null
 
@@ -25,4 +28,4 @@ export function EditorContentArea ({ editor }: EditorContentAreaProps) {
       </div>
     </div>
   )
-}
+})

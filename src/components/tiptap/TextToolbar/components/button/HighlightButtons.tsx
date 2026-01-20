@@ -2,8 +2,11 @@ import { ButtonGroup } from '@/components/tiptap/tiptap-ui-primitive/button'
 import { HIGHLIGHT_COLORS } from '../../constants'
 import type { ToolbarSectionProps } from '../../types'
 import { ColorHighlightButton } from '@/components/tiptap/tiptap-ui/color-highlight-button'
+import { memo } from 'react'
 
-export function HighlightButtons ({ editor }: ToolbarSectionProps) {
+export const HighlightButtons = memo(function HighlightButtons ({
+  editor
+}: ToolbarSectionProps) {
   return (
     <ButtonGroup orientation='horizontal'>
       {HIGHLIGHT_COLORS.map(({ color, tooltip }) => (
@@ -18,4 +21,4 @@ export function HighlightButtons ({ editor }: ToolbarSectionProps) {
       ))}
     </ButtonGroup>
   )
-}
+})

@@ -7,7 +7,12 @@ import { TextAlign } from '@tiptap/extension-text-align'
 import { Link } from '@tiptap/extension-link'
 import { Highlight } from '@tiptap/extension-highlight'
 import { Color } from '@tiptap/extension-color'
-import { FontFamily, FontSize, LineHeight, TextStyle } from '@tiptap/extension-text-style'
+import {
+  FontFamily,
+  FontSize,
+  LineHeight,
+  TextStyle
+} from '@tiptap/extension-text-style'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCaret from '@tiptap/extension-collaboration-caret'
 import Emoji, { gitHubEmojis } from '@tiptap/extension-emoji'
@@ -26,16 +31,16 @@ export function useEditorConfig () {
   const provider = useMemo(() => {
     const p = new WebrtcProvider('ccccc', ydoc)
 
-    // Debug: Số người đang online
-    p.on('peers', (event) => {
-      console.log('👥 Connected peers:', event.webrtcPeers.length)
-      console.log('Peers:', event.webrtcPeers)
-    })
+    // Production: Event listeners for monitoring (optional)
+    // if (process.env.NODE_ENV === 'development') {
+    //   p.on('peers', (event) => {
+    //     console.log('👥 Connected peers:', event.webrtcPeers.length)
+    //   })
 
-    // Debug: Khi đồng bộ thành công
-    p.on('synced', (event) => {
-      console.log('✅ Synced:', event.synced)
-    })
+    //   p.on('synced', (event) => {
+    //     console.log('✅ Synced:', event.synced)
+    //   })
+    // }
 
     return p
   }, [ydoc])
@@ -46,93 +51,94 @@ export function useEditorConfig () {
       ydoc?.destroy()
     }
   }, [provider, ydoc])
-  const extensions = useMemo(() => [
-    Collaboration.configure({
-      document: ydoc
-    }),
-    CollaborationCaret.configure({
-      provider,
-      render: (user: { color: string, name?: string }) => {
-        const root = document.createElement('div')
+  const extensions = useMemo(
+    () => [
+      Collaboration.configure({
+        document: ydoc
+      }),
+      CollaborationCaret.configure({
+        provider,
+        render: (user: { color: string, name?: string }) => {
+          const root = document.createElement('div')
 
-        root.className = 'collaboration-caret'
-        root.style.color = user.color ?? '#f97316'
+          root.className = 'collaboration-caret'
+          root.style.color = user.color ?? '#f97316'
 
-        const line = document.createElement('div')
+          const line = document.createElement('div')
 
-        line.className = 'caret-line'
+          line.className = 'caret-line'
 
-        const tooltip = document.createElement('div')
+          const tooltip = document.createElement('div')
 
-        tooltip.className = 'caret-tooltip'
-        tooltip.textContent = user.name ?? 'User'
+          tooltip.className = 'caret-tooltip'
+          tooltip.textContent = user.name ?? 'User'
 
-        root.appendChild(line)
-        root.appendChild(tooltip)
+          root.appendChild(line)
+          root.appendChild(tooltip)
 
-        return root
-      }
-    }),
-    PreserveMarksOnEnter,
+          return root
+        }
+      }),
+      PreserveMarksOnEnter,
 
-    TextStyle,
-    StarterKit.configure({
-      undoRedo: false
-    }),
-    Mathematics.configure({
-      katexOptions: {
-        throwOnError: false,
-        displayMode: false
-      }
-    }),
-    Image,
-    Emoji.configure({
-      emojis: gitHubEmojis,
-      enableEmoticons: true
-    }),
-    PaginationExtension.configure({
-      defaultMarginConfig: {
-        top: DEFAULT_PAGE_SETTINGS.topMargin,
-        bottom: DEFAULT_PAGE_SETTINGS.bottomMargin,
-        left: DEFAULT_PAGE_SETTINGS.leftMargin,
-        right: DEFAULT_PAGE_SETTINGS.rightMargin
-      },
-      defaultPaperOrientation: DEFAULT_PAGE_SETTINGS.orientation,
-      pageAmendmentOptions: {
-        enableFooter: true
-      }
-    }),
-    PageNode,
-    BodyNode,
-    Color.configure({ types: ['textStyle'] }),
-    Link.configure({ openOnClick: false }),
-    TableKit.configure({
-      table: {
-        resizable: true,
-        HTMLAttributes: { class: 'tiptap-table' }
-      },
-      tableRow: { HTMLAttributes: { class: 'tiptap-table-row' } },
-      tableCell: { HTMLAttributes: { class: 'tiptap-table-cell' } },
-      tableHeader: { HTMLAttributes: { class: 'tiptap-table-header' } }
-    }),
-    FontFamily.configure({ types: ['textStyle'] }),
-    FontSize.configure({ types: ['textStyle'] }),
-    LineHeight.configure({ types: ['textStyle'] }),
-    TextAlign.configure({
-      types: ['heading', 'paragraph'],
-      alignments: ['left', 'center', 'right', 'justify'],
-      defaultAlignment: 'left'
-    }),
-    Highlight.configure({ multicolor: true }),
-    ImageUploadNode.configure({
-      accept: 'image/*',
-      maxSize: MAX_FILE_SIZE,
-      limit: 3,
-      upload: handleImageUpload,
-      onError: (error) => console.error('Upload failed:', error),
-      onSuccess: (url) => console.log('Upload successful! Image URL:', url)
-    })
-  ], [ydoc, provider])
+      TextStyle,
+      StarterKit.configure({
+        undoRedo: false
+      }),
+      Mathematics.configure({
+        katexOptions: {
+          throwOnError: false,
+          displayMode: false
+        }
+      }),
+      Image,
+      Emoji.configure({
+        emojis: gitHubEmojis,
+        enableEmoticons: true
+      }),
+      PaginationExtension.configure({
+        defaultMarginConfig: {
+          top: DEFAULT_PAGE_SETTINGS.topMargin,
+          bottom: DEFAULT_PAGE_SETTINGS.bottomMargin,
+          left: DEFAULT_PAGE_SETTINGS.leftMargin,
+          right: DEFAULT_PAGE_SETTINGS.rightMargin
+        },
+        defaultPaperOrientation: DEFAULT_PAGE_SETTINGS.orientation,
+        pageAmendmentOptions: {
+          enableFooter: true
+        }
+      }),
+      PageNode,
+      BodyNode,
+      Color.configure({ types: ['textStyle'] }),
+      Link.configure({ openOnClick: false }),
+      TableKit.configure({
+        table: {
+          resizable: true,
+          HTMLAttributes: { class: 'tiptap-table' }
+        },
+        tableRow: { HTMLAttributes: { class: 'tiptap-table-row' } },
+        tableCell: { HTMLAttributes: { class: 'tiptap-table-cell' } },
+        tableHeader: { HTMLAttributes: { class: 'tiptap-table-header' } }
+      }),
+      FontFamily.configure({ types: ['textStyle'] }),
+      FontSize.configure({ types: ['textStyle'] }),
+      LineHeight.configure({ types: ['textStyle'] }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        alignments: ['left', 'center', 'right', 'justify'],
+        defaultAlignment: 'left'
+      }),
+      Highlight.configure({ multicolor: true }),
+      ImageUploadNode.configure({
+        accept: 'image/*',
+        maxSize: MAX_FILE_SIZE,
+        limit: 3,
+        upload: handleImageUpload
+      })
+    ],
+    [ydoc, provider]
+  )
 
   return useEditor({
     extensions,

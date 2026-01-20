@@ -35,7 +35,6 @@ const PaginationPlugin = ({ editor, options }: PaginationPluginProps) => {
         const newMargins = tr.getMeta('updatePaginationMargins')
 
         if (newMargins) {
-          console.log('📝 Plugin state updated with new margins:', newMargins)
           return { currentMargins: newMargins }
         }
         return value
@@ -67,7 +66,8 @@ const PaginationPlugin = ({ editor, options }: PaginationPluginProps) => {
           const pluginState = paginationPluginKey.getState(state)
           const currentOptions = {
             ...options,
-            defaultMarginConfig: pluginState?.currentMargins || options.defaultMarginConfig
+            defaultMarginConfig:
+              pluginState?.currentMargins || options.defaultMarginConfig
           }
 
           buildPageView(editor, view, currentOptions)

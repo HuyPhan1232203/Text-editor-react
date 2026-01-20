@@ -1,12 +1,16 @@
 import { Bold, Code, Italic, Strikethrough, Underline } from 'lucide-react'
 import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
+import { memo } from 'react'
 
 interface FormattingButtonsProps extends ToolbarSectionProps {
   state: EditorToolbarState
 }
 
-export function FormattingButtons ({ editor, state }: FormattingButtonsProps) {
+export const FormattingButtons = memo(function FormattingButtons ({
+  editor,
+  state
+}: FormattingButtonsProps) {
   return (
     <>
       <ToolbarButton
@@ -51,4 +55,4 @@ export function FormattingButtons ({ editor, state }: FormattingButtonsProps) {
       />
     </>
   )
-}
+})

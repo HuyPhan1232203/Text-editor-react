@@ -1,12 +1,16 @@
 import { Redo, Undo } from 'lucide-react'
 import type { EditorToolbarState, ToolbarSectionProps } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
+import { memo } from 'react'
 
 interface HistoryButtonsProps extends ToolbarSectionProps {
   state: EditorToolbarState
 }
 
-export function HistoryButtons ({ editor, state }: HistoryButtonsProps) {
+export const HistoryButtons = memo(function HistoryButtons ({
+  editor,
+  state
+}: HistoryButtonsProps) {
   return (
     <>
       <ToolbarButton
@@ -25,4 +29,4 @@ export function HistoryButtons ({ editor, state }: HistoryButtonsProps) {
       />
     </>
   )
-}
+})

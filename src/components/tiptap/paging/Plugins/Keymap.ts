@@ -34,7 +34,13 @@ import {
 import { isNodeEmpty } from '@tiptap/core'
 import { appendAndReplaceNode, deleteNode } from '../utils/nodes/node'
 import { isPageNode } from '../utils/nodes/page/page'
-import { isPosAtStartOfDocumentBody, isPosAtEndOfBody, isPosAtFirstChildOfBody, isPosAtLastChildOfBody, isPosAtStartOfBody } from '../utils/nodes/body/bodyCondition'
+import {
+  isPosAtStartOfDocumentBody,
+  isPosAtEndOfBody,
+  isPosAtFirstChildOfBody,
+  isPosAtLastChildOfBody,
+  isPosAtStartOfBody
+} from '../utils/nodes/body/bodyCondition'
 import { getPageNodeAndPosition } from '../utils/nodes/page/pagePosition'
 import { isTextNode } from '../utils/nodes/text'
 import {
@@ -47,7 +53,6 @@ import {
 const KeymapPlugin = keymap({
   ArrowLeft: (state, dispatch) => {
     if (!dispatch) {
-      console.warn('No dispatch function provided')
       return false
     }
 
@@ -67,47 +72,42 @@ const KeymapPlugin = keymap({
       return false
     }
 
-    console.log('At start of page body')
-
     const thisPos = $pos.pos
     const expectedTextNodePos = thisPos - 1
     const thisTextNode = doc.nodeAt(expectedTextNodePos)
 
     if (!thisTextNode) {
-      console.warn('No node found at position', expectedTextNodePos)
       return false
     }
 
     const { pos: paragraphPos, node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos)
 
     if (!paragraphNode) {
-      console.warn('No current paragraph node found')
       return false
     }
 
     if (!isParagraphNode(thisTextNode) && !isTextNode(thisTextNode)) {
-      console.warn('Unexpected node type found at position', expectedTextNodePos)
       return false
     }
 
-    const {
-      pos: previousParagraphPos,
-      node: previousParagraphNode
-    } = getLastParagraphInPreviousPageBodyBeforePos(doc, paragraphPos)
+    const { pos: previousParagraphPos, node: previousParagraphNode } = getLastParagraphInPreviousPageBodyBeforePos(doc, paragraphPos)
 
     if (!previousParagraphNode) {
       // Handle to prevent cursor moving to header
       return true
     }
 
-    setSelectionToEndOfParagraph(tr, previousParagraphPos, previousParagraphNode)
+    setSelectionToEndOfParagraph(
+      tr,
+      previousParagraphPos,
+      previousParagraphNode
+    )
 
     dispatch(tr)
     return true
   },
   ArrowRight: (state, dispatch) => {
     if (!dispatch) {
-      console.warn('No dispatch function provided')
       return false
     }
 
@@ -127,33 +127,25 @@ const KeymapPlugin = keymap({
       return false
     }
 
-    console.log('At end of page body')
-
     const thisPos = $pos.pos
     const expectedTextNodePos = thisPos - 1
     const thisTextNode = doc.nodeAt(expectedTextNodePos)
 
     if (!thisTextNode) {
-      console.warn('No node found at position', expectedTextNodePos)
       return false
     }
 
     const { pos: paragraphPos, node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos)
 
     if (!paragraphNode) {
-      console.warn('No current paragraph node found')
       return false
     }
 
     if (!isParagraphNode(thisTextNode) && !isTextNode(thisTextNode)) {
-      console.warn('Unexpected node type found at position', expectedTextNodePos)
       return false
     }
 
-    const {
-      pos: nextParagraphPos,
-      node: nextParagraphNode
-    } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
+    const { pos: nextParagraphPos, node: nextParagraphNode } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
 
     if (!nextParagraphNode) {
       // Handle to prevent cursor moving to footer
@@ -168,13 +160,7 @@ const KeymapPlugin = keymap({
     return true
   },
   ArrowUp: (state, dispatch, view) => {
-    if (!dispatch) {
-      console.warn('No dispatch function provided')
-      return false
-    }
-
-    if (!view) {
-      console.warn('No view provided')
+    if (!dispatch || !view) {
       return false
     }
 
@@ -194,10 +180,11 @@ const KeymapPlugin = keymap({
       return false
     }
 
-    console.log('In first child of page body')
-
     const thisPos = $pos.pos
-    const { isAtFirstLine, offsetDistance } = isPosAtFirstLineOfParagraph(view, $pos)
+    const { isAtFirstLine, offsetDistance } = isPosAtFirstLineOfParagraph(
+      view,
+      $pos
+    )
 
     if (!isAtFirstLine) {
       return false
@@ -219,14 +206,14 @@ const KeymapPlugin = keymap({
     }
 
     if (!isParagraphNode(thisTextNode) && !isTextNode(thisTextNode)) {
-      console.warn('Unexpected node type found at position', expectedTextNodePos)
+      console.warn(
+        'Unexpected node type found at position',
+        expectedTextNodePos
+      )
       return false
     }
 
-    const {
-      pos: previousParagraphPos,
-      node: previousParagraphNode
-    } = getLastParagraphInPreviousPageBodyBeforePos(doc, paragraphPos)
+    const { pos: previousParagraphPos, node: previousParagraphNode } = getLastParagraphInPreviousPageBodyBeforePos(doc, paragraphPos)
 
     if (!previousParagraphNode) {
       if (!isPosAtStartOfBody(doc, $pos)) {
@@ -240,27 +227,30 @@ const KeymapPlugin = keymap({
       return true
     }
 
-    const { lineCount: prevParLineCount } = getParagraphLineInfo(view, previousParagraphPos)
+    const { lineCount: prevParLineCount } = getParagraphLineInfo(
+      view,
+      previousParagraphPos
+    )
     const prevParagraphLastLineNum = prevParLineCount - 1
     const cursorOffset = getOffsetForDistanceInLine(
       view,
       previousParagraphPos,
       prevParagraphLastLineNum,
-      offsetDistance) + 1
+      offsetDistance
+    ) + 1
 
-    setSelectionToParagraph(tr, previousParagraphPos, previousParagraphNode, cursorOffset)
+    setSelectionToParagraph(
+      tr,
+      previousParagraphPos,
+      previousParagraphNode,
+      cursorOffset
+    )
 
     dispatch(tr)
     return true
   },
   ArrowDown: (state, dispatch, view) => {
-    if (!dispatch) {
-      console.warn('No dispatch function provided')
-      return false
-    }
-
-    if (!view) {
-      console.warn('No view provided')
+    if (!dispatch || !view) {
       return false
     }
 
@@ -280,10 +270,11 @@ const KeymapPlugin = keymap({
       return false
     }
 
-    console.log('In last child of page body')
-
     const thisPos = $pos.pos
-    const { isAtLastLine, offsetDistance } = isPosAtLastLineOfParagraph(view, $pos)
+    const { isAtLastLine, offsetDistance } = isPosAtLastLineOfParagraph(
+      view,
+      $pos
+    )
 
     if (!isAtLastLine) {
       return false
@@ -305,14 +296,14 @@ const KeymapPlugin = keymap({
     }
 
     if (!isParagraphNode(thisTextNode) && !isTextNode(thisTextNode)) {
-      console.warn('Unexpected node type found at position', expectedTextNodePos)
+      console.warn(
+        'Unexpected node type found at position',
+        expectedTextNodePos
+      )
       return false
     }
 
-    const {
-      pos: nextParagraphPos,
-      node: nextParagraphNode
-    } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
+    const { pos: nextParagraphPos, node: nextParagraphNode } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
 
     if (!nextParagraphNode) {
       if (!isPosAtEndOfBody(doc, $pos)) {
@@ -327,7 +318,12 @@ const KeymapPlugin = keymap({
     }
 
     const cursorOffset = getOffsetForDistanceInLine(view, nextParagraphPos, 0, offsetDistance) + 1
-    const newSelection = moveToThisTextBlock(tr, nextParagraphPos, undefined, cursorOffset)
+    const newSelection = moveToThisTextBlock(
+      tr,
+      nextParagraphPos,
+      undefined,
+      cursorOffset
+    )
 
     setSelection(tr, newSelection)
 
@@ -336,7 +332,6 @@ const KeymapPlugin = keymap({
   },
   Enter: (state, dispatch) => {
     if (!dispatch) {
-      console.warn('No dispatch function provided')
       return false
     }
 
@@ -350,21 +345,17 @@ const KeymapPlugin = keymap({
 
     // Ensure that the position is within a valid block (paragraph)
     if (!isPositionWithinParagraph($pos)) {
-      console.warn('Not inside a paragraph node')
       return false
     }
 
     const { node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos)
 
     if (!paragraphNode) {
-      console.warn('No current paragraph node found')
       return false
     }
 
     // Create a new empty paragraph node
     const newParagraph = schema.nodes.paragraph.create()
-
-    console.log('Inserting new paragraph at position', from)
 
     if (isNodeEmpty(paragraphNode)) {
       tr.insert(from, newParagraph)
@@ -373,9 +364,16 @@ const KeymapPlugin = keymap({
         tr.replaceSelectionWith(newParagraph)
       } else {
         const remainingContent = paragraphNode.content.cut($pos.parentOffset)
-        const newContentParagraph = schema.nodes.paragraph.create({}, remainingContent)
+        const newContentParagraph = schema.nodes.paragraph.create(
+          {},
+          remainingContent
+        )
 
-        tr.replaceWith($pos.pos, $pos.pos + remainingContent.size, newContentParagraph)
+        tr.replaceWith(
+          $pos.pos,
+          $pos.pos + remainingContent.size,
+          newContentParagraph
+        )
       }
     }
 
@@ -387,7 +385,6 @@ const KeymapPlugin = keymap({
   },
   Backspace: (state, dispatch) => {
     if (!dispatch) {
-      console.warn('No dispatch function provided')
       return false
     }
 
@@ -425,10 +422,17 @@ const KeymapPlugin = keymap({
         setSelection(tr, selection)
       } else {
         // Remove the last character from the current paragraph
-        const newContent = paragraphNode.content.cut(0, paragraphNode.content.size - 1)
+        const newContent = paragraphNode.content.cut(
+          0,
+          paragraphNode.content.size - 1
+        )
         const newParagraph = schema.nodes.paragraph.create({}, newContent)
 
-        tr.replaceWith(paragraphPos, paragraphPos + paragraphNode.nodeSize, newParagraph)
+        tr.replaceWith(
+          paragraphPos,
+          paragraphPos + paragraphNode.nodeSize,
+          newParagraph
+        )
         setSelectionAtPos(tr, thisPos - 1)
       }
     } else if (isPosAtStartOfDocumentBody(doc, $pos, true)) {
@@ -437,10 +441,12 @@ const KeymapPlugin = keymap({
     } else if (!isPosAtStartOfBody(doc, $pos)) {
       return false
     } else {
-      const { node: thisPageNode, pos: thisPagePos } = getPageNodeAndPosition(doc, $pos)
+      const { node: thisPageNode, pos: thisPagePos } = getPageNodeAndPosition(
+        doc,
+        $pos
+      )
 
       if (!thisPageNode) {
-        console.warn('No current page node found')
         return false
       }
 
@@ -454,12 +460,10 @@ const KeymapPlugin = keymap({
       // Confirm that the previous node is a page node
       if (!prevPageNode) {
         // Start of document
-        console.log('No previous page node found')
         return false
       }
 
       if (!isPageNode(prevPageNode)) {
-        console.warn('Previous node is not a page node')
         return false
       }
 
@@ -471,10 +475,7 @@ const KeymapPlugin = keymap({
         return false
       }
 
-      const { pos: previousParagraphPos, node: previousParagraphNode } = getLastParagraphInPreviousPageBodyBeforePos(
-        doc,
-        paragraphPos
-      )
+      const { pos: previousParagraphPos, node: previousParagraphNode } = getLastParagraphInPreviousPageBodyBeforePos(doc, paragraphPos)
 
       if (!previousParagraphNode) {
         // Handle to prevent cursor moving to header
@@ -485,10 +486,19 @@ const KeymapPlugin = keymap({
         deleteNode(tr, paragraphPos, paragraphNode)
       }
 
-      appendAndReplaceNode(tr, previousParagraphPos, previousParagraphNode, paragraphNode)
+      appendAndReplaceNode(
+        tr,
+        previousParagraphPos,
+        previousParagraphNode,
+        paragraphNode
+      )
 
       // Set the selection to the end of the previous paragraph
-      setSelectionToEndOfParagraph(tr, previousParagraphPos, previousParagraphNode)
+      setSelectionToEndOfParagraph(
+        tr,
+        previousParagraphPos,
+        previousParagraphNode
+      )
     }
 
     dispatch(tr)
@@ -496,7 +506,6 @@ const KeymapPlugin = keymap({
   },
   Delete: (state, dispatch) => {
     if (!dispatch) {
-      console.warn('No dispatch function provided')
       return false
     }
 
@@ -514,7 +523,6 @@ const KeymapPlugin = keymap({
 
     // Ensure that the position is within a valid block (paragraph)
     if (!isPositionWithinParagraph($pos)) {
-      console.warn('Not inside a paragraph node')
       return false
     }
 
@@ -542,14 +550,14 @@ const KeymapPlugin = keymap({
     }
 
     if (!isParagraphNode(thisTextNode) && !isTextNode(thisTextNode)) {
-      console.warn('Unexpected node type found at position', expectedTextNodePos)
+      console.warn(
+        'Unexpected node type found at position',
+        expectedTextNodePos
+      )
       return false
     }
 
-    const {
-      pos: nextParagraphPos,
-      node: nextParagraphNode
-    } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
+    const { pos: nextParagraphPos, node: nextParagraphNode } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos)
 
     if (!nextParagraphNode) {
       // Handle to prevent cursor moving to footer

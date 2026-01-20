@@ -3,15 +3,21 @@ import type { ToolbarSectionProps } from '../../types'
 import { Button } from '@/components/ui/button'
 import type { CreateTablePayload } from '@/components/tiptap/tableTiptap/CreateTablePopover'
 import CreateTablePopover from '@/components/tiptap/tableTiptap/CreateTablePopover'
+import { memo, useCallback } from 'react'
 
-export function MediaButtons ({ editor }: ToolbarSectionProps) {
-  const handleImageClick = () => {
+export const MediaButtons = memo(function MediaButtons ({
+  editor
+}: ToolbarSectionProps) {
+  const handleImageClick = useCallback(() => {
     editor.chain().focus().setImageUploadNode().run()
-  }
+  }, [editor])
 
-  const handleCreateTable = (payload: CreateTablePayload) => {
-    editor.chain().focus().insertTable(payload).run()
-  }
+  const handleCreateTable = useCallback(
+    (payload: CreateTablePayload) => {
+      editor.chain().focus().insertTable(payload).run()
+    },
+    [editor]
+  )
 
   return (
     <>
@@ -26,4 +32,4 @@ export function MediaButtons ({ editor }: ToolbarSectionProps) {
       </CreateTablePopover>
     </>
   )
-}
+})
