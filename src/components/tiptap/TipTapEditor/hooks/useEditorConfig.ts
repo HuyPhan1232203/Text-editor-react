@@ -21,7 +21,6 @@ import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-no
 import { Mathematics } from '@tiptap/extension-mathematics'
 import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
-import { PreserveMarksOnEnter } from '../../tiptap-extension/PreserveMarksOnEnter'
 
 export function useEditorConfig () {
   const ydoc = useMemo(() => new Y.Doc(), [])
@@ -77,8 +76,6 @@ export function useEditorConfig () {
           return root
         }
       }),
-      PreserveMarksOnEnter,
-
       TextStyle,
       StarterKit.configure({
         undoRedo: false

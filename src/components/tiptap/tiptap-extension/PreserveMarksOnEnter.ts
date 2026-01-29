@@ -11,6 +11,16 @@ export const PreserveMarksOnEnter = Extension.create({
         const { selection, storedMarks } = state
         const { $from } = selection
 
+        // Kiểm tra xem cursor có đang trong list không
+        // Nếu có, để list extension xử lý Enter để tạo bullet/order mới
+        const isInList = $from.parent.type.name === 'paragraph'
+          && $from.node(-1)?.type.name === 'listItem'
+
+        if (isInList) {
+          // Trả về false để cho list extension (ListItem) xử lý
+          return false
+        }
+
         // Lấy marks hiện tại từ vị trí cursor
         const marks = storedMarks || $from.marks()
 
