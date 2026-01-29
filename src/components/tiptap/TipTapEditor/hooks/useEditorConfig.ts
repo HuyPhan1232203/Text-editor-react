@@ -17,9 +17,7 @@ import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCaret from '@tiptap/extension-collaboration-caret'
 import Emoji, { gitHubEmojis } from '@tiptap/extension-emoji'
 import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
-import { DEFAULT_PAGE_SETTINGS } from '../constants'
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
-import PaginationExtension, { BodyNode, PageNode } from '../../paging'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import { WebrtcProvider } from 'y-webrtc'
 import * as Y from 'yjs'
@@ -96,20 +94,6 @@ export function useEditorConfig () {
         emojis: gitHubEmojis,
         enableEmoticons: true
       }),
-      PaginationExtension.configure({
-        defaultMarginConfig: {
-          top: DEFAULT_PAGE_SETTINGS.topMargin,
-          bottom: DEFAULT_PAGE_SETTINGS.bottomMargin,
-          left: DEFAULT_PAGE_SETTINGS.leftMargin,
-          right: DEFAULT_PAGE_SETTINGS.rightMargin
-        },
-        defaultPaperOrientation: DEFAULT_PAGE_SETTINGS.orientation,
-        pageAmendmentOptions: {
-          enableFooter: true
-        }
-      }),
-      PageNode,
-      BodyNode,
       Color.configure({ types: ['textStyle'] }),
       Link.configure({ openOnClick: false }),
       TableKit.configure({

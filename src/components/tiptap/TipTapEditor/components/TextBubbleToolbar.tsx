@@ -1,13 +1,17 @@
 import { BubbleMenu } from '@tiptap/react/menus'
 import { Bold, Italic, AlignLeft, AlignCenter, AlignRight, Underline, LinkIcon } from 'lucide-react'
-import type { EditorContentAreaProps } from './EditorContentArea'
+import type { Editor } from '@tiptap/react'
 import { ToolbarButton } from '@/components/ToolbarButton'
 import { ColorHighlightButton } from '@/components/tiptap/tiptap-ui/color-highlight-button'
 import { HIGHLIGHT_COLORS } from '../../TextToolbar/constants'
 import { useBubbleMenuState } from '../hooks/useBubbleMenuState'
 import { CellSelection } from '@tiptap/pm/tables'
 
-function TextBubbleToolbar ({ editor }: EditorContentAreaProps) {
+interface TextBubbleToolbarProps {
+  editor: Editor
+}
+
+function TextBubbleToolbar ({ editor }: TextBubbleToolbarProps) {
   // Sử dụng hook để track state
   const state = useBubbleMenuState(editor)
 
