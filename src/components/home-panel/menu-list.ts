@@ -288,7 +288,9 @@ export function hasAnyRole (
  * Lọc menu dựa trên role của user
  */
 export function getFilteredMenuList (
-  pathname: string
+  pathname: string,
+  userRole: string = 'admin',
+  userPermissions: string[] = []
 ): Group[] {
   return getMenuList(pathname)
 }
