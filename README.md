@@ -10,6 +10,8 @@
 
 A Word-like rich text editor for the web, built with React and TipTap: an A4 page you type on, page margins, tables, math, autosave, optional real-time collaboration and PDF export.
 
+**[Live demo →](https://text-editor-react-neon.vercel.app/)**
+
 ![Screenshot](docs/screenshot.png)
 
 </div>

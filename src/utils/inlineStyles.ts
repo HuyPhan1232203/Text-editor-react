@@ -1,6 +1,22 @@
+import { COPYRIGHT } from '@/config/constants'
+
 export function inlineStyles (html: string): string {
   const styleSheet = `
   <style>
+    /* --- Footer on every printed page (replaces the browser's date/URL header and footer) --- */
+    @page {
+      @bottom-left {
+        content: "${COPYRIGHT}";
+        font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
+        color: #6b7280;
+      }
+      @bottom-right {
+        content: "Trang " counter(page) " / " counter(pages);
+        font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
+        color: #6b7280;
+      }
+    }
+
     /* --- Base giống index.css --- */
     body {
       font-family: 'Calibri', 'Segoe UI', system-ui, sans-serif;

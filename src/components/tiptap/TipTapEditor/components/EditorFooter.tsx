@@ -1,6 +1,7 @@
 import { PageSettingsDialog } from '@/components/PageSettingDialog'
 import type { PageSettings } from '../types'
 import { memo } from 'react'
+import { COPYRIGHT, REPO_URL } from '@/config/constants'
 
 interface EditorFooterProps {
   pageSettings: PageSettings
@@ -20,11 +21,19 @@ export const EditorFooter = memo(function EditorFooter ({
             onSettingsChange={onSettingsChange}
           />
           <div className='text-xs text-gray-500'>
-            Lề: T:{pageSettings.topMargin}mm | P:{pageSettings.rightMargin}mm |
-            D:{pageSettings.bottomMargin}mm | T:{pageSettings.leftMargin}mm |
-            Hướng:{pageSettings.orientation === 'portrait' ? 'Dọc' : 'Ngang'}
+            Lề trên {pageSettings.topMargin}mm · dưới {pageSettings.bottomMargin}mm ·
+            trái {pageSettings.leftMargin}mm · phải {pageSettings.rightMargin}mm ·
+            {pageSettings.orientation === 'portrait' ? ' Khổ dọc' : ' Khổ ngang'}
           </div>
         </div>
+        <a
+          href={REPO_URL}
+          target='_blank'
+          rel='noreferrer'
+          className='text-xs text-gray-400 hover:text-gray-600'
+        >
+          {COPYRIGHT}
+        </a>
       </div>
     </div>
   )
