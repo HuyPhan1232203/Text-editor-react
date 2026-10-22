@@ -13,7 +13,7 @@ import {
   TextStyle
 } from '@tiptap/extension-text-style'
 import Collaboration from '@tiptap/extension-collaboration'
-import { defaultSelectionBuilder, yCursorPlugin, yCursorPluginKey } from '@tiptap/y-tiptap'
+import { defaultSelectionBuilder, yCursorPlugin, yCursorPluginKey, yUndoPluginKey } from '@tiptap/y-tiptap'
 import { FileHandler } from '@tiptap/extension-file-handler'
 import { handleImageUpload, insertImageFiles, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
@@ -27,6 +27,7 @@ import { StyledTableCell, StyledTableHeader } from '@/components/tiptap/tiptap-e
 import type { WebrtcProvider } from 'y-webrtc'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
+import { WELCOME_CONTENT } from '../welcomeContent'
 
 // Collaboration is opt-in: open the app with ?room=<name> to share a document over WebRTC
 const ROOM_NAME = new URLSearchParams(window.location.search).get('room')
@@ -171,6 +172,29 @@ export function useEditorConfig () {
       }
     }
   })
+
+  // First visit: once the saved document has loaded and turns out empty, show the welcome tour.
+  // Only once per browser (clearing the document later keeps it empty), and never in a shared room.
+  useEffect(() => {
+    if (!editor || ROOM_NAME) return
+
+    const WELCOMED_KEY = 'text-editor-react:welcomed'
+    const showWelcome = () => {
+      try {
+        if (editor.isDestroyed || localStorage.getItem(WELCOMED_KEY)) return
+        localStorage.setItem(WELCOMED_KEY, '1')
+      } catch {
+        return
+      }
+      if (!editor.isEmpty) return
+      editor.commands.setContent(WELCOME_CONTENT)
+      // The tour is the starting point, not an edit: the first Ctrl+Z should not wipe it
+      yUndoPluginKey.getState(editor.state)?.undoManager.clear()
+    }
+
+    if (persistence.synced) showWelcome()
+    else persistence.once('synced', showWelcome)
+  }, [editor, persistence])
 
   // When the room provider arrives, add live cursors to the existing editor instead of
   // recreating it, so the document and the undo history stay intact

@@ -26,6 +26,7 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 - **Media**: links, emoji as plain text characters (picker or typing `:heart:`), inline math with KaTeX
 - **A4 pages**: content flows across separate A4 sheets like Word, portrait or landscape, margin presets and custom margins in mm
 - **Page thumbnails**: a sidebar lists every page; click to jump, the current page is highlighted (lazy-rendered for long documents)
+- **Welcome tour**: first-time visitors get an editable demo document that walks through the features
 - **Autosave**: the document is kept in IndexedDB and page settings in localStorage, so a reload does not lose your work
 - **Collaboration (opt-in)**: open the app with `?room=<name>` to edit the same document with others over WebRTC, with live cursors
 - **PDF export**: works out of the box through the browser's print dialog ("Save as PDF"), with your page size and margins; optionally one-click download through a Puppeteer backend ([PDF-export-Puppeteer](https://github.com/HuyPhan1232203/PDF-export-Puppeteer))
