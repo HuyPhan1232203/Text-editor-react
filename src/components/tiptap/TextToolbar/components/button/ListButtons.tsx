@@ -24,6 +24,13 @@ export function ListButtons ({ editor, state }: ListButtonsProps) {
         showShortcut={false}
         tooltip='Danh sách đánh số'
       />
+      <ListButton
+        editor={editor}
+        type='taskList'
+        hideWhenUnavailable={false}
+        showShortcut={false}
+        tooltip='Danh sách việc cần làm (checklist)'
+      />
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         isActive={state.isBlockquote}

@@ -20,7 +20,7 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 
 - **Formatting**: bold, italic, underline, strikethrough, inline code, text color, highlight
 - **Typography**: font family, font size, line height, text alignment
-- **Structure**: paragraph and headings H1–H6, bullet and numbered lists
+- **Structure**: paragraph and headings H1–H6, bullet and numbered lists, checklists (pasting a Google Docs checklist keeps its checkboxes)
 - **Tables**: insert tables, resize columns, add or delete rows and columns, merge and split cells, toggle borders
 - **Images**: paste, drop or upload images, resize them by dragging and wrap text around them (left / right)
 - **Media**: links, emoji (`:smile:` and emoticons), inline math with KaTeX

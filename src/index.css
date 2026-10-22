@@ -655,3 +655,40 @@
 .tiptap table:has(.page-break-spacer) {
   overflow: visible;
 }
+
+/* Checklist (task list), styled like Google Docs */
+.tiptap ul[data-type='taskList'] {
+  list-style: none;
+  padding-left: 6pt;
+}
+
+.tiptap ul[data-type='taskList'] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding-left: 0;
+}
+
+.tiptap ul[data-type='taskList'] li > label {
+  flex-shrink: 0;
+  margin-top: 0.3em;
+  user-select: none;
+}
+
+.tiptap ul[data-type='taskList'] li > label input[type='checkbox'] {
+  width: 14px;
+  height: 14px;
+  accent-color: #1a73e8;
+  cursor: pointer;
+}
+
+.tiptap ul[data-type='taskList'] li > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.tiptap ul[data-type='taskList'] li[data-checked='true'] > div,
+.tiptap ul[data-type='taskList'] li[data-checked='true'] > div p {
+  color: #80868b;
+  text-decoration: line-through;
+}

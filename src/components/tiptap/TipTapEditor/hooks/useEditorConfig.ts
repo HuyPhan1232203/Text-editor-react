@@ -21,6 +21,7 @@ import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-no
 import { Mathematics } from '@tiptap/extension-mathematics'
 import { Pagination } from '@/components/tiptap/tiptap-extension/pagination-extension'
 import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
+import { ChecklistExtensions } from '@/components/tiptap/tiptap-extension/checklist-extension'
 import { WebrtcProvider } from 'y-webrtc'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
@@ -133,6 +134,7 @@ export function useEditorConfig () {
         defaultAlignment: 'left'
       }),
       Highlight.configure({ multicolor: true }),
+      ...ChecklistExtensions,
       Pagination,
       ImageUploadNode.configure({
         accept: 'image/*',
