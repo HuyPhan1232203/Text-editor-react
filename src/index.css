@@ -327,13 +327,13 @@
     transform: translateY(0);
   }
 }
-.table-wrap {
+.tiptap .tableWrapper {
   position: relative;
 }
 
 /* Border toggle: an icon button in the left page margin, outside the table, so it never covers a cell.
    The padding bridges the gap to the table so the hover is not lost on the way to the button. */
-.table-wrap .table-controls {
+.tiptap .tableWrapper .table-controls {
   position: absolute;
   top: 0;
   left: -40px;
@@ -345,13 +345,13 @@
   transition: opacity 120ms ease;
 }
 
-.table-wrap:hover .table-controls,
-.table-wrap:focus-within .table-controls {
+.tiptap .tableWrapper:hover .table-controls,
+.tiptap .tableWrapper:focus-within .table-controls {
   opacity: 1;
   pointer-events: auto;
 }
 
-.table-wrap .table-border-toggle {
+.tiptap .tableWrapper .table-border-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -365,22 +365,22 @@
   cursor: pointer;
 }
 
-.table-wrap .table-border-toggle:hover {
+.tiptap .tableWrapper .table-border-toggle:hover {
   background: #f3f4f6;
   color: #111827;
 }
 
-.table-wrap .table-border-toggle:focus-visible {
+.tiptap .tableWrapper .table-border-toggle:focus-visible {
   outline: 2px solid #93c5fd;
   outline-offset: 1px;
 }
 
-.table-wrap .table-border-toggle .icon-off,
-.table-wrap .table-border-toggle.is-hidden .icon-on {
+.tiptap .tableWrapper .table-border-toggle .icon-off,
+.tiptap .tableWrapper .table-border-toggle.is-hidden .icon-on {
   display: none;
 }
 
-.table-wrap .table-border-toggle.is-hidden .icon-off {
+.tiptap .tableWrapper .table-border-toggle.is-hidden .icon-off {
   display: flex;
 }
 .collaboration-caret {

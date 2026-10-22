@@ -22,6 +22,7 @@ import { Mathematics } from '@tiptap/extension-mathematics'
 import { Pagination } from '@/components/tiptap/tiptap-extension/pagination-extension'
 import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
 import { ChecklistExtensions } from '@/components/tiptap/tiptap-extension/checklist-extension'
+import { BorderedTable } from '@/components/tiptap/tiptap-extension/table-border-extension'
 import { WebrtcProvider } from 'y-webrtc'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
@@ -116,11 +117,13 @@ export function useEditorConfig () {
       }),
       Color.configure({ types: ['textStyle'] }),
       Link.configure({ openOnClick: false }),
+      // The table itself comes from BorderedTable (hide-borders setting + toggle button)
+      BorderedTable.configure({
+        resizable: true,
+        HTMLAttributes: { class: 'tiptap-table' }
+      }),
       TableKit.configure({
-        table: {
-          resizable: true,
-          HTMLAttributes: { class: 'tiptap-table' }
-        },
+        table: false,
         tableRow: { HTMLAttributes: { class: 'tiptap-table-row' } },
         tableCell: { HTMLAttributes: { class: 'tiptap-table-cell' } },
         tableHeader: { HTMLAttributes: { class: 'tiptap-table-header' } }

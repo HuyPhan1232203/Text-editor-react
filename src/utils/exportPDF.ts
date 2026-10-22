@@ -45,24 +45,8 @@ export async function exportToPdf (
   const margins = { ...DEFAULT_PAGE_SETTINGS, ...pageSettings }
 
   try {
-    let htmlContent = editor.getHTML()
-
-    // Preserve no-border class từ DOM
-    const domTables = editor.view.dom.querySelectorAll('table')
-
-    if (domTables.length > 0) {
-      const parser = new DOMParser()
-      const doc = parser.parseFromString(htmlContent, 'text/html')
-      const exportTables = doc.querySelectorAll('table')
-
-      domTables.forEach((table, index) => {
-        if (table.classList.contains('no-border') && exportTables[index]) {
-          exportTables[index].classList.add('no-border')
-        }
-      })
-
-      htmlContent = doc.body.innerHTML
-    }
+    // Hidden table borders are a table attribute, rendered as the no-border class
+    const htmlContent = editor.getHTML()
 
     const styledHtml = inlineStyles(htmlContent)
 

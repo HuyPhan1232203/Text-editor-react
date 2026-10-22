@@ -5,7 +5,3 @@ export interface PageSettings {
   rightMargin: number
   orientation: 'landscape' | 'portrait'
 }
-
-export interface TableBorderStates {
-  [key: number]: boolean
-}
