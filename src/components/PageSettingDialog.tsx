@@ -12,6 +12,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group' // shadcn Radio [web:13]
 import { Slider } from '@/components/ui/slider' // shadcn Slider [web:14]
 import { Input } from '@/components/ui/input'
+import { t } from '@/i18n'
 
 interface PageSettings {
   topMargin: number
@@ -29,10 +30,10 @@ interface PageSettingsDialogProps {
 type MarginPresetKey = 'default' | 'narrow' | 'normal' | 'wide'
 
 const PRESETS: Record<MarginPresetKey, { label: string, mm: number }> = {
-  default: { label: 'Mặc định', mm: 25.4 },
-  narrow: { label: 'Hẹp', mm: 12.7 },
-  normal: { label: 'Vừa', mm: 15 },
-  wide: { label: 'Rộng', mm: 31.8 }
+  default: { label: t('page.presetDefault'), mm: 25.4 },
+  narrow: { label: t('page.presetNarrow'), mm: 12.7 },
+  normal: { label: t('page.presetNormal'), mm: 15 },
+  wide: { label: t('page.presetWide'), mm: 31.8 }
 }
 
 const MAX_MARGIN_MM = 50
@@ -89,19 +90,19 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
           <Settings className='w-4 h-4 mr-2' />
-          Cài đặt trang
+          {t('page.setup')}
         </Button>
       </DialogTrigger>
 
       <DialogContent className='sm:max-w-130'>
         <DialogHeader>
-          <DialogTitle>Cài đặt trang A4</DialogTitle>
+          <DialogTitle>{t('page.setupTitle')}</DialogTitle>
         </DialogHeader>
 
         <div className='grid gap-5 py-2'>
           {/* Orientation */}
           <div className='grid gap-2'>
-            <Label>Hướng trang</Label>
+            <Label>{t('page.orientation')}</Label>
             <RadioGroup
               value={localSettings.orientation}
               onValueChange={(v) =>
@@ -110,18 +111,18 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
             >
               <div className='flex items-center gap-2'>
                 <RadioGroupItem value='portrait' id='portrait' />
-                <Label htmlFor='portrait'>Dọc</Label>
+                <Label htmlFor='portrait'>{t('page.portrait')}</Label>
               </div>
               <div className='flex items-center gap-2'>
                 <RadioGroupItem value='landscape' id='landscape' />
-                <Label htmlFor='landscape'>Ngang</Label>
+                <Label htmlFor='landscape'>{t('page.landscape')}</Label>
               </div>
             </RadioGroup>
           </div>
 
           {/* Preset margins */}
           <div className='grid gap-2'>
-            <Label>Lề (chọn nhanh)</Label>
+            <Label>{t('page.marginPresets')}</Label>
             <Select
               value={preset}
               onValueChange={(v) => {
@@ -132,7 +133,7 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder='Chọn preset lề' />
+                <SelectValue placeholder={t('page.presetPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(PRESETS).map(([k, p]) => (
@@ -147,9 +148,9 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
           {/* Quick tweak */}
           <div className='grid gap-2'>
             <div className='flex items-center justify-between'>
-              <Label>Tinh chỉnh nhanh (lề chung): {commonMargin}mm</Label>
+              <Label>{t('page.quickAdjust', { mm: commonMargin })}</Label>
               <Button variant='ghost' size='sm' onClick={() => setShowAdvanced((x) => !x)}>
-                {showAdvanced ? 'Ẩn chi tiết' : 'Tùy chỉnh chi tiết'}
+                {showAdvanced ? t('page.hideDetails') : t('page.customMargins')}
               </Button>
             </div>
 
@@ -167,7 +168,7 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
             <div className='grid gap-3 rounded-md border p-3'>
               <div className='grid grid-cols-2 gap-3'>
                 <div className='grid gap-1'>
-                  <Label htmlFor='topMargin'>Lề trên (mm)</Label>
+                  <Label htmlFor='topMargin'>{t('page.marginTop')}</Label>
                   <Input
                     id='topMargin'
                     type='number'
@@ -179,7 +180,7 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
                   />
                 </div>
                 <div className='grid gap-1'>
-                  <Label htmlFor='bottomMargin'>Lề dưới (mm)</Label>
+                  <Label htmlFor='bottomMargin'>{t('page.marginBottom')}</Label>
                   <Input
                     id='bottomMargin'
                     type='number'
@@ -191,7 +192,7 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
                   />
                 </div>
                 <div className='grid gap-1'>
-                  <Label htmlFor='leftMargin'>Lề trái (mm)</Label>
+                  <Label htmlFor='leftMargin'>{t('page.marginLeft')}</Label>
                   <Input
                     id='leftMargin'
                     type='number'
@@ -203,7 +204,7 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
                   />
                 </div>
                 <div className='grid gap-1'>
-                  <Label htmlFor='rightMargin'>Lề phải (mm)</Label>
+                  <Label htmlFor='rightMargin'>{t('page.marginRight')}</Label>
                   <Input
                     id='rightMargin'
                     type='number'
@@ -223,12 +224,12 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
               variant='outline'
               onClick={() => setLocalSettings(applyAllMargins(localSettings, PRESETS.default.mm))}
             >
-              Đặt lại mặc định
+              {t('page.reset')}
             </Button>
             <Button variant='outline' onClick={handleCancel}>
-              Hủy
+              {t('page.cancel')}
             </Button>
-            <Button onClick={handleSave}>Lưu</Button>
+            <Button onClick={handleSave}>{t('page.save')}</Button>
           </div>
         </div>
       </DialogContent>

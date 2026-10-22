@@ -5,13 +5,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button'
 import { Type, Check } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
+import { t } from '@/i18n'
 
 interface FontFamilyPickerProps {
   editor: Editor
 }
 
 const FONT_FAMILIES = [
-  { name: 'Mặc định', value: '' },
+  { name: t('toolbar.fontDefault'), value: '' },
   { name: 'Arial', value: 'Arial, sans-serif' },
   { name: 'Times New Roman', value: 'Times New Roman, serif' },
   { name: 'Courier New', value: 'Courier New, monospace' },
@@ -27,7 +28,7 @@ export function FontFamilyPicker ({ editor }: FontFamilyPickerProps) {
   const [open, setOpen] = useState(false)
 
   const currentFont = editor.getAttributes('textStyle').fontFamily || ''
-  const currentFontName = FONT_FAMILIES.find(f => f.value === currentFont)?.name || 'Mặc định'
+  const currentFontName = FONT_FAMILIES.find(f => f.value === currentFont)?.name || t('toolbar.fontDefault')
 
   const handleFontSelect = (fontValue: string) => {
     if (fontValue === '') {
@@ -69,7 +70,7 @@ export function FontFamilyPicker ({ editor }: FontFamilyPickerProps) {
           </PopoverTrigger>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Font chữ</p>
+          <p>{t('toolbar.font')}</p>
         </TooltipContent>
       </Tooltip>
 

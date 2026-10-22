@@ -4,22 +4,23 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button'
 import { Check, X } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
+import { t } from '@/i18n'
 
 interface TextColorPickerProps {
   editor: Editor
 }
 
 const TEXT_COLORS = [
-  { name: 'Đen', value: '#000000' },
-  { name: 'Xám đậm', value: '#374151' },
-  { name: 'Xám', value: '#6B7280' },
-  { name: 'Đỏ', value: '#EF4444' },
-  { name: 'Cam', value: '#F97316' },
-  { name: 'Vàng', value: '#EAB308' },
-  { name: 'Xanh lá', value: '#22C55E' },
-  { name: 'Xanh dương', value: '#3B82F6' },
-  { name: 'Tím', value: '#A855F7' },
-  { name: 'Hồng', value: '#EC4899' }
+  { name: t('color.black'), value: '#000000' },
+  { name: t('color.darkGray'), value: '#374151' },
+  { name: t('color.gray'), value: '#6B7280' },
+  { name: t('color.red'), value: '#EF4444' },
+  { name: t('color.orange'), value: '#F97316' },
+  { name: t('color.yellow'), value: '#EAB308' },
+  { name: t('color.green'), value: '#22C55E' },
+  { name: t('color.blue'), value: '#3B82F6' },
+  { name: t('color.purple'), value: '#A855F7' },
+  { name: t('color.pink'), value: '#EC4899' }
 ]
 
 export function TextColorPicker ({ editor }: TextColorPickerProps) {
@@ -71,7 +72,7 @@ export function TextColorPicker ({ editor }: TextColorPickerProps) {
 
         </TooltipTrigger>
         <TooltipContent>
-          <p>Màu chữ</p>
+          <p>{t('toolbar.textColor')}</p>
         </TooltipContent>
       </Tooltip>
 
@@ -79,7 +80,7 @@ export function TextColorPicker ({ editor }: TextColorPickerProps) {
         <div className='space-y-3'>
           {/* Predefined Colors */}
           <div>
-            <p className='text-xs font-medium text-gray-600 mb-2'>Màu sẵn có</p>
+            <p className='text-xs font-medium text-gray-600 mb-2'>{t('toolbar.presetColors')}</p>
             <div className='grid grid-cols-5 gap-2'>
               {TEXT_COLORS.map((color) => {
                 const isActive = currentColor.toLowerCase() === color.value.toLowerCase()
@@ -103,7 +104,7 @@ export function TextColorPicker ({ editor }: TextColorPickerProps) {
 
           {/* Custom Color Picker */}
           <div>
-            <p className='text-xs font-medium text-gray-600 mb-2'>Màu tùy chỉnh</p>
+            <p className='text-xs font-medium text-gray-600 mb-2'>{t('toolbar.customColor')}</p>
             <div className='flex gap-2'>
               <input
                 type='color'

@@ -1,6 +1,7 @@
 import { LinkIcon } from 'lucide-react'
 import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
+import { t } from '@/i18n'
 
 interface LinkButtonProps extends ToolbarSectionProps {
   state: EditorToolbarState
@@ -27,7 +28,7 @@ export function LinkButton ({ editor, state }: LinkButtonProps) {
       isActive={state.isLink}
       icon={LinkIcon}
       label='Link'
-      tooltip='Thêm liên kết'
+      tooltip={t('toolbar.link')}
     />
   )
 }

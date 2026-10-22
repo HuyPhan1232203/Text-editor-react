@@ -1,10 +1,11 @@
 import { ToolbarButton } from '@/components/ToolbarButton'
 import { Plus, Sigma } from 'lucide-react'
 import type { ToolbarSectionProps } from '../../types'
+import { t } from '@/i18n'
 
 export function MathButtons ({ editor }: ToolbarSectionProps) {
   const handleInlineMath = () => {
-    const latex = prompt('Nhập công thức LaTeX inline (ví dụ: x^2 + y^2 = z^2):')
+    const latex = prompt(t('toolbar.inlineMathPrompt'))
 
     if (latex) {
       editor.chain().focus().insertInlineMath({ latex }).run()
@@ -12,7 +13,7 @@ export function MathButtons ({ editor }: ToolbarSectionProps) {
   }
 
   const handleBlockMath = () => {
-    const latex = prompt('Nhập công thức LaTeX block (ví dụ: \\frac{a}{b}):')
+    const latex = prompt(t('toolbar.blockMathPrompt'))
 
     if (latex) {
       editor.chain().focus().insertBlockMath({ latex }).run()
@@ -27,7 +28,7 @@ export function MathButtons ({ editor }: ToolbarSectionProps) {
         disabled={false}
         icon={Sigma}
         label='Inline Math'
-        tooltip='Chèn công thức toán học inline'
+        tooltip={t('toolbar.inlineMath')}
       />
       <ToolbarButton
         onClick={handleBlockMath}
@@ -35,7 +36,7 @@ export function MathButtons ({ editor }: ToolbarSectionProps) {
         disabled={false}
         icon={Plus}
         label='Block Math'
-        tooltip='Chèn công thức toán học block'
+        tooltip={t('toolbar.blockMath')}
       />
     </>
   )

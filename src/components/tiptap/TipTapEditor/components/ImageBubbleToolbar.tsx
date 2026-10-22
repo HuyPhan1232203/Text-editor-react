@@ -4,15 +4,16 @@ import type { Editor } from '@tiptap/react'
 import { PanelLeft, PanelRight, RectangleHorizontal, Trash2 } from 'lucide-react'
 import { ToolbarButton } from '@/components/ToolbarButton'
 import type { ImageWrap } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
+import { t } from '@/i18n'
 
 interface ImageBubbleToolbarProps {
   editor: Editor
 }
 
 const WRAP_OPTIONS: { wrap: ImageWrap, icon: typeof PanelLeft, label: string }[] = [
-  { wrap: 'none', icon: RectangleHorizontal, label: 'Ảnh một dòng riêng' },
-  { wrap: 'left', icon: PanelLeft, label: 'Ảnh bên trái, chữ bao quanh' },
-  { wrap: 'right', icon: PanelRight, label: 'Ảnh bên phải, chữ bao quanh' }
+  { wrap: 'none', icon: RectangleHorizontal, label: t('image.inline') },
+  { wrap: 'left', icon: PanelLeft, label: t('image.wrapLeft') },
+  { wrap: 'right', icon: PanelRight, label: t('image.wrapRight') }
 ]
 
 function ImageBubbleToolbar ({ editor }: ImageBubbleToolbarProps) {
@@ -49,8 +50,8 @@ function ImageBubbleToolbar ({ editor }: ImageBubbleToolbarProps) {
         <ToolbarButton
           onClick={() => editor.chain().focus().deleteSelection().run()}
           icon={Trash2}
-          label='Xoá ảnh'
-          tooltip='Xoá ảnh'
+          label={t('image.delete')}
+          tooltip={t('image.delete')}
         />
       </div>
     </BubbleMenu>

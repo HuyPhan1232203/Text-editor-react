@@ -2,6 +2,7 @@ import { Quote } from 'lucide-react'
 import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ListButton } from '@/components/tiptap/tiptap-ui/list-button'
 import { ToolbarButton } from '@/components/ToolbarButton'
+import { t } from '@/i18n'
 
 interface ListButtonsProps extends ToolbarSectionProps {
   state: EditorToolbarState
@@ -15,28 +16,28 @@ export function ListButtons ({ editor, state }: ListButtonsProps) {
         type='bulletList'
         hideWhenUnavailable={false}
         showShortcut={false}
-        tooltip='Danh sách dấu chấm'
+        tooltip={t('toolbar.bulletList')}
       />
       <ListButton
         editor={editor}
         type='orderedList'
         hideWhenUnavailable={false}
         showShortcut={false}
-        tooltip='Danh sách đánh số'
+        tooltip={t('toolbar.orderedList')}
       />
       <ListButton
         editor={editor}
         type='taskList'
         hideWhenUnavailable={false}
         showShortcut={false}
-        tooltip='Danh sách việc cần làm (checklist)'
+        tooltip={t('toolbar.taskList')}
       />
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         isActive={state.isBlockquote}
         icon={Quote}
         label='Blockquote'
-        tooltip='Trích dẫn'
+        tooltip={t('toolbar.blockquote')}
       />
     </>
   )

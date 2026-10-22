@@ -12,6 +12,7 @@ import {
   type Editor,
   type NodeWithPos
 } from '@tiptap/react'
+import { t } from '@/i18n'
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -428,7 +429,7 @@ export const insertImageFiles = async (
 
   for (const file of files) {
     if (file.size > MAX_FILE_SIZE) {
-      window.alert(`Ảnh "${file.name}" vượt quá ${MAX_FILE_SIZE / (1024 * 1024)}MB`)
+      window.alert(t('image.tooLarge', { name: file.name, size: MAX_FILE_SIZE / (1024 * 1024) }))
       continue
     }
     images.push({ type: 'image', attrs: { src: await fileToDataUrl(file), alt: file.name } })

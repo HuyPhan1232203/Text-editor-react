@@ -2,6 +2,7 @@ import { PageSettingsDialog } from '@/components/PageSettingDialog'
 import type { PageSettings } from '../types'
 import { memo } from 'react'
 import { COPYRIGHT, REPO_URL } from '@/config/constants'
+import { language, setLanguage, t } from '@/i18n'
 
 interface EditorFooterProps {
   pageSettings: PageSettings
@@ -21,19 +22,33 @@ export const EditorFooter = memo(function EditorFooter ({
             onSettingsChange={onSettingsChange}
           />
           <div className='text-xs text-gray-500'>
-            Lề trên {pageSettings.topMargin}mm · dưới {pageSettings.bottomMargin}mm ·
-            trái {pageSettings.leftMargin}mm · phải {pageSettings.rightMargin}mm ·
-            {pageSettings.orientation === 'portrait' ? ' Khổ dọc' : ' Khổ ngang'}
+            {t('page.summary', {
+              top: pageSettings.topMargin,
+              bottom: pageSettings.bottomMargin,
+              left: pageSettings.leftMargin,
+              right: pageSettings.rightMargin,
+              orientation: pageSettings.orientation === 'portrait' ? t('page.portrait') : t('page.landscape')
+            })}
           </div>
         </div>
-        <a
-          href={REPO_URL}
-          target='_blank'
-          rel='noreferrer'
-          className='text-xs text-gray-600 hover:text-gray-900'
-        >
-          {COPYRIGHT}
-        </a>
+        <div className='flex items-center gap-3'>
+          <button
+            type='button'
+            onClick={() => setLanguage(language === 'en' ? 'vi' : 'en')}
+            title={t('language.switchTitle')}
+            className='text-xs font-medium text-gray-700 rounded border border-gray-300 px-2 py-1 hover:bg-gray-100'
+          >
+            {t('language.switch')}
+          </button>
+          <a
+            href={REPO_URL}
+            target='_blank'
+            rel='noreferrer'
+            className='text-xs text-gray-600 hover:text-gray-900'
+          >
+            {COPYRIGHT}
+          </a>
+        </div>
       </div>
     </div>
   )

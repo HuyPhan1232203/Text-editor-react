@@ -7,6 +7,7 @@ import { HIGHLIGHT_COLORS } from '../../TextToolbar/constants'
 import { useBubbleMenuState } from '../hooks/useBubbleMenuState'
 import { CellSelection } from '@tiptap/pm/tables'
 import { NodeSelection } from '@tiptap/pm/state'
+import { t } from '@/i18n'
 
 interface TextBubbleToolbarProps {
   editor: Editor
@@ -62,21 +63,21 @@ function TextBubbleToolbar ({ editor }: TextBubbleToolbarProps) {
           isActive={state.isBold}
           icon={Bold}
           label='Bold'
-          tooltip='In đậm (Ctrl+B)'
+          tooltip={t('toolbar.bold')}
         />
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
           isActive={state.isItalic}
           icon={Italic}
           label='Italic'
-          tooltip='In nghiêng (Ctrl+I)'
+          tooltip={t('toolbar.italic')}
         />
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           isActive={state.isUnderline}
           icon={Underline}
           label='Underline'
-          tooltip='Gạch chân (Ctrl+U)'
+          tooltip={t('toolbar.underline')}
         />
         <div className='w-px h-6 bg-gray-300 mx-1' />
         <ToolbarButton
@@ -84,7 +85,7 @@ function TextBubbleToolbar ({ editor }: TextBubbleToolbarProps) {
           isActive={state.isLink}
           icon={LinkIcon}
           label='Link'
-          tooltip='Thêm liên kết'
+          tooltip={t('toolbar.link')}
         />
         {/* Divider */}
         <div className='w-px h-6 bg-gray-300 mx-1' />
@@ -110,21 +111,21 @@ function TextBubbleToolbar ({ editor }: TextBubbleToolbarProps) {
           isActive={state.textAlign === 'left'}
           icon={AlignLeft}
           label='Align Left'
-          tooltip='Căn trái'
+          tooltip={t('toolbar.alignLeft')}
         />
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
           isActive={state.textAlign === 'center'}
           icon={AlignCenter}
           label='Align Center'
-          tooltip='Căn giữa'
+          tooltip={t('toolbar.alignCenter')}
         />
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
           isActive={state.textAlign === 'right'}
           icon={AlignRight}
           label='Align Right'
-          tooltip='Căn phải'
+          tooltip={t('toolbar.alignRight')}
         />
       </div>
     </BubbleMenu>

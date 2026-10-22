@@ -7,6 +7,7 @@
 [![Vite](https://img.shields.io/badge/Vite-rolldown--vite_7-646cff?style=flat&logo=vite)](https://vite.dev)
 [![TipTap](https://img.shields.io/badge/TipTap-3-4ade80?style=flat)](https://tiptap.dev)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
+[![CI](https://github.com/HuyPhan1232203/Text-editor-react/actions/workflows/ci.yml/badge.svg)](https://github.com/HuyPhan1232203/Text-editor-react/actions/workflows/ci.yml)
 
 A Word-like rich text editor for the web, built with React and TipTap: an A4 page you type on, page margins, tables, math, autosave, optional real-time collaboration and PDF export.
 
@@ -31,7 +32,7 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 - **Collaboration (opt-in)**: open the app with `?room=<name>` to edit the same document with others over WebRTC, with live cursors
 - **PDF export**: works out of the box through the browser's print dialog ("Save as PDF"), with your page size and margins; optionally one-click download through a Puppeteer backend ([PDF-export-Puppeteer](https://github.com/HuyPhan1232203/PDF-export-Puppeteer))
 
-> The editor UI is currently in Vietnamese.
+- **English and Vietnamese UI**: picked from the browser language, switch any time in the footer
 
 ## Getting started
 
@@ -71,6 +72,16 @@ http://localhost:5173/?room=my-team
 
 Peers find each other through the public y-webrtc signaling servers, so anyone who knows the room name can join. Pick a hard-to-guess name for anything private.
 
+## Use the pagination in your own editor
+
+The page layout engine is published separately as **[`tiptap-a4-pagination`](packages/tiptap-a4-pagination)** — a free TipTap 3 extension for A4 / Letter pages, table splitting and repeated header rows, without touching your document or CSS.
+
+```bash
+npm install tiptap-a4-pagination
+```
+
+See the [package README](packages/tiptap-a4-pagination#readme) for setup.
+
 ## Scripts
 
 | Command | What it does |
@@ -79,11 +90,15 @@ Peers find each other through the public y-webrtc signaling servers, so anyone w
 | `pnpm build` | Type-check and build to `dist/` |
 | `pnpm preview` | Preview the production build |
 | `pnpm lint` | Run ESLint |
+| `pnpm test` | Run the unit tests (Vitest) |
 
 ## Project structure
 
 ```
+packages/
+└── tiptap-a4-pagination/     # Pagination extension, published to npm
 src/
+├── i18n/                     # English / Vietnamese UI strings
 ├── components/
 │   ├── tiptap/
 │   │   ├── TipTapEditor/     # Editor shell, hooks (config, page settings, autosave)
@@ -107,11 +122,10 @@ React 19, TypeScript, TipTap 3 (ProseMirror), Yjs (y-webrtc, y-indexeddb), Radix
 - DOCX export
 - Split a single long paragraph across pages
 - Headers, footers and page numbers
-- English UI
 
 ## Contributing
 
-Issues and pull requests are welcome. Please run `pnpm lint` and `pnpm build` before opening a PR.
+Issues and pull requests are welcome. Please run `pnpm lint`, `pnpm test` and `pnpm build` before opening a PR.
 
 ## License
 

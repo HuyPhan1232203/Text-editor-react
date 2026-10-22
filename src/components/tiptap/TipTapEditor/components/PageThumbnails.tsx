@@ -3,6 +3,7 @@ import type { Editor } from '@tiptap/react'
 import type { PageSettings } from '../types'
 import { usePageCount, usePageLayout } from '../hooks/usePageLayout'
 import type { PageLayoutPx } from '../hooks/usePageLayout'
+import { t } from '@/i18n'
 
 interface PageThumbnailsProps {
   editor: Editor
@@ -174,7 +175,7 @@ export const PageThumbnails = memo(function PageThumbnails ({ editor, pageSettin
   return (
     <nav
       ref={listRef}
-      aria-label='Danh sách trang'
+      aria-label={t('page.list')}
       className='hidden lg:flex flex-col items-center gap-5 w-44 shrink-0 overflow-y-auto border-r border-gray-300 bg-gray-100 py-6'
     >
       {Array.from({ length: pageCount }, (_, index) => (
@@ -183,7 +184,7 @@ export const PageThumbnails = memo(function PageThumbnails ({ editor, pageSettin
           type='button'
           onClick={() => goToPage(index)}
           className='flex flex-col items-center gap-2 group rounded outline-none focus-visible:ring-2 focus-visible:ring-blue-300 focus-visible:ring-offset-4'
-          aria-label={`Trang ${index + 1}`}
+          aria-label={t('page.number', { n: index + 1 })}
           aria-current={index === activePage ? 'page' : undefined}
         >
           <div

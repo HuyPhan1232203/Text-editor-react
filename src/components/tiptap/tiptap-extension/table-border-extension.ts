@@ -1,6 +1,7 @@
 import { Table, TableView } from '@tiptap/extension-table'
 import type { Node as PMNode } from '@tiptap/pm/model'
 import type { EditorView } from '@tiptap/pm/view'
+import { t } from '@/i18n'
 
 /**
  * Table with a "hide borders" setting stored on the table node, so it is autosaved,
@@ -67,7 +68,7 @@ class BorderToggleTableView extends TableView {
 
   private sync (node: PMNode) {
     const hidden = node.attrs.hideBorders === true
-    const label = hidden ? 'Hiện viền bảng' : 'Ẩn viền bảng'
+    const label = hidden ? t('table.showBorders') : t('table.hideBorders')
 
     this.table.classList.toggle('no-border', hidden)
     this.dom.style.marginLeft = node.attrs.indent ?? ''

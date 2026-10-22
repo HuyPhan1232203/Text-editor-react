@@ -21,6 +21,7 @@ import {
   TableCellsSplit,
   Trash2
 } from 'lucide-react'
+import { t } from '@/i18n'
 
 interface ToolbarActionProps {
   editor: Editor
@@ -35,14 +36,14 @@ const MergeSplitActions = ({ editor, executeWithSelection }: ToolbarActionProps)
     <ToolbarGroup>
       <TooltipButton
         icon={TableCellsMerge}
-        tooltip={canMergeCells ? 'Gộp ô' : 'Chọn nhiều ô để gộp'}
+        tooltip={canMergeCells ? t('table.merge') : t('table.mergeHint')}
         onClick={() => executeWithSelection(() => editor.chain().focus().mergeCells().run())}
         disabled={!canMergeCells}
       />
 
       <TooltipButton
         icon={TableCellsSplit}
-        tooltip={canSplitCell ? 'Tách ô' : 'Chỉ có thể tách ô đã gộp'}
+        tooltip={canSplitCell ? t('table.split') : t('table.splitHint')}
         onClick={() => executeWithSelection(() => editor.chain().focus().splitCell().run())}
         disabled={!canSplitCell}
       />
@@ -55,19 +56,19 @@ const RowActions = ({ editor, executeWithSelection }: ToolbarActionProps) => {
     <ToolbarGroup>
       <TooltipButton
         icon={BetweenHorizontalStart}
-        tooltip='Thêm hàng phía trên'
+        tooltip={t('table.rowAbove')}
         onClick={() => executeWithSelection(() => editor.chain().focus().addRowBefore().run())}
       />
 
       <TooltipButton
         icon={BetweenHorizontalEnd}
-        tooltip='Thêm hàng phía dưới'
+        tooltip={t('table.rowBelow')}
         onClick={() => executeWithSelection(() => editor.chain().focus().addRowAfter().run())}
       />
 
       <TooltipButton
         icon={Rows3}
-        tooltip='Xóa hàng'
+        tooltip={t('table.deleteRow')}
         onClick={() => executeWithSelection(() => editor.chain().focus().deleteRow().run())}
         className='text-red-600'
       />
@@ -80,19 +81,19 @@ const ColumnActions = ({ editor, executeWithSelection }: ToolbarActionProps) => 
     <ToolbarGroup>
       <TooltipButton
         icon={BetweenVerticalStart}
-        tooltip='Thêm cột bên trái'
+        tooltip={t('table.columnLeft')}
         onClick={() => executeWithSelection(() => editor.chain().focus().addColumnBefore().run())}
       />
 
       <TooltipButton
         icon={BetweenVerticalEnd}
-        tooltip='Thêm cột bên phải'
+        tooltip={t('table.columnRight')}
         onClick={() => executeWithSelection(() => editor.chain().focus().addColumnAfter().run())}
       />
 
       <TooltipButton
         icon={Columns3}
-        tooltip='Xóa cột'
+        tooltip={t('table.deleteColumn')}
         onClick={() => executeWithSelection(() => editor.chain().focus().deleteColumn().run())}
         className='text-red-600'
       />
@@ -105,7 +106,7 @@ const CellTypeActions = ({ editor, executeWithSelection }: ToolbarActionProps) =
     <ToolbarGroup>
       <TooltipButton
         icon={PanelTop}
-        tooltip='Bật/tắt ô tiêu đề'
+        tooltip={t('table.toggleHeader')}
         onClick={() => executeWithSelection(() => editor.chain().focus().toggleHeaderCell().run())}
       />
     </ToolbarGroup>
@@ -119,9 +120,9 @@ const CELL_COLORS = [
 ]
 
 const VERTICAL_ALIGNS: { value: CellVerticalAlign, icon: typeof PaintBucket, tooltip: string }[] = [
-  { value: 'top', icon: AlignVerticalJustifyStart, tooltip: 'Căn trên' },
-  { value: 'middle', icon: AlignVerticalJustifyCenter, tooltip: 'Căn giữa theo chiều dọc' },
-  { value: 'bottom', icon: AlignVerticalJustifyEnd, tooltip: 'Căn dưới' }
+  { value: 'top', icon: AlignVerticalJustifyStart, tooltip: t('table.alignTop') },
+  { value: 'middle', icon: AlignVerticalJustifyCenter, tooltip: t('table.alignMiddle') },
+  { value: 'bottom', icon: AlignVerticalJustifyEnd, tooltip: t('table.alignBottom') }
 ]
 
 const CellStyleActions = ({ editor, executeWithSelection }: ToolbarActionProps) => {
@@ -135,8 +136,8 @@ const CellStyleActions = ({ editor, executeWithSelection }: ToolbarActionProps) 
           <Button
             variant='ghost'
             size='sm'
-            aria-label='Màu nền ô'
-            title='Màu nền ô'
+            aria-label={t('table.background')}
+            title={t('table.background')}
             onMouseDown={(e) => e.preventDefault()}
           >
             <PaintBucket className='w-4 h-4' />
@@ -152,7 +153,7 @@ const CellStyleActions = ({ editor, executeWithSelection }: ToolbarActionProps) 
               <button
                 key={color}
                 type='button'
-                aria-label={`Nền ${color}`}
+                aria-label={t('table.backgroundColor', { color })}
                 title={color}
                 className='w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform'
                 style={{ backgroundColor: color }}
@@ -165,7 +166,7 @@ const CellStyleActions = ({ editor, executeWithSelection }: ToolbarActionProps) 
             className='mt-2 flex w-full items-center justify-center gap-1.5 rounded px-2 py-1 text-xs text-gray-600 hover:bg-gray-100'
             onClick={() => setCell('backgroundColor', null)}
           >
-            <Ban className='w-3.5 h-3.5' /> Không màu
+            <Ban className='w-3.5 h-3.5' /> {t('table.noBackground')}
           </button>
         </PopoverContent>
       </Popover>
@@ -187,7 +188,7 @@ const DeleteTableAction = ({ editor, executeWithSelection }: ToolbarActionProps)
     <ToolbarGroup>
       <TooltipButton
         icon={Trash2}
-        tooltip='Xóa bảng'
+        tooltip={t('table.delete')}
         onClick={() => executeWithSelection(() => editor.chain().focus().deleteTable().run())}
         className='text-red-600 hover:text-red-700 hover:bg-red-50'
       />

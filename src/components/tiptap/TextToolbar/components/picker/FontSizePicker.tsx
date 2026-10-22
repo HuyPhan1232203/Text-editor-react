@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Check, ChevronDown } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
 import { cn } from '@/lib/utils'
+import { t } from '@/i18n'
 
 interface FontSizePickerProps {
   editor: Editor
@@ -74,7 +75,7 @@ export function FontSizePicker ({ editor }: FontSizePickerProps) {
           </PopoverTrigger>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Cỡ chữ</p>
+          <p>{t('toolbar.fontSize')}</p>
         </TooltipContent>
       </Tooltip>
 
@@ -85,7 +86,7 @@ export function FontSizePicker ({ editor }: FontSizePickerProps) {
             <div className='flex gap-2'>
               <input
                 type='text'
-                placeholder='Tùy chỉnh (vd: 22pt)'
+                placeholder={t('toolbar.fontSizeCustom')}
                 value={customSize}
                 onChange={(e) => setCustomSize(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleCustomSize()}

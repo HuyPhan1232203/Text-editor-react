@@ -5,6 +5,7 @@ import { printToPdf } from '@/utils/printPDF'
 import { PDF_API_URL } from '@/config/constants'
 import type { Editor } from '@tiptap/react'
 import { Button } from '@/components/ui/button'
+import { t } from '@/i18n'
 
 interface ExportButtonProps {
   editor: Editor
@@ -52,7 +53,7 @@ export function ExportButton ({
           orientation
         })
       } catch (error) {
-        window.alert(`Xuất PDF thất bại: ${error instanceof Error ? error.message : 'Unknown error'}`)
+        window.alert(t('export.failed', { error: error instanceof Error ? error.message : 'Unknown error' }))
       }
       return
     }
@@ -70,14 +71,14 @@ export function ExportButton ({
     })
 
     if (!result.success) {
-      window.alert(`Xuất PDF thất bại: ${result.error}`)
+      window.alert(t('export.failed', { error: result.error ?? 'Unknown error' }))
     }
   }
 
   return (
-    <Button onClick={handleExportPDF} disabled={exporting} variant='ghost' title='Xuất file PDF'>
+    <Button onClick={handleExportPDF} disabled={exporting} variant='ghost' title={t('export.title')}>
       <File className='w-4 h-4 mr-2' />
-      Xuất PDF
+      {t('export.button')}
     </Button>
   )
 }

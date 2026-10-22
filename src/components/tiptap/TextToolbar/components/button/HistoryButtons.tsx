@@ -2,6 +2,7 @@ import { Redo, Undo } from 'lucide-react'
 import type { EditorToolbarState, ToolbarSectionProps } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
 import { memo } from 'react'
+import { t } from '@/i18n'
 
 interface HistoryButtonsProps extends ToolbarSectionProps {
   state: EditorToolbarState
@@ -18,14 +19,14 @@ export const HistoryButtons = memo(function HistoryButtons ({
         disabled={!state.canUndo}
         icon={Undo}
         label='Undo'
-        tooltip='Hoàn tác (Ctrl+Z)'
+        tooltip={t('toolbar.undo')}
       />
       <ToolbarButton
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!state.canRedo}
         icon={Redo}
         label='Redo'
-        tooltip='Làm lại (Ctrl+Y)'
+        tooltip={t('toolbar.redo')}
       />
     </>
   )

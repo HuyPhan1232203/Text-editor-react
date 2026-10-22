@@ -4,6 +4,7 @@ import { Smile } from 'lucide-react'
 import tippy, { type Instance as TippyInstance } from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
 import type { EmojiItem } from '@tiptap/extension-emoji'
+import { t } from '@/i18n'
 
 interface EmojiButtonProps {
   editor: Editor
@@ -89,7 +90,7 @@ export function EmojiButton ({ editor }: EmojiButtonProps) {
     const searchInput = document.createElement('input')
 
     searchInput.type = 'text'
-    searchInput.placeholder = 'Tìm emoji...'
+    searchInput.placeholder = t('emoji.search')
     searchInput.className = 'w-full px-3 py-2 border rounded mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm'
 
     const categories = [
@@ -158,7 +159,7 @@ export function EmojiButton ({ editor }: EmojiButtonProps) {
       })
 
       if (displayEmojis.length === 0) {
-        emojiList.innerHTML = '<div class="col-span-9 text-center text-gray-500 py-8 text-sm">Không tìm thấy emoji</div>'
+        emojiList.innerHTML = `<div class="col-span-9 text-center text-gray-500 py-8 text-sm">${t('emoji.notFound')}</div>`
       }
     }
 
@@ -217,7 +218,7 @@ export function EmojiButton ({ editor }: EmojiButtonProps) {
     const loading = document.createElement('div')
 
     loading.className = 'bg-white rounded shadow-lg border p-4 text-sm text-gray-600'
-    loading.textContent = 'Đang tải emoji…'
+    loading.textContent = t('emoji.loading')
 
     let loaded = false
     const instance = tippy(buttonRef.current, {
@@ -230,7 +231,7 @@ export function EmojiButton ({ editor }: EmojiButtonProps) {
           tip.setContent(createEmojiPicker(gitHubEmojis))
         }).catch(() => {
           loaded = false
-          loading.textContent = 'Không tải được emoji'
+          loading.textContent = t('emoji.loadFailed')
         })
       },
       trigger: 'click',
@@ -255,7 +256,8 @@ export function EmojiButton ({ editor }: EmojiButtonProps) {
       ref={buttonRef}
       type='button'
       className='p-2 rounded hover:bg-gray-100 transition-colors'
-      title='Chèn emoji'
+      title={t('toolbar.emoji')}
+      aria-label={t('toolbar.emoji')}
     >
       <Smile className='w-5 h-5' />
     </button>

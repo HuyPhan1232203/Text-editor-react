@@ -2,6 +2,7 @@ import { Bold, Code, Italic, Strikethrough, Underline } from 'lucide-react'
 import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
 import { memo } from 'react'
+import { t } from '@/i18n'
 
 interface FormattingButtonsProps extends ToolbarSectionProps {
   state: EditorToolbarState
@@ -19,7 +20,7 @@ export const FormattingButtons = memo(function FormattingButtons ({
         disabled={!state.canBold}
         icon={Bold}
         label='Bold'
-        tooltip='In đậm (Ctrl+B)'
+        tooltip={t('toolbar.bold')}
       />
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleItalic().run()}
@@ -27,7 +28,7 @@ export const FormattingButtons = memo(function FormattingButtons ({
         disabled={!state.canItalic}
         icon={Italic}
         label='Italic'
-        tooltip='In nghiêng (Ctrl+I)'
+        tooltip={t('toolbar.italic')}
       />
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleUnderline().run()}
@@ -35,7 +36,7 @@ export const FormattingButtons = memo(function FormattingButtons ({
         disabled={!state.canUnderline}
         icon={Underline}
         label='Underline'
-        tooltip='Gạch chân (Ctrl+U)'
+        tooltip={t('toolbar.underline')}
       />
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleStrike().run()}
@@ -43,7 +44,7 @@ export const FormattingButtons = memo(function FormattingButtons ({
         disabled={!state.canStrike}
         icon={Strikethrough}
         label='Strike'
-        tooltip='Gạch ngang'
+        tooltip={t('toolbar.strike')}
       />
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleCode().run()}

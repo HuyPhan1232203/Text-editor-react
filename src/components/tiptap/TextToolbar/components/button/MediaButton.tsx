@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import type { CreateTablePayload } from '@/components/tiptap/tableTiptap/CreateTablePopover'
 import CreateTablePopover from '@/components/tiptap/tableTiptap/CreateTablePopover'
 import { memo, useCallback } from 'react'
+import { t } from '@/i18n'
 
 export const MediaButtons = memo(function MediaButtons ({
   editor
@@ -21,12 +22,12 @@ export const MediaButtons = memo(function MediaButtons ({
 
   return (
     <>
-      <Button onClick={handleImageClick} variant='ghost' title='Chèn hình ảnh'>
+      <Button onClick={handleImageClick} variant='ghost' title={t('toolbar.image')} aria-label={t('toolbar.image')}>
         <Image className='w-4 h-4' />
       </Button>
 
       <CreateTablePopover createTable={handleCreateTable}>
-        <Button variant='ghost' title='Chèn bảng'>
+        <Button variant='ghost' title={t('toolbar.table')} aria-label={t('toolbar.table')}>
           <Table className='w-4 h-4' />
         </Button>
       </CreateTablePopover>

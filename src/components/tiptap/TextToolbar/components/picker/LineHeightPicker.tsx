@@ -5,13 +5,14 @@ import { Button } from '@/components/ui/button'
 import { Check, ChevronDown } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
 import { cn } from '@/lib/utils'
+import { t } from '@/i18n'
 
 interface LineHeightPickerProps {
   editor: Editor
 }
 
 const LINE_HEIGHTS = [
-  { label: 'Mặc định', value: 'normal' },
+  { label: t('toolbar.lineHeightDefault'), value: 'normal' },
   { label: '1.0', value: '1' },
   { label: '1.15', value: '1.15' },
   { label: '1.5', value: '1.5' },
@@ -75,7 +76,7 @@ export function LineHeightPicker ({ editor }: LineHeightPickerProps) {
           </PopoverTrigger>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Khoảng cách dòng</p>
+          <p>{t('toolbar.lineHeight')}</p>
         </TooltipContent>
       </Tooltip>
 
@@ -86,7 +87,7 @@ export function LineHeightPicker ({ editor }: LineHeightPickerProps) {
             <div className='flex gap-2'>
               <input
                 type='text'
-                placeholder='Tùy chỉnh (vd: 1.8)'
+                placeholder={t('toolbar.lineHeightCustom')}
                 value={customValue}
                 onChange={(e) => setCustomValue(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleCustomValue()}

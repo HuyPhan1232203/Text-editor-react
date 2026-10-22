@@ -1,14 +1,16 @@
+import { t } from '@/i18n'
+
 export const HIGHLIGHT_COLORS = [
-  { color: '#fef08a', tooltip: 'Highlight màu vàng' },
-  { color: '#bbf7d0', tooltip: 'Highlight màu xanh lá' },
-  { color: '#bfdbfe', tooltip: 'Highlight màu xanh dương' },
-  { color: '#fbcfe8', tooltip: 'Highlight màu hồng' },
-  { color: '#fed7aa', tooltip: 'Highlight màu cam' }
+  { color: '#fef08a', tooltip: t('toolbar.highlightYellow') },
+  { color: '#bbf7d0', tooltip: t('toolbar.highlightGreen') },
+  { color: '#bfdbfe', tooltip: t('toolbar.highlightBlue') },
+  { color: '#fbcfe8', tooltip: t('toolbar.highlightPink') },
+  { color: '#fed7aa', tooltip: t('toolbar.highlightOrange') }
 ] as const
 
 export const TEXT_ALIGNMENTS = [
-  { align: 'left', tooltip: 'Căn trái' },
-  { align: 'center', tooltip: 'Căn giữa' },
-  { align: 'right', tooltip: 'Căn phải' },
-  { align: 'justify', tooltip: 'Căn đều' }
+  { align: 'left', tooltip: t('toolbar.alignLeft') },
+  { align: 'center', tooltip: t('toolbar.alignCenter') },
+  { align: 'right', tooltip: t('toolbar.alignRight') },
+  { align: 'justify', tooltip: t('toolbar.alignJustify') }
 ] as const

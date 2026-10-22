@@ -5,6 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Button } from '@/components/ui/button'
 import { Type, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Check } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
+import { t } from '@/i18n'
 
 interface HeadingPopoverProps {
   editor: Editor
@@ -55,7 +56,7 @@ export function HeadingPopover ({ editor }: HeadingPopoverProps) {
               variant='ghost'
               size='sm'
               className='h-8 px-2 gap-1 text-sm font-medium'
-              aria-label={`Kiểu văn bản: ${currentHeading.label}`}
+              aria-label={t('toolbar.textStyleLabel', { style: currentHeading.label })}
             >
               <CurrentIcon className='w-4 h-4' />
               <span className='hidden sm:inline'>{currentHeading.label}</span>
@@ -78,7 +79,7 @@ export function HeadingPopover ({ editor }: HeadingPopoverProps) {
           </PopoverTrigger>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Chọn kiểu văn bản</p>
+          <p>{t('toolbar.textStyle')}</p>
         </TooltipContent>
       </Tooltip>
 
