@@ -27,8 +27,7 @@ import { StyledTableCell, StyledTableHeader } from '@/components/tiptap/tiptap-e
 import type { WebrtcProvider } from 'y-webrtc'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
-import { getWelcomeContent } from '../welcomeContent'
-import { language } from '@/i18n'
+import { WELCOME_CONTENT } from '../welcomeContent'
 
 // Collaboration is opt-in: open the app with ?room=<name> to share a document over WebRTC
 const ROOM_NAME = new URLSearchParams(window.location.search).get('room')
@@ -188,7 +187,7 @@ export function useEditorConfig () {
         return
       }
       if (!editor.isEmpty) return
-      editor.commands.setContent(getWelcomeContent(language))
+      editor.commands.setContent(WELCOME_CONTENT)
       // The tour is the starting point, not an edit: the first Ctrl+Z should not wipe it
       yUndoPluginKey.getState(editor.state)?.undoManager.clear()
     }
