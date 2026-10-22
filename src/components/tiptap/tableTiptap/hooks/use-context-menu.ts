@@ -1,7 +1,7 @@
 import type { Editor } from '@tiptap/core'
 import type { Position } from '../types'
 import { useCallback } from 'react'
-import { calculateMenuPosition, getSelectionInfo, isTableCellElement } from '../helper/utils'
+import { calculateMenuPosition, getSelectionInfo, isTableCellElement, selectClickedCell } from '../helper/utils'
 
 const useContextMenuHandlers = (
   editor: Editor,
@@ -20,9 +20,8 @@ const useContextMenuHandlers = (
     event.preventDefault()
     event.stopPropagation()
 
-    const { selection } = editor.state
-
-    savedSelectionRef.current = selection
+    selectClickedCell(event, editor)
+    savedSelectionRef.current = editor.state.selection
 
     const selectionInfo = getSelectionInfo(editor)
 
@@ -31,14 +30,7 @@ const useContextMenuHandlers = (
       return
     }
 
-    const position = calculateMenuPosition(event, editor)
-
-    if (!position) {
-      setIsVisible(false)
-      return
-    }
-
-    setPosition(position)
+    setPosition(calculateMenuPosition(event))
     setIsVisible(true)
   }, [editor, savedSelectionRef, setPosition, setIsVisible])
 

@@ -1,7 +1,18 @@
 import { ToolbarGroup } from '@/components/tiptap/tiptap-ui-primitive/toolbar'
 import type { Editor } from '@tiptap/core'
 import { TooltipButton } from './TooltipButton'
-import { ArrowDownFromLine, ArrowLeftFromLine, ArrowRightFromLine, ArrowUpFromLine, Merge, Plus, Split, Trash2 } from 'lucide-react'
+import {
+  BetweenHorizontalEnd,
+  BetweenHorizontalStart,
+  BetweenVerticalEnd,
+  BetweenVerticalStart,
+  Columns3,
+  PanelTop,
+  Rows3,
+  TableCellsMerge,
+  TableCellsSplit,
+  Trash2
+} from 'lucide-react'
 
 interface ToolbarActionProps {
   editor: Editor
@@ -15,14 +26,14 @@ const MergeSplitActions = ({ editor, executeWithSelection }: ToolbarActionProps)
   return (
     <ToolbarGroup>
       <TooltipButton
-        icon={Merge}
+        icon={TableCellsMerge}
         tooltip={canMergeCells ? 'Gộp ô' : 'Chọn nhiều ô để gộp'}
         onClick={() => executeWithSelection(() => editor.chain().focus().mergeCells().run())}
         disabled={!canMergeCells}
       />
 
       <TooltipButton
-        icon={Split}
+        icon={TableCellsSplit}
         tooltip={canSplitCell ? 'Tách ô' : 'Chỉ có thể tách ô đã gộp'}
         onClick={() => executeWithSelection(() => editor.chain().focus().splitCell().run())}
         disabled={!canSplitCell}
@@ -35,19 +46,19 @@ const RowActions = ({ editor, executeWithSelection }: ToolbarActionProps) => {
   return (
     <ToolbarGroup>
       <TooltipButton
-        icon={ArrowUpFromLine}
+        icon={BetweenHorizontalStart}
         tooltip='Thêm hàng phía trên'
         onClick={() => executeWithSelection(() => editor.chain().focus().addRowBefore().run())}
       />
 
       <TooltipButton
-        icon={ArrowDownFromLine}
+        icon={BetweenHorizontalEnd}
         tooltip='Thêm hàng phía dưới'
         onClick={() => executeWithSelection(() => editor.chain().focus().addRowAfter().run())}
       />
 
       <TooltipButton
-        icon={Trash2}
+        icon={Rows3}
         tooltip='Xóa hàng'
         onClick={() => executeWithSelection(() => editor.chain().focus().deleteRow().run())}
         className='text-red-600'
@@ -60,19 +71,19 @@ const ColumnActions = ({ editor, executeWithSelection }: ToolbarActionProps) => 
   return (
     <ToolbarGroup>
       <TooltipButton
-        icon={ArrowLeftFromLine}
+        icon={BetweenVerticalStart}
         tooltip='Thêm cột bên trái'
         onClick={() => executeWithSelection(() => editor.chain().focus().addColumnBefore().run())}
       />
 
       <TooltipButton
-        icon={ArrowRightFromLine}
+        icon={BetweenVerticalEnd}
         tooltip='Thêm cột bên phải'
         onClick={() => executeWithSelection(() => editor.chain().focus().addColumnAfter().run())}
       />
 
       <TooltipButton
-        icon={Trash2}
+        icon={Columns3}
         tooltip='Xóa cột'
         onClick={() => executeWithSelection(() => editor.chain().focus().deleteColumn().run())}
         className='text-red-600'
@@ -85,8 +96,8 @@ const CellTypeActions = ({ editor, executeWithSelection }: ToolbarActionProps) =
   return (
     <ToolbarGroup>
       <TooltipButton
-        icon={Plus}
-        tooltip='Chuyển sang header cell'
+        icon={PanelTop}
+        tooltip='Bật/tắt ô tiêu đề'
         onClick={() => executeWithSelection(() => editor.chain().focus().toggleHeaderCell().run())}
       />
     </ToolbarGroup>

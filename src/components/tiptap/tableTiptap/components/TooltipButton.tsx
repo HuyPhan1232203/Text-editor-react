@@ -26,6 +26,7 @@ export const TooltipButton = ({
           variant={variant}
           size='sm'
           disabled={disabled}
+          aria-label={tooltip}
           onMouseDown={(e) => e.preventDefault()}
           onClick={onClick}
           className={className}
