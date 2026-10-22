@@ -39,6 +39,7 @@ interface TableRows {
   // Offset of the first row from the top of the table block, and of the block bottom from the last row
   firstOffset: number
   lastGap: number
+  // Groups of rows a page break may not cut (rows joined by a rowspan); a break can only go before a group
   rows: { pos: number, height: number }[]
   bleedLeft: number
   bleedRight: number
@@ -119,21 +120,29 @@ function measureTableRows (
   blockRect: DOMRect,
   pageRect: DOMRect
 ): TableRows | null {
+  const map = TableMap.get(table)
   const rows: TableRows['rows'] = []
   let firstRect: DOMRect | null = null
   let lastRect: DOMRect | null = null
+  let rowIndex = 0
 
   table.forEach((_row, rowOffset) => {
     const pos = offset + 1 + rowOffset
     const dom = view.nodeDOM(pos)
+    const index = rowIndex++
 
     if (!(dom instanceof HTMLElement)) return
 
     const rect = dom.getBoundingClientRect()
+    // A cell from the row above reaching into this row (rowspan) joins the two rows
+    const joined = index > 0 && map.map
+      .slice(index * map.width, (index + 1) * map.width)
+      .some((cell, column) => cell === map.map[(index - 1) * map.width + column])
 
     firstRect ??= rect
     lastRect = rect
-    rows.push({ pos, height: rect.height })
+    if (joined && rows.length > 0) rows[rows.length - 1].height += rect.height
+    else rows.push({ pos, height: rect.height })
   })
 
   if (!firstRect || !lastRect || rows.length < 2) return null
@@ -147,7 +156,7 @@ function measureTableRows (
     rows,
     bleedLeft: Math.round(first.left - pageRect.left),
     bleedRight: Math.round(pageRect.right - first.right),
-    columns: TableMap.get(table).width
+    columns: map.width
   }
 }
 
