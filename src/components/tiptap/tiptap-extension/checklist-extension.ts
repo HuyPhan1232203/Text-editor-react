@@ -65,11 +65,19 @@ const StripDocsCheckboxImages = Extension.create({
 
             const doc = new DOMParser().parseFromString(html, 'text/html')
 
-            doc.querySelectorAll<HTMLImageElement>(`:is(${DOCS_CHECKLIST_ITEM}) img`).forEach((img) => {
-              // Only checkbox-sized images, so real images inside an item are kept
-              const size = parseFloat(img.getAttribute('width') ?? img.style.width ?? '')
+            doc.querySelectorAll(DOCS_CHECKLIST_ITEM).forEach((item) => {
+              // The marker is a checkbox-sized image placed before any text of the item;
+              // images next to or after the text are user content and are kept
+              const img = item.querySelector('img')
+              const size = parseFloat(img?.getAttribute('width') ?? img?.style.width ?? '')
 
-              if (size > 0 && size <= 24) img.remove()
+              if (!img || !(size > 0 && size <= 24)) return
+
+              const before = doc.createRange()
+
+              before.setStart(item, 0)
+              before.setEndBefore(img)
+              if (before.toString().trim() === '') img.remove()
             })
 
             return doc.body.innerHTML
