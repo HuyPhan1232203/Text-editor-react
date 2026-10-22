@@ -145,7 +145,7 @@ export function inlineStyles (html: string): string {
       }
 
       /* Tránh “cố giữ” khối khiến layout không bẻ dòng tốt */
-      table, img, pre, blockquote {
+      img, pre, blockquote, tr {
         break-inside: avoid;
         page-break-inside: avoid;
       }

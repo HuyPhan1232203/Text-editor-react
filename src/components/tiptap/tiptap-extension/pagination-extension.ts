@@ -2,6 +2,8 @@ import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import type { EditorView } from '@tiptap/pm/view'
+import type { Node as PMNode } from '@tiptap/pm/model'
+import { TableMap } from '@tiptap/pm/tables'
 
 /**
  * Visual pagination without touching the document or its CSS.
@@ -11,7 +13,8 @@ import type { EditorView } from '@tiptap/pm/view'
  * fills the rest of the page, the bottom/top margins and a gray gap, so the content
  * looks like separate A4 sheets. The document (and exported HTML) is unchanged.
  *
- * Limitation: a single block (paragraph, table...) is never split across pages;
+ * Tables are split between rows: the spacer is then a table row.
+ * Limitation: other blocks (paragraphs, images...) are never split across pages;
  * a block taller than a page simply overflows the gap.
  */
 
@@ -28,6 +31,18 @@ interface PageBreak {
   height: number
   // Offset of the gray gap from the top of the spacer
   gapTop: number
+  // Break between two table rows: the spacer is a <tr>, with its own distance to the page edges
+  row?: { bleedLeft: number, bleedRight: number, columns: number }
+}
+
+interface TableRows {
+  // Offset of the first row from the top of the table block, and of the block bottom from the last row
+  firstOffset: number
+  lastGap: number
+  rows: { pos: number, height: number }[]
+  bleedLeft: number
+  bleedRight: number
+  columns: number
 }
 
 interface PaginationState {
@@ -66,22 +81,74 @@ declare module '@tiptap/core' {
 export const paginationKey = new PluginKey<PaginationState>('pagination')
 
 function createSpacer (pageBreak: PageBreak, state: PaginationState): HTMLElement {
-  const spacer = document.createElement('div')
+  const spacer = document.createElement(pageBreak.row ? 'tr' : 'div')
+  // Inside a table the spacer is a full-width row; the gap is drawn in its single cell
+  const holder = pageBreak.row ? document.createElement('td') : spacer
+  const bleed = pageBreak.row ?? state
 
   spacer.className = 'page-break-spacer'
   spacer.contentEditable = 'false'
-  spacer.style.height = `${pageBreak.height}px`
+
+  if (pageBreak.row) {
+    const cell = holder as HTMLTableCellElement
+
+    cell.className = 'page-break-cell'
+    // Exact column count: with table-layout: fixed, a larger colspan would add phantom columns
+    cell.colSpan = pageBreak.row.columns
+    spacer.appendChild(cell)
+  }
+  holder.style.height = `${pageBreak.height}px`
 
   const gap = document.createElement('div')
 
   gap.className = 'page-break-gap'
   gap.style.top = `${pageBreak.gapTop}px`
   gap.style.height = `${state.layout?.gap ?? 0}px`
-  gap.style.left = `${-state.bleedLeft}px`
-  gap.style.right = `${-state.bleedRight}px`
-  spacer.appendChild(gap)
+  gap.style.left = `${-bleed.bleedLeft}px`
+  gap.style.right = `${-bleed.bleedRight}px`
+  holder.appendChild(gap)
 
   return spacer
+}
+
+// Row geometry of a top-level table, ignoring spacer rows already inserted
+function measureTableRows (
+  view: EditorView,
+  table: PMNode,
+  offset: number,
+  blockRect: DOMRect,
+  pageRect: DOMRect
+): TableRows | null {
+  const rows: TableRows['rows'] = []
+  let firstRect: DOMRect | null = null
+  let lastRect: DOMRect | null = null
+
+  table.forEach((_row, rowOffset) => {
+    const pos = offset + 1 + rowOffset
+    const dom = view.nodeDOM(pos)
+
+    if (!(dom instanceof HTMLElement)) return
+
+    const rect = dom.getBoundingClientRect()
+
+    firstRect ??= rect
+    lastRect = rect
+    rows.push({ pos, height: rect.height })
+  })
+
+  if (!firstRect || !lastRect || rows.length < 2) return null
+
+  const first = firstRect as DOMRect
+  const last = lastRect as DOMRect
+
+  return {
+    firstOffset: first.top - blockRect.top,
+    lastGap: blockRect.bottom - last.bottom,
+    rows,
+    bleedLeft: Math.round(first.left - pageRect.left),
+    bleedRight: Math.round(pageRect.right - first.right),
+    columns: TableMap.get(table).width
+  }
 }
 
 function buildDecorations (doc: Parameters<typeof DecorationSet.create>[0], state: Omit<PaginationState, 'decorations'>): DecorationSet {
@@ -93,7 +160,7 @@ function buildDecorations (doc: Parameters<typeof DecorationSet.create>[0], stat
       Decoration.widget(pageBreak.pos, () => createSpacer(pageBreak, full), {
         side: -1,
         ignoreSelection: true,
-        key: `page-break-${pageBreak.height}-${pageBreak.gapTop}-${state.bleedLeft}-${state.bleedRight}`
+        key: `page-break-${pageBreak.row ? `row-${pageBreak.row.bleedLeft}-${pageBreak.row.bleedRight}-${pageBreak.row.columns}` : 'block'}-${pageBreak.height}-${pageBreak.gapTop}-${state.bleedLeft}-${state.bleedRight}`
       })
     )
   )
@@ -101,7 +168,9 @@ function buildDecorations (doc: Parameters<typeof DecorationSet.create>[0], stat
 
 function sameBreaks (a: PageBreak[], b: PageBreak[]): boolean {
   return a.length === b.length
-    && a.every((item, i) => item.pos === b[i].pos && item.height === b[i].height && item.gapTop === b[i].gapTop)
+    && a.every((item, i) => item.pos === b[i].pos && item.height === b[i].height && item.gapTop === b[i].gapTop
+      && item.row?.bleedLeft === b[i].row?.bleedLeft && item.row?.bleedRight === b[i].row?.bleedRight
+      && item.row?.columns === b[i].row?.columns)
 }
 
 function measure (view: EditorView): PaginationMeta | null {
@@ -126,7 +195,7 @@ function measure (view: EditorView): PaginationMeta | null {
   let cursor: number | null = null
   let prevMarginBottom = 0
 
-  view.state.doc.forEach((_node, offset) => {
+  view.state.doc.forEach((node, offset) => {
     const dom = view.nodeDOM(offset)
 
     if (!(dom instanceof HTMLElement)) return
@@ -137,25 +206,62 @@ function measure (view: EditorView): PaginationMeta | null {
     const marginBottom = parseFloat(style.marginBottom || '0')
     // Floated images (text wrapping) sit beside the following blocks instead of above them
     const isFloat = style.float !== 'none'
+    const table = node.type.name === 'table' && !isFloat
+      ? measureTableRows(view, node, offset, rect, pageRect)
+      : null
+    // Spacer rows already inside the table are excluded from its height
+    const height = table
+      ? table.firstOffset + table.rows.reduce((sum, row) => sum + row.height, 0) + table.lastGap
+      : rect.height
     let top = cursor === null ? rect.top - originTop : cursor + Math.max(prevMarginBottom, marginTop)
-    let bottom = top + rect.height
+    let bottom = top + height
     const pageStart = pageEnd - layout.contentHeight
+    // A table only moves as a whole when even its first row does not fit
+    const overflows = table
+      ? top + table.firstOffset + table.rows[0].height > pageEnd
+      : bottom > pageEnd
 
-    if (cursor !== null && bottom > pageEnd && top > pageStart + 1) {
+    if (cursor !== null && overflows && top > pageStart + 1) {
       const spacerTop = cursor + prevMarginBottom
       const nextContentTop = pageEnd + layout.marginBottom + layout.gap + layout.marginTop
       // The block's own top margin is absorbed so it starts exactly at the top of the next page
-      const height = Math.round(Math.max(0, nextContentTop - marginTop - spacerTop))
+      const spacerHeight = Math.round(Math.max(0, nextContentTop - marginTop - spacerTop))
 
-      breaks.push({ pos: offset, height, gapTop: Math.round(pageEnd + layout.marginBottom - spacerTop) })
-      top = spacerTop + height + marginTop
-      bottom = top + rect.height
+      breaks.push({ pos: offset, height: spacerHeight, gapTop: Math.round(pageEnd + layout.marginBottom - spacerTop) })
+      top = spacerTop + spacerHeight + marginTop
+      bottom = top + height
       pageEnd += pitch
       if (isFloat) {
         // The spacer is in the normal flow, so the next blocks start below it
-        cursor = spacerTop + height
+        cursor = spacerTop + spacerHeight
         prevMarginBottom = 0
       }
+    }
+
+    // Split the table between rows that would cross the bottom of a page
+    if (table) {
+      let y = top + table.firstOffset
+
+      table.rows.forEach((row, index) => {
+        const rowPageStart = pageEnd - layout.contentHeight
+
+        if (index > 0 && y + row.height > pageEnd && y > rowPageStart + 1) {
+          const nextContentTop = pageEnd + layout.marginBottom + layout.gap + layout.marginTop
+          const spacerHeight = Math.round(nextContentTop - y)
+
+          breaks.push({
+            pos: row.pos,
+            height: spacerHeight,
+            gapTop: Math.round(pageEnd + layout.marginBottom - y),
+            row: { bleedLeft: table.bleedLeft, bleedRight: table.bleedRight, columns: table.columns }
+          })
+          y += spacerHeight
+          pageEnd += pitch
+        }
+        y += row.height
+        while (y > pageEnd) pageEnd += pitch
+      })
+      bottom = y + table.lastGap
     }
     while (bottom > pageEnd) pageEnd += pitch
 

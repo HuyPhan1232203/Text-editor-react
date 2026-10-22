@@ -642,3 +642,16 @@
 .tiptap img {
   max-width: 100%;
 }
+
+/* Spacer row splitting a table across pages */
+.tiptap table td.page-break-cell {
+  position: relative;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+/* Let the page gap inside a split table span the whole sheet */
+.tiptap table:has(.page-break-spacer) {
+  overflow: visible;
+}

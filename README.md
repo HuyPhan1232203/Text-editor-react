@@ -24,7 +24,7 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 - **Tables**: insert tables, resize columns, add or delete rows and columns, merge and split cells, toggle borders
 - **Images**: paste, drop or upload images, resize them by dragging and wrap text around them (left / right)
 - **Media**: links, emoji (`:smile:` and emoticons), inline math with KaTeX
-- **A4 pages**: content flows across separate A4 sheets like Word, portrait or landscape, margin presets and custom margins in mm
+- **A4 pages**: content flows across separate A4 sheets like Word (long tables split between rows), portrait or landscape, margin presets and custom margins in mm
 - **Page thumbnails**: a sidebar lists every page; click to jump, the current page is highlighted (lazy-rendered for long documents)
 - **Autosave**: the document is kept in IndexedDB and page settings in localStorage, so a reload does not lose your work
 - **Collaboration (opt-in)**: open the app with `?room=<name>` to edit the same document with others over WebRTC, with live cursors
@@ -104,7 +104,8 @@ React 19, TypeScript, TipTap 3 (ProseMirror), Yjs (y-webrtc, y-indexeddb), Radix
 ## Roadmap
 
 - DOCX export
-- Split a single long paragraph or table across pages
+- Split a single long paragraph across pages
+- Repeat table header rows on each page
 - Headers, footers and page numbers
 - English UI
 
