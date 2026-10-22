@@ -6,6 +6,7 @@ import { EditorContentArea } from './components/EditorContentArea'
 import { EditorFooter } from './components/EditorFooter'
 import { PageThumbnails } from './components/PageThumbnails'
 import 'katex/dist/katex.min.css'
+import 'tiptap-a4-pagination/styles.css'
 
 export default function TiptapEditor () {
   const editor = useEditorConfig()

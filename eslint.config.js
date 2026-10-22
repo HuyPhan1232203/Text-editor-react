@@ -11,7 +11,7 @@ export default [
   ...neostandard({
     ts: true,
     ignores: [
-      "dist/**",
+      "**/dist/**",
       "build/**",
       "node_modules/**",
       "*.config.js",

@@ -584,18 +584,6 @@
   }
 }
 
-/* Pagination: spacer widgets between pages (see pagination-extension.ts) */
-.page-break-spacer {
-  position: relative;
-  user-select: none;
-  pointer-events: none;
-}
-
-.page-break-gap {
-  position: absolute;
-  background: #e5e7eb;
-  box-shadow: inset 0 6px 6px -6px rgba(0, 0, 0, 0.15), inset 0 -6px 6px -6px rgba(0, 0, 0, 0.15);
-}
 
 /* Images with text wrapping float; keep the editor tall enough to contain them */
 .tiptap::after {
@@ -608,18 +596,6 @@
   max-width: 100%;
 }
 
-/* Spacer row splitting a table across pages */
-.tiptap table td.page-break-cell {
-  position: relative;
-  padding: 0;
-  border: none;
-  background: transparent;
-}
-
-/* Let the page gap inside a split table span the whole sheet */
-.tiptap table:has(.page-break-spacer) {
-  overflow: visible;
-}
 
 /* Checklist (task list), styled like Google Docs */
 .tiptap ul[data-type='taskList'] {
@@ -658,18 +634,6 @@
   text-decoration: line-through;
 }
 
-/* Header row repeated at the top of each page a table continues on */
-.tiptap .page-break-header {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-}
-
-.tiptap .page-break-header table {
-  margin: 0;
-}
 
 /* Image resize handles: TipTap's resizable node view ships no styles, so the handles were 0×0
    and impossible to grab. Small squares on the corners, shown on hover or when selected. */

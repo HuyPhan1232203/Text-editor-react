@@ -1,5 +1,9 @@
+packages:
+  - packages/*
+
 overrides:
   vite: npm:rolldown-vite@7.2.5
 
 allowBuilds:
+  '@parcel/watcher': false
   unrs-resolver: false

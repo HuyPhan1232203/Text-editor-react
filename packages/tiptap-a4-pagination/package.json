@@ -1,0 +1,57 @@
+{
+  "name": "tiptap-a4-pagination",
+  "version": "0.1.0",
+  "description": "Free A4 / Letter pagination for TipTap 3: content flows across real pages, tables split between rows and repeat their header. No changes to your document or CSS.",
+  "keywords": [
+    "tiptap",
+    "tiptap-extension",
+    "prosemirror",
+    "pagination",
+    "page-break",
+    "a4",
+    "word",
+    "docs",
+    "rich-text-editor"
+  ],
+  "license": "MIT",
+  "author": "Phan Nhật Huy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HuyPhan1232203/Text-editor-react.git",
+    "directory": "packages/tiptap-a4-pagination"
+  },
+  "homepage": "https://github.com/HuyPhan1232203/Text-editor-react/tree/main/packages/tiptap-a4-pagination#readme",
+  "bugs": "https://github.com/HuyPhan1232203/Text-editor-react/issues",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && cp src/styles.css dist/styles.css",
+    "prepublishOnly": "pnpm build"
+  },
+  "peerDependencies": {
+    "@tiptap/core": "^3.0.0",
+    "@tiptap/pm": "^3.0.0"
+  },
+  "devDependencies": {
+    "@tiptap/core": "^3.13.0",
+    "@tiptap/pm": "^3.13.0",
+    "typescript": "~5.9.3"
+  }
+}
