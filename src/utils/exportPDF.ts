@@ -66,23 +66,23 @@ export async function exportToPdf (
 
     const styledHtml = inlineStyles(htmlContent)
 
+    // Backend nhận multipart: HTML gửi dạng file đính kèm, margins là chuỗi JSON
+    const formData = new FormData()
+
+    formData.append('file', new Blob([styledHtml], { type: 'text/html' }), 'document.html')
+    formData.append('format', pageFormat)
+    formData.append('filename', fileName)
+    formData.append('margins', JSON.stringify({
+      top: `${margins.topMargin}px`,
+      bottom: `${margins.bottomMargin}px`,
+      left: `${margins.leftMargin}px`,
+      right: `${margins.rightMargin}px`
+    }))
+    formData.append('orientation', margins.orientation)
+
     const response = await fetch(API_ENDPOINTS.GENERATE_PDF, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        html: styledHtml,
-        format: pageFormat,
-        filename: fileName,
-        margins: {
-          top: `${margins.topMargin}px`,
-          bottom: `${margins.bottomMargin}px`,
-          left: `${margins.leftMargin}px`,
-          right: `${margins.rightMargin}px`
-        },
-        orientation: margins.orientation
-      })
+      body: formData
     })
 
     if (!response.ok) {

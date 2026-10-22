@@ -21,7 +21,7 @@ export function ExportButton ({
   orientation
 }: ExportButtonProps) {
   const handleExportPDF = async () => {
-    await exportToPdf(editor, {
+    const result = await exportToPdf(editor, {
       fileName: 'my-document.pdf',
       pageFormat: 'A4',
       pageSettings: {
@@ -32,6 +32,10 @@ export function ExportButton ({
         orientation
       }
     })
+
+    if (!result.success) {
+      window.alert(`Xuất PDF thất bại: ${result.error}`)
+    }
   }
 
   return (

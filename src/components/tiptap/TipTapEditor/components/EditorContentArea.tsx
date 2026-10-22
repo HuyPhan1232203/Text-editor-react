@@ -23,8 +23,8 @@ export const EditorContentArea = memo(function EditorContentArea ({
   if (!editor) return null
 
   return (
-    <div className='flex-1 overflow-auto p-8 flex justify-center'>
-      <div onClick={handleContainerClick} className='relative'>
+    <div className='flex-1 overflow-auto p-8'>
+      <div onClick={handleContainerClick} className='relative mx-auto w-fit'>
         <TextBubbleToolbar editor={editor} />
         <div className='document-page bg-white' style={{
           width: pageSettings.orientation === 'portrait' ? '210mm' : '297mm',

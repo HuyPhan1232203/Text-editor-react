@@ -35,6 +35,12 @@ const PRESETS: Record<MarginPresetKey, { label: string, mm: number }> = {
   wide: { label: 'Rộng', mm: 31.8 }
 }
 
+const MAX_MARGIN_MM = 50
+
+function clampMargin (mm: number): number {
+  return Math.min(Math.max(mm, 0), MAX_MARGIN_MM)
+}
+
 function applyAllMargins (settings: PageSettings, mm: number): PageSettings {
   return { ...settings, topMargin: mm, bottomMargin: mm, leftMargin: mm, rightMargin: mm }
 }
@@ -63,7 +69,13 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
   }
 
   const handleSave = () => {
-    onSettingsChange(localSettings)
+    onSettingsChange({
+      ...localSettings,
+      topMargin: clampMargin(localSettings.topMargin),
+      bottomMargin: clampMargin(localSettings.bottomMargin),
+      leftMargin: clampMargin(localSettings.leftMargin),
+      rightMargin: clampMargin(localSettings.rightMargin)
+    })
     setOpen(false)
   }
 
@@ -159,6 +171,8 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
                   <Input
                     id='topMargin'
                     type='number'
+                    min={0}
+                    max={MAX_MARGIN_MM}
                     value={localSettings.topMargin}
                     onChange={(e) =>
                       setLocalSettings((s) => ({ ...s, topMargin: Number(e.target.value) || 0 }))}
@@ -169,6 +183,8 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
                   <Input
                     id='bottomMargin'
                     type='number'
+                    min={0}
+                    max={MAX_MARGIN_MM}
                     value={localSettings.bottomMargin}
                     onChange={(e) =>
                       setLocalSettings((s) => ({ ...s, bottomMargin: Number(e.target.value) || 0 }))}
@@ -179,6 +195,8 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
                   <Input
                     id='leftMargin'
                     type='number'
+                    min={0}
+                    max={MAX_MARGIN_MM}
                     value={localSettings.leftMargin}
                     onChange={(e) =>
                       setLocalSettings((s) => ({ ...s, leftMargin: Number(e.target.value) || 0 }))}
@@ -189,6 +207,8 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
                   <Input
                     id='rightMargin'
                     type='number'
+                    min={0}
+                    max={MAX_MARGIN_MM}
                     value={localSettings.rightMargin}
                     onChange={(e) =>
                       setLocalSettings((s) => ({ ...s, rightMargin: Number(e.target.value) || 0 }))}

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Editor } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { Type, Heading1, Heading2, Heading3, Check } from 'lucide-react'
+import { Type, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Check } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
 
 interface HeadingPopoverProps {
@@ -14,7 +14,10 @@ const headingOptions = [
   { level: 0, label: 'Paragraph', icon: Type, command: 'paragraph', fontSize: 'text-base' },
   { level: 1, label: 'Heading 1', icon: Heading1, command: 'heading', fontSize: 'text-xl' },
   { level: 2, label: 'Heading 2', icon: Heading2, command: 'heading', fontSize: 'text-lg' },
-  { level: 3, label: 'Heading 3', icon: Heading3, command: 'heading', fontSize: 'text-md' }
+  { level: 3, label: 'Heading 3', icon: Heading3, command: 'heading', fontSize: 'text-md' },
+  { level: 4, label: 'Heading 4', icon: Heading4, command: 'heading', fontSize: 'text-base' },
+  { level: 5, label: 'Heading 5', icon: Heading5, command: 'heading', fontSize: 'text-sm' },
+  { level: 6, label: 'Heading 6', icon: Heading6, command: 'heading', fontSize: 'text-xs' }
 ] as const
 
 export function HeadingPopover ({ editor }: HeadingPopoverProps) {
@@ -25,6 +28,9 @@ export function HeadingPopover ({ editor }: HeadingPopoverProps) {
     if (editor.isActive('heading', { level: 1 })) return { level: 1, label: 'Heading 1', icon: Heading1 }
     if (editor.isActive('heading', { level: 2 })) return { level: 2, label: 'Heading 2', icon: Heading2 }
     if (editor.isActive('heading', { level: 3 })) return { level: 3, label: 'Heading 3', icon: Heading3 }
+    if (editor.isActive('heading', { level: 4 })) return { level: 4, label: 'Heading 4', icon: Heading4 }
+    if (editor.isActive('heading', { level: 5 })) return { level: 5, label: 'Heading 5', icon: Heading5 }
+    if (editor.isActive('heading', { level: 6 })) return { level: 6, label: 'Heading 6', icon: Heading6 }
     return { level: 0, label: 'Paragraph', icon: Type }
   }
 
@@ -35,7 +41,7 @@ export function HeadingPopover ({ editor }: HeadingPopoverProps) {
     if (option.command === 'paragraph') {
       editor.chain().focus().setParagraph().run()
     } else {
-      editor.chain().focus().toggleHeading({ level: option.level as 1 | 2 | 3 }).run()
+      editor.chain().focus().toggleHeading({ level: option.level as 1 | 2 | 3 | 4 | 5 | 6 }).run()
     }
     setOpen(false)
   }
