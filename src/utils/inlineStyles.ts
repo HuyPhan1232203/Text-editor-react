@@ -54,20 +54,20 @@ export function inlineStyles (html: string): string {
 
     h1, h2, h3, h4, h5, h6 {
       line-height: 1.3;
-      font-weight: 700;
-      margin: 12pt 0 6pt 0;
+      font-weight: 400;
+      margin: 16pt 0 4pt 0;
       color: #000;
       font-family: 'Calibri', 'Segoe UI', system-ui, sans-serif;
       page-break-after: avoid;
       break-after: avoid;
     }
 
-    h1 { font-size: 26pt; }
-    h2 { font-size: 19pt; }
-    h3 { font-size: 14pt; }
-    h4 { font-size: 13pt; }
-    h5 { font-size: 12pt; }
-    h6 { font-size: 11pt; }
+    h1 { font-size: 20pt; margin-top: 20pt; margin-bottom: 6pt; }
+    h2 { font-size: 16pt; margin-top: 18pt; margin-bottom: 6pt; }
+    h3 { font-size: 14pt; color: #434343; }
+    h4 { font-size: 12pt; color: #666; margin-top: 14pt; }
+    h5 { font-size: 11pt; color: #666; margin-top: 12pt; }
+    h6 { font-size: 11pt; color: #666; font-style: italic; margin-top: 12pt; }
 
     ul, ol { padding-left: 36pt; margin: 6pt 0; color: #000; }
     ul { list-style-type: disc; }
@@ -117,8 +117,8 @@ export function inlineStyles (html: string): string {
     }
 
     td, th {
-      border: 1px solid #e5e7eb;
-      padding: 0 5pt;
+      border: 1px solid #000;
+      padding: 5pt;
       vertical-align: top;
       box-sizing: border-box;
       color: #1f2937;

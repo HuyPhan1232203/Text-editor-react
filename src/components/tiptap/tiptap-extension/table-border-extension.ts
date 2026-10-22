@@ -8,7 +8,17 @@ import type { EditorView } from '@tiptap/pm/view'
  *
  * The toggle is an icon button rendered by the table's node view in the left page margin,
  * outside the table, so it never covers a cell.
+ *
+ * Tables also keep a left indent: Google Docs indents a table by wrapping it in
+ * <div style="margin-left: 36pt">, which would otherwise be lost on paste.
  */
+
+// A positive CSS length from a margin-left value, e.g. "36pt"
+function indentOf (element: HTMLElement | null): string | null {
+  const value = element?.style.marginLeft ?? ''
+
+  return parseFloat(value) > 0 ? value : null
+}
 
 // Border icons (lucide "grid" / dashed outline)
 const BORDER_ON_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" '
@@ -60,6 +70,7 @@ class BorderToggleTableView extends TableView {
     const label = hidden ? 'Hiện viền bảng' : 'Ẩn viền bảng'
 
     this.table.classList.toggle('no-border', hidden)
+    this.dom.style.marginLeft = node.attrs.indent ?? ''
     this.button.classList.toggle('is-hidden', hidden)
     this.button.setAttribute('aria-pressed', String(hidden))
     this.button.setAttribute('aria-label', label)
@@ -90,6 +101,14 @@ export const BorderedTable = Table.extend({
         default: false,
         parseHTML: (element) => element.classList.contains('no-border'),
         renderHTML: (attributes) => (attributes.hideBorders ? { class: 'no-border' } : {})
+      },
+      indent: {
+        default: null,
+        parseHTML: (element) => indentOf(element)
+          ?? (element.parentElement?.tagName === 'DIV' ? indentOf(element.parentElement) : null),
+        renderHTML: (attributes) => (attributes.indent
+          ? { style: `margin-left: ${attributes.indent}; width: calc(100% - ${attributes.indent})` }
+          : {})
       }
     }
   }
