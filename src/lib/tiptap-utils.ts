@@ -388,17 +388,55 @@ export const handleImageUpload = async (
     )
   }
 
-  // For demo/testing: Simulate upload progress. In production, replace the following code
-  // with your own upload implementation.
-  for (let progress = 0; progress <= 100; progress += 10) {
-    if (abortSignal?.aborted) {
-      throw new Error('Upload cancelled')
+  // Images are embedded as data URLs so they work without an upload server.
+  // To host images elsewhere, upload the file here and return its URL instead.
+  return await fileToDataUrl(file, onProgress, abortSignal)
+}
+
+/**
+ * Reads a file as a data URL, reporting progress and honouring an abort signal
+ */
+export const fileToDataUrl = (
+  file: File,
+  onProgress?: (event: { progress: number }) => void,
+  abortSignal?: AbortSignal
+): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+
+    reader.onprogress = (event) => {
+      if (event.lengthComputable) {
+        onProgress?.({ progress: Math.round((event.loaded / event.total) * 100) })
+      }
     }
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    onProgress?.({ progress })
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = () => reject(reader.error ?? new Error('Cannot read file'))
+    reader.onabort = () => reject(new Error('Upload cancelled'))
+    abortSignal?.addEventListener('abort', () => reader.abort(), { once: true })
+    reader.readAsDataURL(file)
+  })
+
+/**
+ * Inserts pasted or dropped image files at the given position
+ */
+export const insertImageFiles = async (
+  editor: Editor,
+  files: File[],
+  pos: number
+): Promise<void> => {
+  const images = []
+
+  for (const file of files) {
+    if (file.size > MAX_FILE_SIZE) {
+      window.alert(`Ảnh "${file.name}" vượt quá ${MAX_FILE_SIZE / (1024 * 1024)}MB`)
+      continue
+    }
+    images.push({ type: 'image', attrs: { src: await fileToDataUrl(file), alt: file.name } })
   }
 
-  return '/images/tiptap-ui-placeholder-image.jpg'
+  if (images.length > 0) {
+    editor.chain().insertContentAt(pos, images).focus().run()
+  }
 }
 
 type ProtocolOptions = {

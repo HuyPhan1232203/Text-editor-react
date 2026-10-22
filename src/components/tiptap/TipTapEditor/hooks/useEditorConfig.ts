@@ -16,7 +16,8 @@ import {
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCaret from '@tiptap/extension-collaboration-caret'
 import Emoji, { gitHubEmojis } from '@tiptap/extension-emoji'
-import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
+import { FileHandler } from '@tiptap/extension-file-handler'
+import { handleImageUpload, insertImageFiles, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import { Pagination } from '@/components/tiptap/tiptap-extension/pagination-extension'
@@ -92,7 +93,19 @@ export function useEditorConfig () {
           displayMode: false
         }
       }),
-      Image,
+      // Pasted/uploaded images are stored as data URLs
+      Image.configure({ allowBase64: true }),
+      FileHandler.configure({
+        allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+        onPaste: (editor, files, htmlContent) => {
+          // Copied web content brings its own <img> tags; let the default HTML paste handle it
+          if (htmlContent) return
+          insertImageFiles(editor, files, editor.state.selection.anchor)
+        },
+        onDrop: (editor, files, pos) => {
+          insertImageFiles(editor, files, pos)
+        }
+      }),
       Emoji.configure({
         emojis: gitHubEmojis,
         enableEmoticons: true

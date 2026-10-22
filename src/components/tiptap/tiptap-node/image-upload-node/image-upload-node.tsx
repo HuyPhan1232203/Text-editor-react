@@ -6,7 +6,7 @@ import { NodeViewWrapper } from '@tiptap/react'
 import { Button } from '@/components/tiptap/tiptap-ui-primitive/button'
 import { CloseIcon } from '@/components/tiptap/tiptap-icons/close-icon'
 import '@/components/tiptap/tiptap-node/image-upload-node/image-upload-node.scss'
-import { focusNextNode, isValidPosition } from '@/lib/tiptap-utils'
+import { fileToDataUrl, focusNextNode, isValidPosition } from '@/lib/tiptap-utils'
 
 export interface FileItem {
   /**
@@ -446,17 +446,17 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
     maxSize,
     limit,
     accept,
-    upload: async (file, onProgress, _signal) => {
-    // validate
+    upload: async (file, onProgress, signal) => {
       if (file.size > maxSize && maxSize > 0) {
         throw new Error(`File size exceeds maximum allowed`)
       }
 
-      // vì không upload thật, coi như xong luôn
-      onProgress({ progress: 100 })
-      const blobUrl = URL.createObjectURL(file)
+      // Use the configured upload (data URL by default); a blob: URL would break after a reload
+      if (extension.options.upload) {
+        return extension.options.upload(file, onProgress, signal)
+      }
 
-      return blobUrl
+      return fileToDataUrl(file, onProgress, signal)
     },
     onSuccess: extension.options.onSuccess,
     onError: extension.options.onError
