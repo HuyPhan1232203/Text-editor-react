@@ -670,3 +670,37 @@
 .tiptap .page-break-header table {
   margin: 0;
 }
+
+/* Image resize handles: TipTap's resizable node view ships no styles, so the handles were 0×0
+   and impossible to grab. Small squares on the corners, shown on hover or when selected. */
+.tiptap [data-resize-container][data-node='image'] [data-resize-handle] {
+  width: 10px;
+  height: 10px;
+  margin: -5px;
+  z-index: 2;
+  background: #fff;
+  border: 1.5px solid #1a73e8;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.tiptap [data-resize-container][data-node='image']:hover [data-resize-handle],
+.tiptap [data-resize-container][data-node='image'].ProseMirror-selectednode [data-resize-handle],
+.tiptap [data-resize-container][data-node='image'][data-resize-state='true'] [data-resize-handle] {
+  opacity: 1;
+}
+
+.tiptap [data-resize-container][data-node='image'].ProseMirror-selectednode img {
+  outline: 2px solid #1a73e8;
+}
+
+.tiptap [data-resize-handle='top-left'],
+.tiptap [data-resize-handle='bottom-right'] {
+  cursor: nwse-resize;
+}
+
+.tiptap [data-resize-handle='top-right'],
+.tiptap [data-resize-handle='bottom-left'] {
+  cursor: nesw-resize;
+}
