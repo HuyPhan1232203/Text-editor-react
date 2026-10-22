@@ -135,6 +135,8 @@ function measure (view: EditorView): PaginationMeta | null {
     const style = getComputedStyle(dom)
     const marginTop = parseFloat(style.marginTop || '0')
     const marginBottom = parseFloat(style.marginBottom || '0')
+    // Floated images (text wrapping) sit beside the following blocks instead of above them
+    const isFloat = style.float !== 'none'
     let top = cursor === null ? rect.top - originTop : cursor + Math.max(prevMarginBottom, marginTop)
     let bottom = top + rect.height
     const pageStart = pageEnd - layout.contentHeight
@@ -149,11 +151,18 @@ function measure (view: EditorView): PaginationMeta | null {
       top = spacerTop + height + marginTop
       bottom = top + rect.height
       pageEnd += pitch
+      if (isFloat) {
+        // The spacer is in the normal flow, so the next blocks start below it
+        cursor = spacerTop + height
+        prevMarginBottom = 0
+      }
     }
     while (bottom > pageEnd) pageEnd += pitch
 
-    cursor = bottom
-    prevMarginBottom = marginBottom
+    if (!isFloat) {
+      cursor = bottom
+      prevMarginBottom = marginBottom
+    }
   })
 
   return {

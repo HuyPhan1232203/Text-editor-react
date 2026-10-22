@@ -2,6 +2,7 @@ import { TableCellToolbar } from '@/components/tiptap/tableTiptap/TableCellToolb
 import { EditorContent } from '@tiptap/react'
 import type { Editor } from '@tiptap/react'
 import TextBubbleToolbar from './TextBubbleToolbar'
+import ImageBubbleToolbar from './ImageBubbleToolbar'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { mmToPx } from '@/utils/convertUnit'
 import type { PageSettings } from '../types'
@@ -53,6 +54,7 @@ export const EditorContentArea = memo(function EditorContentArea ({
     <div className='flex-1 overflow-auto p-8'>
       <div onClick={handleContainerClick} className='relative mx-auto w-fit'>
         <TextBubbleToolbar editor={editor} />
+        <ImageBubbleToolbar editor={editor} />
         <div
           className='document-page bg-white' style={{
             width: pageSettings.orientation === 'portrait' ? '210mm' : '297mm',

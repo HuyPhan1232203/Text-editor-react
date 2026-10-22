@@ -1,7 +1,6 @@
 import { useEditor } from '@tiptap/react'
 import { useEffect, useMemo } from 'react'
 import StarterKit from '@tiptap/starter-kit'
-import { Image } from '@tiptap/extension-image'
 import { TableKit } from '@tiptap/extension-table'
 import { TextAlign } from '@tiptap/extension-text-align'
 import { Link } from '@tiptap/extension-link'
@@ -21,6 +20,7 @@ import { handleImageUpload, insertImageFiles, MAX_FILE_SIZE } from '@/lib/tiptap
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import { Pagination } from '@/components/tiptap/tiptap-extension/pagination-extension'
+import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
 import { WebrtcProvider } from 'y-webrtc'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
@@ -93,8 +93,11 @@ export function useEditorConfig () {
           displayMode: false
         }
       }),
-      // Pasted/uploaded images are stored as data URLs
-      Image.configure({ allowBase64: true }),
+      // Pasted/uploaded images are stored as data URLs; drag the corners to resize, wrap text around them
+      ImageWrapExtension.configure({
+        allowBase64: true,
+        resize: { enabled: true, alwaysPreserveAspectRatio: true, minWidth: 40, minHeight: 40 }
+      }),
       FileHandler.configure({
         allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
         onPaste: (editor, files, htmlContent) => {

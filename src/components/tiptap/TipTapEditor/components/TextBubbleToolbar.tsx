@@ -6,6 +6,7 @@ import { ColorHighlightButton } from '@/components/tiptap/tiptap-ui/color-highli
 import { HIGHLIGHT_COLORS } from '../../TextToolbar/constants'
 import { useBubbleMenuState } from '../hooks/useBubbleMenuState'
 import { CellSelection } from '@tiptap/pm/tables'
+import { NodeSelection } from '@tiptap/pm/state'
 
 interface TextBubbleToolbarProps {
   editor: Editor
@@ -44,7 +45,8 @@ function TextBubbleToolbar ({ editor }: TextBubbleToolbarProps) {
         const isCellSelection = selection instanceof CellSelection
 
         // CHỈ show khi có selection VÀ KHÔNG phải cell selection
-        return hasSelection && !isCellSelection
+        // Selected nodes such as images have their own menu
+        return hasSelection && !isCellSelection && !(selection instanceof NodeSelection)
       }}
     >
       <div
