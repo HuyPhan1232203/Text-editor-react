@@ -98,8 +98,8 @@ export function useEditorConfig () {
       FileHandler.configure({
         allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
         onPaste: (editor, files, htmlContent) => {
-          // Copied web content brings its own <img> tags; let the default HTML paste handle it
-          if (htmlContent) return
+          // Copied web content with its own <img> tags is handled by the default HTML paste
+          if (htmlContent && /<img\b/i.test(htmlContent)) return
           insertImageFiles(editor, files, editor.state.selection.anchor)
         },
         onDrop: (editor, files, pos) => {
