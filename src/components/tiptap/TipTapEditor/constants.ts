@@ -13,3 +13,6 @@ export const EDITOR_CLASSES = {
   container: 'flex flex-col h-screen bg-gray-200',
   toolbar: 'border-b border-gray-300 bg-white p-3 sticky top-0 z-10 shadow-sm'
 } as const
+
+// Gray gap between A4 sheets, in px
+export const PAGE_GAP_PX = 24

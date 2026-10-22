@@ -48,7 +48,7 @@ export async function exportToPdf (
     let htmlContent = editor.getHTML()
 
     // Preserve no-border class từ DOM
-    const domTables = document.querySelectorAll('.tiptap table')
+    const domTables = editor.view.dom.querySelectorAll('table')
 
     if (domTables.length > 0) {
       const parser = new DOMParser()

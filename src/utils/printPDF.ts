@@ -17,6 +17,8 @@ const EDITOR_ONLY_SELECTORS = [
   '.column-resize-handle',
   '.collaboration-caret',
   '.page-break-spacer',
+  '[data-table-control]',
+  '[data-resize-handle]',
   '.ProseMirror-gapcursor',
   '.ProseMirror-separator',
   '.ProseMirror-trailingBreak'

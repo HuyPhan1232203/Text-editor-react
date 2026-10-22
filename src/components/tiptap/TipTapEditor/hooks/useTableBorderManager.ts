@@ -6,21 +6,23 @@ export function useTableBorderManager (editor: Editor | null) {
   const [tableBorderStates, setTableBorderStates] = useState<TableBorderStates>({})
 
   const updateSwitchUI = useCallback((tableIndex: number, isHidden: boolean) => {
-    const switchButton = document.querySelector(`[data-switch-index="${tableIndex}"]`) as HTMLElement | null
-    const thumb = document.querySelector(`[data-thumb-index="${tableIndex}"]`) as HTMLElement | null
+    // Scoped to this editor: page thumbnails contain cloned controls with the same attributes
+    const root = editor?.view.dom
+    const switchButton = root?.querySelector(`[data-switch-index="${tableIndex}"]`) as HTMLElement | null
+    const thumb = root?.querySelector(`[data-thumb-index="${tableIndex}"]`) as HTMLElement | null
 
     if (switchButton && thumb) {
       switchButton.style.backgroundColor = isHidden ? '#d1d5db' : '#10b981'
       thumb.style.transform = isHidden ? 'translateX(20px)' : 'translateX(1px)'
     }
-  }, [])
+  }, [editor])
 
   const handleToggleTableBorder = useCallback((tableIndex: number) => {
     setTableBorderStates(prev => {
       const newState = { ...prev, [tableIndex]: !prev[tableIndex] }
 
       requestAnimationFrame(() => {
-        const tables = document.querySelectorAll('.tiptap table')
+        const tables = editor?.view.dom.querySelectorAll('table') ?? []
         const table = tables[tableIndex] as HTMLElement | undefined
 
         if (table) {
@@ -31,10 +33,10 @@ export function useTableBorderManager (editor: Editor | null) {
 
       return newState
     })
-  }, [updateSwitchUI])
+  }, [editor, updateSwitchUI])
 
   const handleEditorUpdate = useCallback(() => {
-    const tables = document.querySelectorAll('.tiptap table')
+    const tables = editor?.view.dom.querySelectorAll('table') ?? []
 
     tables.forEach((table, index) => {
       const tableElement = table as HTMLElement
@@ -72,7 +74,7 @@ export function useTableBorderManager (editor: Editor | null) {
       tableElement.classList.toggle('no-border', isHidden)
       updateSwitchUI(index, isHidden)
     })
-  }, [tableBorderStates, handleToggleTableBorder, updateSwitchUI])
+  }, [editor, tableBorderStates, handleToggleTableBorder, updateSwitchUI])
 
   useEffect(() => {
     if (!editor) return
