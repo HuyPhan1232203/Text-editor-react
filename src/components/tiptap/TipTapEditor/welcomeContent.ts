@@ -11,6 +11,8 @@ export const WELCOME_CONTENT = `
 <h2>Try it in one minute</h2>
 <ul data-type="taskList">
   <li data-type="taskItem" data-checked="true"><p>Open this page for the first time</p></li>
+  <li data-type="taskItem" data-checked="false"><p>Type <code>/</code> on an empty line to insert a heading, table, code block or YouTube video</p></li>
+  <li data-type="taskItem" data-checked="false"><p>Hover a paragraph and drag the <strong>⋮⋮</strong> handle on its left to move it</p></li>
   <li data-type="taskItem" data-checked="false"><p><strong>Select</strong> some text to bring up the quick formatting bar</p></li>
   <li data-type="taskItem" data-checked="false"><p>Type <code>:rocket:</code> to insert an emoji, or use the 😊 button in the toolbar</p></li>
   <li data-type="taskItem" data-checked="false"><p><strong>Right-click</strong> a cell in the table below to add rows, merge cells or color them</p></li>
@@ -39,6 +41,7 @@ export const WELCOME_CONTENT = `
 <h2>Handy shortcuts</h2>
 <ul>
   <li><p><code>Ctrl/Cmd + B / I / U</code> — bold, italic, underline</p></li>
+  <li><p><code>/</code> — insert any block, <code>Ctrl/Cmd + F</code> — find, <code>Ctrl/Cmd + H</code> — find and replace</p></li>
   <li><p><code>Ctrl/Cmd + Z</code> — undo, <code>Ctrl/Cmd + Shift + Z</code> — redo</p></li>
   <li><p>Type <code>#</code> + space at the start of a line for a heading, <code>-</code> + space for a list</p></li>
 </ul>

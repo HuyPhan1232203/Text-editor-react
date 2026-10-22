@@ -3,13 +3,17 @@ import type { PageSettings } from '../types'
 import { memo } from 'react'
 import { COPYRIGHT, REPO_URL } from '@/config/constants'
 import { language, setLanguage, t } from '@/i18n'
+import type { Editor } from '@tiptap/react'
+import { StatusBar } from './StatusBar'
 
 interface EditorFooterProps {
+  editor: Editor
   pageSettings: PageSettings
   onSettingsChange: (settings: PageSettings) => void
 }
 
 export const EditorFooter = memo(function EditorFooter ({
+  editor,
   pageSettings,
   onSettingsChange
 }: EditorFooterProps) {
@@ -31,6 +35,7 @@ export const EditorFooter = memo(function EditorFooter ({
             })}
           </div>
         </div>
+        <StatusBar editor={editor} pageSettings={pageSettings} />
         <div className='flex items-center gap-3'>
           <button
             type='button'

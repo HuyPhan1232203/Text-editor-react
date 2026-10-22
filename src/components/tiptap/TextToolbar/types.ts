@@ -24,6 +24,9 @@ export interface EditorToolbarState {
   canStrike: boolean
   isCode: boolean
   canCode: boolean
+  isSubscript: boolean
+  isSuperscript: boolean
+  isCodeBlock: boolean
   isBlockquote: boolean
   isInTable: boolean
   isLink: boolean

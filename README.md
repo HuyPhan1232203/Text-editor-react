@@ -19,14 +19,18 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 
 ## Features
 
-- **Formatting**: bold, italic, underline, strikethrough, inline code, text color, highlight
+- **Slash menu**: type `/` to insert headings, lists, checklists, tables, images, formulas, code blocks, dividers or YouTube videos (filter by typing, arrow keys + Enter)
+- **Find & replace**: `Ctrl/Cmd + F` (or `+ H` for replace) with highlighted matches, match case, replace one or all in a single undo step
+- **Formatting**: bold, italic, underline, strikethrough, inline code, subscript, superscript, text color, highlight; smart typography (`--` → —, `(c)` → ©)
 - **Typography**: font family, font size, line height, text alignment
 - **Structure**: paragraph and headings H1–H6, bullet and numbered lists, checklists (pasting a Google Docs checklist keeps its checkboxes)
 - **Tables**: insert tables, resize columns, add or delete rows and columns, merge and split cells, cell background color and vertical alignment, hide borders per table; long tables split between rows and repeat their header row on each page
 - **Images**: paste, drop or upload images, resize them by dragging and wrap text around them (left / right)
-- **Media**: links, emoji as plain text characters (picker or typing `:heart:`), inline math with KaTeX
+- **Media**: links, emoji as plain text characters (picker or typing `:heart:`), inline math with KaTeX, YouTube embeds, code blocks with syntax highlighting (grammars lazy-loaded)
+- **Drag & drop blocks**: grab the ⋮⋮ handle left of any paragraph, heading, table or image to move it
 - **A4 pages**: content flows across separate A4 sheets like Word, portrait or landscape, margin presets and custom margins in mm
-- **Page thumbnails**: a sidebar lists every page; click to jump, the current page is highlighted (lazy-rendered for long documents)
+- **Sidebar**: page thumbnails (click to jump, lazy-rendered for long documents) or a document outline built from the headings
+- **Status bar**: current page, word and character count
 - **Welcome tour**: first-time visitors get an editable demo document that walks through the features
 - **Autosave**: the document is kept in IndexedDB and page settings in localStorage, so a reload does not lose your work
 - **Collaboration (opt-in)**: open the app with `?room=<name>` to edit the same document with others over WebRTC, with live cursors
@@ -122,6 +126,7 @@ React 19, TypeScript, TipTap 3 (ProseMirror), Yjs (y-webrtc, y-indexeddb), Radix
 - DOCX export
 - Split a single long paragraph across pages
 - Headers, footers and page numbers
+- Incremental pagination: re-measure only from the first changed block instead of the whole document on every edit
 
 ## Support & custom work
 

@@ -7,6 +7,9 @@ import { memo, useCallback, useEffect } from 'react'
 import type { PageSettings } from '../types'
 import { PAGE_GAP_PX } from '../constants'
 import { usePageCount, usePageLayout } from '../hooks/usePageLayout'
+import { DragHandle } from '@tiptap/extension-drag-handle-react'
+import { GripVertical } from 'lucide-react'
+import { t } from '@/i18n'
 
 export interface EditorContentAreaProps {
   editor: Editor
@@ -54,6 +57,11 @@ export const EditorContentArea = memo(function EditorContentArea ({
           }}
         >
           <EditorContent editor={editor} />
+          <DragHandle editor={editor}>
+            <div className='drag-handle-grip' title={t('editor.dragHandle')} aria-label={t('editor.dragHandle')}>
+              <GripVertical className='h-4 w-4' />
+            </div>
+          </DragHandle>
         </div>
         <TableCellToolbar editor={editor} />
       </div>

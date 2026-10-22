@@ -1,4 +1,4 @@
-import { Bold, Code, Italic, Strikethrough, Underline } from 'lucide-react'
+import { Bold, Code, Italic, Strikethrough, Subscript, Superscript, Underline } from 'lucide-react'
 import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
 import { memo } from 'react'
@@ -53,6 +53,20 @@ export const FormattingButtons = memo(function FormattingButtons ({
         icon={Code}
         label='Code'
         tooltip='Code inline'
+      />
+      <ToolbarButton
+        onClick={() => editor.chain().focus().toggleSubscript().run()}
+        isActive={state.isSubscript}
+        icon={Subscript}
+        label='Subscript'
+        tooltip={t('toolbar.subscript')}
+      />
+      <ToolbarButton
+        onClick={() => editor.chain().focus().toggleSuperscript().run()}
+        isActive={state.isSuperscript}
+        icon={Superscript}
+        label='Superscript'
+        tooltip={t('toolbar.superscript')}
       />
     </>
   )

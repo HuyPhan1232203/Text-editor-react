@@ -19,6 +19,16 @@ import { handleImageUpload, insertImageFiles, MAX_FILE_SIZE } from '@/lib/tiptap
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import { Pagination } from 'tiptap-a4-pagination'
+import { Subscript } from '@tiptap/extension-subscript'
+import { Superscript } from '@tiptap/extension-superscript'
+import { Typography } from '@tiptap/extension-typography'
+import { Youtube } from '@tiptap/extension-youtube'
+import { CodeBlockLowlight } from '@tiptap/extension-code-block-lowlight'
+import { CharacterCount, Placeholder } from '@tiptap/extensions'
+import { lazyLowlight, loadLowlight } from '@/lib/lowlight-lazy'
+import { SlashCommand } from '@/components/tiptap/tiptap-extension/slash-command-extension'
+import { SearchReplace } from '@/components/tiptap/tiptap-extension/search-replace-extension'
+import { t } from '@/i18n'
 import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
 import { ChecklistExtensions } from '@/components/tiptap/tiptap-extension/checklist-extension'
 import { EmojiText } from '@/components/tiptap/tiptap-extension/emoji-text-extension'
@@ -99,8 +109,21 @@ export function useEditorConfig () {
       StarterKit.configure({
         undoRedo: false,
         // Link is configured separately below
-        link: false
+        link: false,
+        // Replaced by CodeBlockLowlight (syntax highlighting)
+        codeBlock: false
       }),
+      // Grammars are loaded lazily, see loadLowlight below
+      CodeBlockLowlight.configure({ lowlight: lazyLowlight }),
+      Subscript,
+      Superscript,
+      // Smart quotes, dashes, arrows and symbols while typing: -- → —, (c) → ©
+      Typography,
+      Youtube.configure({ nocookie: true, width: 560, height: 315 }),
+      Placeholder.configure({ placeholder: t('editor.placeholder') }),
+      CharacterCount,
+      SlashCommand,
+      SearchReplace,
       Mathematics.configure({
         katexOptions: {
           throwOnError: false,
@@ -172,6 +195,15 @@ export function useEditorConfig () {
       }
     }
   })
+
+  // Syntax highlighting grammars, once the page is idle
+  useEffect(() => {
+    if (!editor) return
+
+    const id = window.setTimeout(() => { loadLowlight(editor) }, 1500)
+
+    return () => window.clearTimeout(id)
+  }, [editor])
 
   // First visit: once the saved document has loaded and turns out empty, show the welcome tour.
   // Only once per browser (clearing the document later keeps it empty), and never in a shared room.

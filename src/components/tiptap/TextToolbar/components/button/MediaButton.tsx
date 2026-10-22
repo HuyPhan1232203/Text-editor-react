@@ -1,4 +1,5 @@
-import { Image, Table } from 'lucide-react'
+import { Image, Table, Youtube } from 'lucide-react'
+import { promptYoutube } from '@/components/tiptap/tiptap-extension/slash-command-extension'
 import type { ToolbarSectionProps } from '../../types'
 import { Button } from '@/components/ui/button'
 import type { CreateTablePayload } from '@/components/tiptap/tableTiptap/CreateTablePopover'
@@ -31,6 +32,10 @@ export const MediaButtons = memo(function MediaButtons ({
           <Table className='w-4 h-4' />
         </Button>
       </CreateTablePopover>
+
+      <Button onClick={() => promptYoutube(editor)} variant='ghost' title={t('toolbar.youtube')} aria-label={t('toolbar.youtube')}>
+        <Youtube className='w-4 h-4' />
+      </Button>
     </>
   )
 })

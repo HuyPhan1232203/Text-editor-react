@@ -176,7 +176,7 @@ export const PageThumbnails = memo(function PageThumbnails ({ editor, pageSettin
     <nav
       ref={listRef}
       aria-label={t('page.list')}
-      className='hidden lg:flex flex-col items-center gap-5 w-44 shrink-0 overflow-y-auto border-r border-gray-300 bg-gray-100 py-6'
+      className='flex flex-1 min-h-0 flex-col items-center gap-5 overflow-y-auto py-6'
     >
       {Array.from({ length: pageCount }, (_, index) => (
         <button

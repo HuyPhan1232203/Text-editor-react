@@ -668,3 +668,89 @@
 .tiptap [data-resize-handle='bottom-left'] {
   cursor: nesw-resize;
 }
+
+/* Placeholder on the empty line with the cursor (top level only, not inside tables or lists; not in thumbnails) */
+.tiptap[contenteditable='true'] > p.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+/* Find & replace */
+.tiptap .search-match {
+  background-color: #fde68a;
+  border-radius: 2px;
+}
+
+.tiptap .search-match-current {
+  background-color: #f97316;
+  color: #fff;
+}
+
+/* Block drag handle, shown left of the hovered block */
+.drag-handle-grip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 24px;
+  margin-right: 4px;
+  border-radius: 4px;
+  color: #9ca3af;
+  cursor: grab;
+}
+
+.drag-handle-grip:hover {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.drag-handle-grip:active {
+  cursor: grabbing;
+}
+
+/* YouTube embeds keep a 16:9 box and fit the page width */
+.tiptap div[data-youtube-video] {
+  margin: 12pt 0;
+}
+
+.tiptap div[data-youtube-video] iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.tiptap div[data-youtube-video].ProseMirror-selectednode iframe {
+  outline: 3px solid #3b82f6;
+}
+
+/* Syntax highlighting (GitHub light colors) */
+.tiptap pre .hljs-comment,
+.tiptap pre .hljs-quote { color: #6a737d; font-style: italic; }
+.tiptap pre .hljs-keyword,
+.tiptap pre .hljs-selector-tag,
+.tiptap pre .hljs-type { color: #d73a49; }
+.tiptap pre .hljs-string,
+.tiptap pre .hljs-regexp,
+.tiptap pre .hljs-addition { color: #032f62; }
+.tiptap pre .hljs-number,
+.tiptap pre .hljs-literal,
+.tiptap pre .hljs-variable,
+.tiptap pre .hljs-template-variable,
+.tiptap pre .hljs-attr { color: #005cc5; }
+.tiptap pre .hljs-title,
+.tiptap pre .hljs-section,
+.tiptap pre .hljs-function { color: #6f42c1; }
+.tiptap pre .hljs-name,
+.tiptap pre .hljs-tag,
+.tiptap pre .hljs-selector-id,
+.tiptap pre .hljs-selector-class { color: #22863a; }
+.tiptap pre .hljs-built_in,
+.tiptap pre .hljs-symbol,
+.tiptap pre .hljs-meta { color: #e36209; }
+.tiptap pre .hljs-deletion { color: #b31d28; }

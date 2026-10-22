@@ -1,4 +1,4 @@
-import { Quote } from 'lucide-react'
+import { Code2, Quote } from 'lucide-react'
 import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ListButton } from '@/components/tiptap/tiptap-ui/list-button'
 import { ToolbarButton } from '@/components/ToolbarButton'
@@ -38,6 +38,13 @@ export function ListButtons ({ editor, state }: ListButtonsProps) {
         icon={Quote}
         label='Blockquote'
         tooltip={t('toolbar.blockquote')}
+      />
+      <ToolbarButton
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        isActive={state.isCodeBlock}
+        icon={Code2}
+        label='Code block'
+        tooltip={t('toolbar.codeBlock')}
       />
     </>
   )
