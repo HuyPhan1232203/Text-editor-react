@@ -1,5 +1,5 @@
 import { useEditor } from '@tiptap/react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import StarterKit from '@tiptap/starter-kit'
 import { TableKit } from '@tiptap/extension-table'
 import { TextAlign } from '@tiptap/extension-text-align'
@@ -24,7 +24,7 @@ import { ChecklistExtensions } from '@/components/tiptap/tiptap-extension/checkl
 import { EmojiText } from '@/components/tiptap/tiptap-extension/emoji-text-extension'
 import { BorderedTable } from '@/components/tiptap/tiptap-extension/table-border-extension'
 import { StyledTableCell, StyledTableHeader } from '@/components/tiptap/tiptap-extension/table-cell-style-extension'
-import { WebrtcProvider } from 'y-webrtc'
+import type { WebrtcProvider } from 'y-webrtc'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
 
@@ -34,10 +34,26 @@ const ROOM_NAME = new URLSearchParams(window.location.search).get('room')
 export function useEditorConfig () {
   const ydoc = useMemo(() => new Y.Doc(), [])
 
-  const provider = useMemo(
-    () => (ROOM_NAME ? new WebrtcProvider(ROOM_NAME, ydoc) : null),
-    [ydoc]
-  )
+  // y-webrtc (and its WebRTC dependencies) is only downloaded when a room is joined
+  const [provider, setProvider] = useState<WebrtcProvider | null>(null)
+
+  useEffect(() => {
+    if (!ROOM_NAME) return
+
+    let joined: WebrtcProvider | null = null
+    let cancelled = false
+
+    import('y-webrtc').then(({ WebrtcProvider }) => {
+      if (cancelled) return
+      joined = new WebrtcProvider(ROOM_NAME, ydoc)
+      setProvider(joined)
+    })
+
+    return () => {
+      cancelled = true
+      joined?.destroy()
+    }
+  }, [ydoc])
 
   // Autosave: keep the document in IndexedDB so a reload does not lose it
   const persistence = useMemo(
@@ -47,11 +63,10 @@ export function useEditorConfig () {
 
   useEffect(() => {
     return () => {
-      provider?.destroy()
       persistence.destroy()
-      ydoc?.destroy()
+      ydoc.destroy()
     }
-  }, [provider, persistence, ydoc])
+  }, [persistence, ydoc])
   const extensions = useMemo(
     () => [
       Collaboration.configure({
@@ -151,6 +166,7 @@ export function useEditorConfig () {
     [ydoc, provider]
   )
 
+  // Recreated once the collaboration provider arrives (room mode only), to add live cursors
   return useEditor({
     extensions,
     autofocus: 'start',
@@ -160,5 +176,5 @@ export function useEditorConfig () {
         class: 'tiptap-editor-content focus:outline-none'
       }
     }
-  })
+  }, [provider])
 }

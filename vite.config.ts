@@ -7,8 +7,10 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [react(), tailwindcss(),tsconfigPaths(),],
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
+    alias: [
+      { find: '@', replacement: path.resolve(__dirname, './src') },
+      // Load KaTeX only when a document contains math (see src/lib/katex-lazy.ts)
+      { find: /^katex$/, replacement: path.resolve(__dirname, './src/lib/katex-lazy.ts') },
+    ],
   },
 })

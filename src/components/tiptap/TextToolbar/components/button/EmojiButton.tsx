@@ -3,7 +3,7 @@ import { Editor } from '@tiptap/react'
 import { Smile } from 'lucide-react'
 import tippy, { type Instance as TippyInstance } from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
-import { gitHubEmojis } from '@tiptap/extension-emoji'
+import type { EmojiItem } from '@tiptap/extension-emoji'
 
 interface EmojiButtonProps {
   editor: Editor
@@ -42,22 +42,29 @@ const isEmojiSupported = (emoji: string): boolean => {
   return coloredPixels >= 10 && coloredPixels <= 300
 }
 
-// Lọc và cache emoji được hỗ trợ
-let cachedSupportedEmojis: typeof gitHubEmojis | null = null
+// Lọc và cache emoji được hỗ trợ.
+// Kiểm tra theo phiên bản Unicode (một emoji đại diện cho mỗi phiên bản) thay vì từng emoji:
+// ~15 lần vẽ canvas thay vì ~1800, nên mở picker không còn chặn luồng chính.
+let cachedSupportedEmojis: EmojiItem[] | null = null
 
-const getSupportedEmojis = () => {
+const getSupportedEmojis = (emojis: EmojiItem[]) => {
   if (cachedSupportedEmojis) {
     return cachedSupportedEmojis
   }
 
-  cachedSupportedEmojis = gitHubEmojis.filter(emoji => {
-    if (!emoji.emoji) return false
-    try {
-      return isEmojiSupported(emoji.emoji)
-    } catch {
-      return false
+  const supportByVersion = new Map<number | undefined, boolean>()
+  const isSupported = (emoji: EmojiItem) => {
+    if (!supportByVersion.has(emoji.version)) {
+      try {
+        supportByVersion.set(emoji.version, isEmojiSupported(emoji.emoji as string))
+      } catch {
+        supportByVersion.set(emoji.version, false)
+      }
     }
-  })
+    return supportByVersion.get(emoji.version)
+  }
+
+  cachedSupportedEmojis = emojis.filter(emoji => !!emoji.emoji && isSupported(emoji))
 
   return cachedSupportedEmojis
 }
@@ -66,8 +73,8 @@ export function EmojiButton ({ editor }: EmojiButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [tippyInstance, setTippyInstance] = useState<TippyInstance | null>(null)
 
-  const createEmojiPicker = () => {
-    const supportedEmojis = getSupportedEmojis()
+  const createEmojiPicker = (emojis: EmojiItem[]) => {
+    const supportedEmojis = getSupportedEmojis(emojis)
 
     const container = document.createElement('div')
 
@@ -112,7 +119,7 @@ export function EmojiButton ({ editor }: EmojiButtonProps) {
     emojiList.style.gridTemplateColumns = 'repeat(9, 1fr)'
     emojiList.style.gap = '4px'
 
-    const renderEmojis = (emojis: typeof gitHubEmojis) => {
+    const renderEmojis = (emojis: EmojiItem[]) => {
       emojiList.innerHTML = ''
 
       let filteredEmojis = emojis
@@ -207,8 +214,25 @@ export function EmojiButton ({ editor }: EmojiButtonProps) {
   useEffect(() => {
     if (!buttonRef.current) return
 
+    const loading = document.createElement('div')
+
+    loading.className = 'bg-white rounded shadow-lg border p-4 text-sm text-gray-600'
+    loading.textContent = 'Đang tải emoji…'
+
+    let loaded = false
     const instance = tippy(buttonRef.current, {
-      content: createEmojiPicker(),
+      // The emoji list (~1800 items) is loaded and built on first open, not at page load
+      content: loading,
+      onShow: (tip) => {
+        if (loaded) return
+        loaded = true
+        import('@tiptap/extension-emoji').then(({ gitHubEmojis }) => {
+          tip.setContent(createEmojiPicker(gitHubEmojis))
+        }).catch(() => {
+          loaded = false
+          loading.textContent = 'Không tải được emoji'
+        })
+      },
       trigger: 'click',
       interactive: true,
       placement: 'bottom-start',

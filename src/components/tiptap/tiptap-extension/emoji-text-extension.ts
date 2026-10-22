@@ -1,5 +1,4 @@
 import { InputRule, Node } from '@tiptap/core'
-import { gitHubEmojis } from '@tiptap/extension-emoji'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 /**
@@ -12,18 +11,27 @@ import { Plugin, PluginKey } from '@tiptap/pm/state'
  * - emoji nodes already in older documents still load, and render as characters
  */
 
+// The emoji data (~1800 entries) is loaded in its own chunk the first time a ':' is typed
+// or emoji HTML is pasted, so it is not downloaded with the page
 let shortcodeMap: Map<string, string> | null = null
+let loading: Promise<void> | null = null
 
-function emojiForShortcode (shortcode: string): string | undefined {
-  if (!shortcodeMap) {
-    shortcodeMap = new Map()
+function loadShortcodes (): Promise<void> {
+  loading ??= import('@tiptap/extension-emoji').then(({ gitHubEmojis }) => {
+    const map = new Map<string, string>()
+
     for (const item of gitHubEmojis) {
       if (!item.emoji) continue
-      shortcodeMap.set(item.name, item.emoji)
-      item.shortcodes.forEach((code) => shortcodeMap?.set(code, item.emoji as string))
+      map.set(item.name, item.emoji)
+      item.shortcodes.forEach((code) => map.set(code, item.emoji as string))
     }
-  }
-  return shortcodeMap.get(shortcode)
+    shortcodeMap = map
+  })
+  return loading
+}
+
+function emojiForShortcode (shortcode: string): string | undefined {
+  return shortcodeMap?.get(shortcode)
 }
 
 export const EmojiText = Node.create({
@@ -69,8 +77,14 @@ export const EmojiText = Node.create({
       new Plugin({
         key: new PluginKey('emojiToText'),
         props: {
+          handleTextInput: (_view, _from, _to, text) => {
+            // Start loading the shortcode data as soon as a shortcode may be typed
+            if (text === ':') loadShortcodes()
+            return false
+          },
           transformPastedHTML: (html) => {
             if (!html.includes('data-type="emoji"')) return html
+            loadShortcodes()
 
             const doc = new DOMParser().parseFromString(html, 'text/html')
 
