@@ -166,9 +166,11 @@ export function useEditorConfig () {
     [ydoc, provider]
   )
 
-  // Recreated once the collaboration provider arrives (room mode only), to add live cursors
+  // In a room, the editor is recreated once the provider arrives (to add live cursors);
+  // it stays read-only until then so no edit or undo history is lost in the swap
   return useEditor({
     extensions,
+    editable: !ROOM_NAME || provider !== null,
     autofocus: 'start',
     content: '',
     editorProps: {

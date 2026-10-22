@@ -58,6 +58,22 @@ export const EmojiText = Node.create({
     return ['span', {}, emojiForShortcode(node.attrs.name) ?? `:${node.attrs.name}:`]
   },
 
+  // Legacy emoji nodes show their character once the (lazily loaded) emoji data has arrived
+  addNodeView () {
+    return ({ node }) => {
+      const dom = document.createElement('span')
+      const name = node.attrs.name as string
+      const show = () => {
+        dom.textContent = emojiForShortcode(name) ?? `:${name}:`
+      }
+
+      show()
+      if (!shortcodeMap) loadShortcodes().then(show)
+
+      return { dom }
+    }
+  },
+
   addInputRules () {
     return [
       new InputRule({
@@ -84,7 +100,12 @@ export const EmojiText = Node.create({
           },
           transformPastedHTML: (html) => {
             if (!html.includes('data-type="emoji"')) return html
-            loadShortcodes()
+            // Without the emoji data yet, keep the spans: they become emoji nodes,
+            // which render their character as soon as the data has loaded
+            if (!shortcodeMap) {
+              loadShortcodes()
+              return html
+            }
 
             const doc = new DOMParser().parseFromString(html, 'text/html')
 
