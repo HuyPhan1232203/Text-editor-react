@@ -14,7 +14,6 @@ import {
 } from '@tiptap/extension-text-style'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCaret from '@tiptap/extension-collaboration-caret'
-import Emoji, { gitHubEmojis } from '@tiptap/extension-emoji'
 import { FileHandler } from '@tiptap/extension-file-handler'
 import { handleImageUpload, insertImageFiles, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
@@ -22,6 +21,7 @@ import { Mathematics } from '@tiptap/extension-mathematics'
 import { Pagination } from '@/components/tiptap/tiptap-extension/pagination-extension'
 import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
 import { ChecklistExtensions } from '@/components/tiptap/tiptap-extension/checklist-extension'
+import { EmojiText } from '@/components/tiptap/tiptap-extension/emoji-text-extension'
 import { BorderedTable } from '@/components/tiptap/tiptap-extension/table-border-extension'
 import { StyledTableCell, StyledTableHeader } from '@/components/tiptap/tiptap-extension/table-cell-style-extension'
 import { WebrtcProvider } from 'y-webrtc'
@@ -112,10 +112,8 @@ export function useEditorConfig () {
           insertImageFiles(editor, files, pos)
         }
       }),
-      Emoji.configure({
-        emojis: gitHubEmojis,
-        enableEmoticons: true
-      }),
+      // Emojis are plain text characters (no image fallback); :shortcode: still works
+      EmojiText,
       Color.configure({ types: ['textStyle'] }),
       Link.configure({ openOnClick: false }),
       // The table itself comes from BorderedTable (hide-borders setting + toggle button)

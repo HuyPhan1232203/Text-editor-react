@@ -23,7 +23,7 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 - **Structure**: paragraph and headings H1–H6, bullet and numbered lists, checklists (pasting a Google Docs checklist keeps its checkboxes)
 - **Tables**: insert tables, resize columns, add or delete rows and columns, merge and split cells, cell background color and vertical alignment, hide borders per table; long tables split between rows and repeat their header row on each page
 - **Images**: paste, drop or upload images, resize them by dragging and wrap text around them (left / right)
-- **Media**: links, emoji (`:smile:` and emoticons), inline math with KaTeX
+- **Media**: links, emoji as plain text characters (picker or typing `:heart:`), inline math with KaTeX
 - **A4 pages**: content flows across separate A4 sheets like Word, portrait or landscape, margin presets and custom margins in mm
 - **Page thumbnails**: a sidebar lists every page; click to jump, the current page is highlighted (lazy-rendered for long documents)
 - **Autosave**: the document is kept in IndexedDB and page settings in localStorage, so a reload does not lose your work
