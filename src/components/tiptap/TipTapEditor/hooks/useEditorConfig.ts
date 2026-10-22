@@ -19,6 +19,7 @@ import Emoji, { gitHubEmojis } from '@tiptap/extension-emoji'
 import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
 import { Mathematics } from '@tiptap/extension-mathematics'
+import { Pagination } from '@/components/tiptap/tiptap-extension/pagination-extension'
 import { WebrtcProvider } from 'y-webrtc'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
@@ -116,6 +117,7 @@ export function useEditorConfig () {
         defaultAlignment: 'left'
       }),
       Highlight.configure({ multicolor: true }),
+      Pagination,
       ImageUploadNode.configure({
         accept: 'image/*',
         maxSize: MAX_FILE_SIZE,

@@ -16,6 +16,7 @@ interface PrintPdfOptions {
 const EDITOR_ONLY_SELECTORS = [
   '.column-resize-handle',
   '.collaboration-caret',
+  '.page-break-spacer',
   '.ProseMirror-gapcursor',
   '.ProseMirror-separator',
   '.ProseMirror-trailingBreak'

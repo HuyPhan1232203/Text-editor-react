@@ -2,8 +2,12 @@ import { TableCellToolbar } from '@/components/tiptap/tableTiptap/TableCellToolb
 import { EditorContent } from '@tiptap/react'
 import type { Editor } from '@tiptap/react'
 import TextBubbleToolbar from './TextBubbleToolbar'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { mmToPx } from '@/utils/convertUnit'
 import type { PageSettings } from '../types'
+
+// Gray gap between A4 sheets, in px
+const PAGE_GAP = 24
 
 export interface EditorContentAreaProps {
   editor: Editor
@@ -20,6 +24,29 @@ export const EditorContentArea = memo(function EditorContentArea ({
     }
   }, [editor])
 
+  const pageHeightMm = pageSettings.orientation === 'portrait' ? 297 : 210
+  const [pageCount, setPageCount] = useState(1)
+
+  useEffect(() => {
+    editor?.commands.setPageLayout({
+      contentHeight: mmToPx(pageHeightMm - pageSettings.topMargin - pageSettings.bottomMargin),
+      marginTop: mmToPx(pageSettings.topMargin),
+      marginBottom: mmToPx(pageSettings.bottomMargin),
+      gap: PAGE_GAP
+    })
+  }, [editor, pageHeightMm, pageSettings.topMargin, pageSettings.bottomMargin])
+
+  useEffect(() => {
+    if (!editor) return
+
+    const syncPageCount = () => setPageCount(editor.storage.pagination.pageCount)
+
+    editor.on('transaction', syncPageCount)
+    return () => {
+      editor.off('transaction', syncPageCount)
+    }
+  }, [editor])
+
   if (!editor) return null
 
   return (
@@ -29,7 +56,7 @@ export const EditorContentArea = memo(function EditorContentArea ({
         <div
           className='document-page bg-white' style={{
             width: pageSettings.orientation === 'portrait' ? '210mm' : '297mm',
-            minHeight: pageSettings.orientation === 'portrait' ? '297mm' : '210mm',
+            minHeight: `calc(${pageCount} * ${pageHeightMm}mm + ${(pageCount - 1) * PAGE_GAP}px)`,
             paddingTop: `${pageSettings.topMargin}mm`,
             paddingBottom: `${pageSettings.bottomMargin}mm`,
             paddingLeft: `${pageSettings.leftMargin}mm`,
