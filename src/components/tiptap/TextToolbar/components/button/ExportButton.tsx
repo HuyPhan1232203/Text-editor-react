@@ -1,5 +1,7 @@
 import { File } from 'lucide-react'
 import { exportToPdf } from '@/utils/exportPDF'
+import { printToPdf } from '@/utils/printPDF'
+import { PDF_API_URL } from '@/config/constants'
 import type { Editor } from '@tiptap/react'
 import { Button } from '@/components/ui/button'
 
@@ -21,6 +23,23 @@ export function ExportButton ({
   orientation
 }: ExportButtonProps) {
   const handleExportPDF = async () => {
+    // No backend configured: let the browser print the document to PDF
+    if (!PDF_API_URL) {
+      try {
+        await printToPdf(editor, {
+          title: 'my-document',
+          topMargin,
+          bottomMargin,
+          leftMargin,
+          rightMargin,
+          orientation
+        })
+      } catch (error) {
+        window.alert(`Xuất PDF thất bại: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      }
+      return
+    }
+
     const result = await exportToPdf(editor, {
       fileName: 'my-document.pdf',
       pageFormat: 'A4',

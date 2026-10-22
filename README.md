@@ -24,7 +24,7 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 - **A4 page**: portrait or landscape, margin presets and custom margins in mm
 - **Autosave**: the document is kept in IndexedDB and page settings in localStorage, so a reload does not lose your work
 - **Collaboration (opt-in)**: open the app with `?room=<name>` to edit the same document with others over WebRTC, with live cursors
-- **PDF export**: renders the page with Puppeteer through a small backend ([PDF-export-Puppeteer](https://github.com/HuyPhan1232203/PDF-export-Puppeteer))
+- **PDF export**: works out of the box through the browser's print dialog ("Save as PDF"), with your page size and margins; optionally one-click download through a Puppeteer backend ([PDF-export-Puppeteer](https://github.com/HuyPhan1232203/PDF-export-Puppeteer))
 
 > The editor UI is currently in Vietnamese.
 
@@ -41,9 +41,11 @@ pnpm dev
 
 Open http://localhost:5173.
 
-### PDF export (optional)
+### PDF export
 
-PDF export needs the backend running. With Docker:
+No setup needed: click **Xuất PDF** and choose **Save as PDF** in the print dialog. Only the page is printed, using the orientation and margins from page settings.
+
+For a one-click download instead, run the optional backend and point the editor to it:
 
 ```bash
 git clone https://github.com/HuyPhan1232203/PDF-export-Puppeteer.git
@@ -52,7 +54,7 @@ docker build -t pdf-export .
 docker run -p 3000:3000 pdf-export
 ```
 
-The editor calls `http://localhost:3000` by default. To use another URL, copy `.env.example` to `.env` and set `VITE_PDF_API_URL`.
+Then copy `.env.example` to `.env`, set `VITE_PDF_API_URL=http://localhost:3000` and restart `pnpm dev`.
 
 ### Collaboration
 
