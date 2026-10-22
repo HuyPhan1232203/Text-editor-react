@@ -40,6 +40,12 @@ export async function printToPdf (editor: Editor, options: PrintPdfOptions): Pro
   const content = editor.view.dom.cloneNode(true) as HTMLElement
 
   content.removeAttribute('contenteditable')
+  // Keep the editor's page breaks in the PDF: the block after each spacer starts a new page
+  content.querySelectorAll('.page-break-spacer').forEach((spacer) => {
+    const next = spacer.nextElementSibling as HTMLElement | null
+
+    if (next) next.style.breakBefore = 'page'
+  })
   content.querySelectorAll(EDITOR_ONLY_SELECTORS).forEach((node) => node.remove())
 
   // App styles (fonts, KaTeX, editor classes) first, so the print styles from inlineStyles win
