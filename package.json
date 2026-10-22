@@ -41,7 +41,6 @@
     "@tiptap/pm": "^3.13.0",
     "@tiptap/react": "^3.13.0",
     "@tiptap/starter-kit": "^3.13.0",
-    "@turbodocx/html-to-docx": "^1.18.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "katex": "^0.16.27",
@@ -50,7 +49,7 @@
     "prosemirror-model": "^1.25.4",
     "prosemirror-state": "^1.4.4",
     "prosemirror-view": "^1.41.4",
-    "react": "link:@tiptap/extension-bubble-menu/react",
+    "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hotkeys-hook": "^5.2.1",
     "tailwind-merge": "^3.4.0",
@@ -59,7 +58,6 @@
     "tiptap-extension-pagination": "^2.1.4",
     "vite-tsconfig-paths": "^6.0.1",
     "y-webrtc": "^10.3.0",
-    "y-websocket": "^3.0.0",
     "yjs": "^13.6.28"
   },
   "devDependencies": {
@@ -77,10 +75,5 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "npm:rolldown-vite@7.2.5"
-  },
-  "pnpm": {
-    "overrides": {
-      "vite": "npm:rolldown-vite@7.2.5"
-    }
   }
 }
