@@ -138,56 +138,6 @@
 .tiptap a:hover {
   color: #054399;
 }
-.table-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-  margin-bottom: 20px;
-  padding: 12px;
-  background-color: #f8f9fa;
-  border-radius: 6px;
-  border: 1px solid #e5e7eb;
-}
-.switch-wrapper {
-  display: inline-flex;
-}
-.table-border-toggle {
-  position: relative;
-  display: inline-flex;
-  height: 24px;
-  width: 44px;
-  align-items: center;
-  border-radius: 9999px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 200ms ease;
-  padding: 0;
-  background-color: #10b981;
-}
-
-.table-border-toggle:hover {
-  opacity: 0.9;
-}
-
-.table-border-toggle span {
-  display: inline-block;
-  height: 20px;
-  width: 20px;
-  transform: translateX(2px);
-  border-radius: 9999px;
-  background-color: white;
-  transition: transform 200ms ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.table-controls label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #374151;
-  margin: 0;
-  cursor: pointer;
-}
 /* Table Styles */
 .tiptap table {
   border-collapse: collapse;
@@ -381,35 +331,56 @@
   position: relative;
 }
 
+/* Border toggle: an icon button in the left page margin, outside the table, so it never covers a cell.
+   The padding bridges the gap to the table so the hover is not lost on the way to the button. */
 .table-wrap .table-controls {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 0;
+  left: -40px;
   z-index: 30;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-
-  margin: 0;              /* không chiếm layout */
-  padding: 8px 10px;
-
-  background: rgba(248, 249, 250, 0.95);
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.10);
-}
-
-/* Optional: chỉ hiện khi hover/focus trong table */
-.table-wrap .table-controls {
+  padding-right: 8px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 120ms ease;
 }
+
 .table-wrap:hover .table-controls,
 .table-wrap:focus-within .table-controls {
   opacity: 1;
   pointer-events: auto;
+}
+
+.table-wrap .table-border-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+  color: #4b5563;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.table-wrap .table-border-toggle:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.table-wrap .table-border-toggle:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 1px;
+}
+
+.table-wrap .table-border-toggle .icon-off,
+.table-wrap .table-border-toggle.is-hidden .icon-on {
+  display: none;
+}
+
+.table-wrap .table-border-toggle.is-hidden .icon-off {
+  display: flex;
 }
 .collaboration-caret {
   position: absolute;
@@ -465,14 +436,6 @@
   border-top-color: rgba(0,0,0,0.85);
 }
 
-/* label gọn lại */
-.table-wrap .table-controls label {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 500;
-  color: #374151;
-  user-select: none;
-}
 .animate-in {
   animation-duration: 200ms;
 }
