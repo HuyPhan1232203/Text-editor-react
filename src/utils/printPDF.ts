@@ -19,6 +19,7 @@ const EDITOR_ONLY_SELECTORS = [
   '.page-break-spacer',
   '[data-table-control]',
   '[data-resize-handle]',
+  '.tiptap-image-upload',
   '.ProseMirror-gapcursor',
   '.ProseMirror-separator',
   '.ProseMirror-trailingBreak'

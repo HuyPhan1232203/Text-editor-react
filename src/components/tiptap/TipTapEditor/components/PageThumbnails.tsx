@@ -13,7 +13,7 @@ const THUMBNAIL_WIDTH = 120
 // Wait for typing to pause before redrawing thumbnails
 const REFRESH_DELAY_MS = 300
 // Editor-only elements that must not show up in thumbnails
-const EDITOR_ONLY_SELECTORS = '[data-resize-handle], [data-table-control], .collaboration-caret, .ProseMirror-gapcursor'
+const EDITOR_ONLY_SELECTORS = '[data-resize-handle], [data-table-control], .tiptap-image-upload, .collaboration-caret, .ProseMirror-gapcursor'
 
 // Safari has no requestIdleCallback
 const scheduleIdle = (callback: () => void) =>

@@ -1,4 +1,5 @@
 import { File } from 'lucide-react'
+import { useRef, useState } from 'react'
 import { exportToPdf } from '@/utils/exportPDF'
 import { printToPdf } from '@/utils/printPDF'
 import { PDF_API_URL } from '@/config/constants'
@@ -22,7 +23,23 @@ export function ExportButton ({
   rightMargin,
   orientation
 }: ExportButtonProps) {
+  // Ignore repeated clicks (e.g. a double click) while an export is running
+  const exportingRef = useRef(false)
+  const [exporting, setExporting] = useState(false)
+
   const handleExportPDF = async () => {
+    if (exportingRef.current) return
+    exportingRef.current = true
+    setExporting(true)
+    try {
+      await runExport()
+    } finally {
+      exportingRef.current = false
+      setExporting(false)
+    }
+  }
+
+  const runExport = async () => {
     // No backend configured: let the browser print the document to PDF
     if (!PDF_API_URL) {
       try {
@@ -58,7 +75,7 @@ export function ExportButton ({
   }
 
   return (
-    <Button onClick={handleExportPDF} variant='ghost' title='Xuất file PDF'>
+    <Button onClick={handleExportPDF} disabled={exporting} variant='ghost' title='Xuất file PDF'>
       <File className='w-4 h-4 mr-2' />
       Xuất PDF
     </Button>
