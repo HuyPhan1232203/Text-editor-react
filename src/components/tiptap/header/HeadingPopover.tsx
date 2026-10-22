@@ -55,6 +55,7 @@ export function HeadingPopover ({ editor }: HeadingPopoverProps) {
               variant='ghost'
               size='sm'
               className='h-8 px-2 gap-1 text-sm font-medium'
+              aria-label={`Kiểu văn bản: ${currentHeading.label}`}
             >
               <CurrentIcon className='w-4 h-4' />
               <span className='hidden sm:inline'>{currentHeading.label}</span>

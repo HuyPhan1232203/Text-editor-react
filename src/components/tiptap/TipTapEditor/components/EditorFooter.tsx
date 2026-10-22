@@ -30,7 +30,7 @@ export const EditorFooter = memo(function EditorFooter ({
           href={REPO_URL}
           target='_blank'
           rel='noreferrer'
-          className='text-xs text-gray-400 hover:text-gray-600'
+          className='text-xs text-gray-600 hover:text-gray-900'
         >
           {COPYRIGHT}
         </a>

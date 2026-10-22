@@ -15,10 +15,10 @@ export default function TiptapEditor () {
     <EditorContext.Provider value={{ editor }}>
       <div className='flex flex-col h-screen bg-gray-200'>
         <EditorToolbar editor={editor} pageSettings={pageSettings} />
-        <div className='flex flex-1 min-h-0'>
+        <main className='flex flex-1 min-h-0'>
           <PageThumbnails editor={editor} pageSettings={pageSettings} />
           <EditorContentArea editor={editor} pageSettings={pageSettings} />
-        </div>
+        </main>
         <EditorFooter
           pageSettings={pageSettings}
           onSettingsChange={setPageSettings}
