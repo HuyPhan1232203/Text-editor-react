@@ -7,8 +7,9 @@ import { Plugin, PluginKey } from '@tiptap/pm/state'
  * with no image fallback from a CDN and no non-editable emoji node.
  *
  * - typing `:shortcode:` (e.g. `:heart:`) inserts the emoji character
- * - emoji nodes from older documents or pasted TipTap HTML
- *   (<span data-type="emoji" data-name="...">) are turned into characters
+ * - pasted TipTap emoji HTML (<span data-type="emoji" data-name="...">) becomes characters
+ *   before parsing, so no extra transaction ends up in the undo history
+ * - emoji nodes already in older documents still load, and render as characters
  */
 
 let shortcodeMap: Map<string, string> | null = null
@@ -67,26 +68,19 @@ export const EmojiText = Node.create({
     return [
       new Plugin({
         key: new PluginKey('emojiToText'),
-        // Replace any legacy emoji node with its character
-        appendTransaction: (transactions, _oldState, state) => {
-          if (!transactions.some((tr) => tr.docChanged)) return null
+        props: {
+          transformPastedHTML: (html) => {
+            if (!html.includes('data-type="emoji"')) return html
 
-          const emojis: { pos: number, size: number, text: string }[] = []
+            const doc = new DOMParser().parseFromString(html, 'text/html')
 
-          state.doc.descendants((node, pos) => {
-            if (node.type.name === this.name) {
-              emojis.push({ pos, size: node.nodeSize, text: emojiForShortcode(node.attrs.name) ?? `:${node.attrs.name}:` })
-            }
-          })
-          if (emojis.length === 0) return null
+            doc.querySelectorAll('span[data-type="emoji"]').forEach((span) => {
+              const name = span.getAttribute('data-name') ?? ''
 
-          const tr = state.tr
-
-          // From the end, so earlier positions stay valid
-          emojis.reverse().forEach(({ pos, size, text }) => {
-            tr.replaceWith(pos, pos + size, state.schema.text(text, state.doc.resolve(pos).marks()))
-          })
-          return tr.setMeta('addToHistory', false)
+              span.replaceWith(doc.createTextNode(emojiForShortcode(name) ?? span.textContent ?? `:${name}:`))
+            })
+            return doc.body.innerHTML
+          }
         }
       })
     ]
