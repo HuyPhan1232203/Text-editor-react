@@ -97,6 +97,12 @@ Spacers are editor-only. When printing, remove `.page-break-spacer` elements and
 - A single paragraph taller than the remaining space moves to the next page as a whole; one paragraph is never split across two pages.
 - A table row (or rowspan group) taller than a page overflows the gap.
 
+## Support & custom work
+
+- ⭐ **Star the repo** if it's useful — it helps others find it
+- 🐛 **Found a bug or a document that breaks the layout?** [Open an issue](https://github.com/HuyPhan1232203/Text-editor-react/issues)
+- 💼 **Need a custom document editor?** I build and integrate TipTap / ProseMirror editors: pagination, PDF / DOCX export, Google Docs import, collaboration. Reach me at [huyphan1232203@gmail.com](mailto:huyphan1232203@gmail.com)
+
 ## License
 
 [MIT](LICENSE) © Phan Nhật Huy
