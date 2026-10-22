@@ -13,7 +13,7 @@ import {
   TextStyle
 } from '@tiptap/extension-text-style'
 import Collaboration from '@tiptap/extension-collaboration'
-import CollaborationCaret from '@tiptap/extension-collaboration-caret'
+import { defaultSelectionBuilder, yCursorPlugin, yCursorPluginKey } from '@tiptap/y-tiptap'
 import { FileHandler } from '@tiptap/extension-file-handler'
 import { handleImageUpload, insertImageFiles, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
@@ -30,6 +30,28 @@ import * as Y from 'yjs'
 
 // Collaboration is opt-in: open the app with ?room=<name> to share a document over WebRTC
 const ROOM_NAME = new URLSearchParams(window.location.search).get('room')
+
+// Live cursor of another collaborator
+function renderCaret (user: { color?: string, name?: string }): HTMLElement {
+  const root = document.createElement('div')
+
+  root.className = 'collaboration-caret'
+  root.style.color = user.color ?? '#f97316'
+
+  const line = document.createElement('div')
+
+  line.className = 'caret-line'
+
+  const tooltip = document.createElement('div')
+
+  tooltip.className = 'caret-tooltip'
+  tooltip.textContent = user.name ?? 'User'
+
+  root.appendChild(line)
+  root.appendChild(tooltip)
+
+  return root
+}
 
 export function useEditorConfig () {
   const ydoc = useMemo(() => new Y.Doc(), [])
@@ -72,33 +94,6 @@ export function useEditorConfig () {
       Collaboration.configure({
         document: ydoc
       }),
-      ...(provider
-        ? [
-          CollaborationCaret.configure({
-            provider,
-            render: (user: { color: string, name?: string }) => {
-              const root = document.createElement('div')
-
-              root.className = 'collaboration-caret'
-              root.style.color = user.color ?? '#f97316'
-
-              const line = document.createElement('div')
-
-              line.className = 'caret-line'
-
-              const tooltip = document.createElement('div')
-
-              tooltip.className = 'caret-tooltip'
-              tooltip.textContent = user.name ?? 'User'
-
-              root.appendChild(line)
-              root.appendChild(tooltip)
-
-              return root
-            }
-          })
-        ]
-        : []),
       TextStyle,
       StarterKit.configure({
         undoRedo: false,
@@ -163,14 +158,11 @@ export function useEditorConfig () {
         upload: handleImageUpload
       })
     ],
-    [ydoc, provider]
+    [ydoc]
   )
 
-  // In a room, the editor is recreated once the provider arrives (to add live cursors);
-  // it stays read-only until then so no edit or undo history is lost in the swap
-  return useEditor({
+  const editor = useEditor({
     extensions,
-    editable: !ROOM_NAME || provider !== null,
     autofocus: 'start',
     content: '',
     editorProps: {
@@ -178,5 +170,23 @@ export function useEditorConfig () {
         class: 'tiptap-editor-content focus:outline-none'
       }
     }
-  }, [provider])
+  })
+
+  // When the room provider arrives, add live cursors to the existing editor instead of
+  // recreating it, so the document and the undo history stay intact
+  useEffect(() => {
+    if (!editor || !provider) return
+
+    provider.awareness.setLocalStateField('user', { name: 'User', color: '#f97316' })
+    editor.registerPlugin(yCursorPlugin(provider.awareness, {
+      cursorBuilder: renderCaret,
+      selectionBuilder: defaultSelectionBuilder
+    }))
+
+    return () => {
+      if (!editor.isDestroyed) editor.unregisterPlugin(yCursorPluginKey)
+    }
+  }, [editor, provider])
+
+  return editor
 }

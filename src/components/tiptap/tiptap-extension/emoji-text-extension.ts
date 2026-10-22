@@ -1,4 +1,5 @@
 import { InputRule, Node } from '@tiptap/core'
+import type { Editor } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 /**
@@ -32,6 +33,21 @@ function loadShortcodes (): Promise<void> {
 
 function emojiForShortcode (shortcode: string): string | undefined {
   return shortcodeMap?.get(shortcode)
+}
+
+// Converts a shortcode typed before the emoji data arrived, if it is still right before the cursor
+function convertShortcodeBeforeCursor (editor: Editor, shortcode: string) {
+  const emoji = emojiForShortcode(shortcode)
+
+  if (!emoji || editor.isDestroyed) return
+
+  const { $from, empty } = editor.state.selection
+  const token = `:${shortcode}:`
+
+  if (!empty || $from.parentOffset < token.length) return
+  if ($from.parent.textBetween($from.parentOffset - token.length, $from.parentOffset) !== token) return
+
+  editor.chain().insertContentAt({ from: $from.pos - token.length, to: $from.pos }, emoji).run()
 }
 
 export const EmojiText = Node.create({
@@ -81,7 +97,15 @@ export const EmojiText = Node.create({
         handler: ({ range, match, chain }) => {
           const emoji = emojiForShortcode(match[1])
 
-          if (!emoji) return null
+          if (!emoji) {
+            // Data still loading: convert once it arrives (after the closing ':' is inserted)
+            if (!shortcodeMap) {
+              const { editor } = this
+
+              loadShortcodes().then(() => convertShortcodeBeforeCursor(editor, match[1]))
+            }
+            return null
+          }
           chain().insertContentAt(range, emoji).run()
         }
       })
