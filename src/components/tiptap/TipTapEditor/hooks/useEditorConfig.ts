@@ -20,62 +20,65 @@ import { handleImageUpload, MAX_FILE_SIZE } from '@/lib/tiptap-utils'
 import { ImageUploadNode } from '@/components/tiptap/tiptap-node/image-upload-node'
 import { Mathematics } from '@tiptap/extension-mathematics'
 import { WebrtcProvider } from 'y-webrtc'
+import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
+
+// Collaboration is opt-in: open the app with ?room=<name> to share a document over WebRTC
+const ROOM_NAME = new URLSearchParams(window.location.search).get('room')
 
 export function useEditorConfig () {
   const ydoc = useMemo(() => new Y.Doc(), [])
 
-  const provider = useMemo(() => {
-    const p = new WebrtcProvider('ccccc', ydoc)
+  const provider = useMemo(
+    () => (ROOM_NAME ? new WebrtcProvider(ROOM_NAME, ydoc) : null),
+    [ydoc]
+  )
 
-    // Production: Event listeners for monitoring (optional)
-    // if (process.env.NODE_ENV === 'development') {
-    //   p.on('peers', (event) => {
-    //     console.log('👥 Connected peers:', event.webrtcPeers.length)
-    //   })
-
-    //   p.on('synced', (event) => {
-    //     console.log('✅ Synced:', event.synced)
-    //   })
-    // }
-
-    return p
-  }, [ydoc])
+  // Autosave: keep the document in IndexedDB so a reload does not lose it
+  const persistence = useMemo(
+    () => new IndexeddbPersistence(ROOM_NAME ? `room:${ROOM_NAME}` : 'document', ydoc),
+    [ydoc]
+  )
 
   useEffect(() => {
     return () => {
       provider?.destroy()
+      persistence.destroy()
       ydoc?.destroy()
     }
-  }, [provider, ydoc])
+  }, [provider, persistence, ydoc])
   const extensions = useMemo(
     () => [
       Collaboration.configure({
         document: ydoc
       }),
-      CollaborationCaret.configure({
-        provider,
-        render: (user: { color: string, name?: string }) => {
-          const root = document.createElement('div')
+      ...(provider
+        ? [
+          CollaborationCaret.configure({
+            provider,
+            render: (user: { color: string, name?: string }) => {
+              const root = document.createElement('div')
 
-          root.className = 'collaboration-caret'
-          root.style.color = user.color ?? '#f97316'
+              root.className = 'collaboration-caret'
+              root.style.color = user.color ?? '#f97316'
 
-          const line = document.createElement('div')
+              const line = document.createElement('div')
 
-          line.className = 'caret-line'
+              line.className = 'caret-line'
 
-          const tooltip = document.createElement('div')
+              const tooltip = document.createElement('div')
 
-          tooltip.className = 'caret-tooltip'
-          tooltip.textContent = user.name ?? 'User'
+              tooltip.className = 'caret-tooltip'
+              tooltip.textContent = user.name ?? 'User'
 
-          root.appendChild(line)
-          root.appendChild(tooltip)
+              root.appendChild(line)
+              root.appendChild(tooltip)
 
-          return root
-        }
-      }),
+              return root
+            }
+          })
+        ]
+        : []),
       TextStyle,
       StarterKit.configure({
         undoRedo: false

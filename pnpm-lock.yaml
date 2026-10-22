@@ -152,6 +152,9 @@ importers:
       vite-tsconfig-paths:
         specifier: ^6.0.1
         version: 6.0.1(rolldown-vite@7.2.5(@types/node@24.10.4)(jiti@2.6.1)(sass-embedded@1.96.0)(sass@1.96.0))(typescript@5.9.3)
+      y-indexeddb:
+        specifier: ^9.0.12
+        version: 9.0.12(yjs@13.6.28)
       y-webrtc:
         specifier: ^10.3.0
         version: 10.3.0(yjs@13.6.28)
@@ -3204,6 +3207,12 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+
+  y-indexeddb@9.0.12:
+    resolution: {integrity: sha512-9oCFRSPPzBK7/w5vOkJBaVCQZKHXB/v6SIT+WYhnJxlEC61juqG0hBrAf+y3gmSMLFLwICNH9nQ53uscuse6Hg==}
+    engines: {node: '>=16.0.0', npm: '>=8.0.0'}
+    peerDependencies:
+      yjs: ^13.0.0
 
   y-protocols@1.0.7:
     resolution: {integrity: sha512-YSVsLoXxO67J6eE/nV4AtFtT3QEotZf5sK5BHxFBXso7VDUT3Tx07IfA6hsu5Q5OmBdMkQVmFZ9QOA7fikWvnw==}
@@ -6419,6 +6428,11 @@ snapshots:
 
   ws@8.18.3:
     optional: true
+
+  y-indexeddb@9.0.12(yjs@13.6.28):
+    dependencies:
+      lib0: 0.2.115
+      yjs: 13.6.28
 
   y-protocols@1.0.7(yjs@13.6.28):
     dependencies:
