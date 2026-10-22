@@ -81,7 +81,9 @@ export function useEditorConfig () {
         : []),
       TextStyle,
       StarterKit.configure({
-        undoRedo: false
+        undoRedo: false,
+        // Link is configured separately below
+        link: false
       }),
       Mathematics.configure({
         katexOptions: {

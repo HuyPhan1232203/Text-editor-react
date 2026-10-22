@@ -26,15 +26,17 @@ export const EditorContentArea = memo(function EditorContentArea ({
     <div className='flex-1 overflow-auto p-8'>
       <div onClick={handleContainerClick} className='relative mx-auto w-fit'>
         <TextBubbleToolbar editor={editor} />
-        <div className='document-page bg-white' style={{
-          width: pageSettings.orientation === 'portrait' ? '210mm' : '297mm',
-          minHeight: pageSettings.orientation === 'portrait' ? '297mm' : '210mm',
-          paddingTop: `${pageSettings.topMargin}mm`,
-          paddingBottom: `${pageSettings.bottomMargin}mm`,
-          paddingLeft: `${pageSettings.leftMargin}mm`,
-          paddingRight: `${pageSettings.rightMargin}mm`,
-          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)'
-        }}>
+        <div
+          className='document-page bg-white' style={{
+            width: pageSettings.orientation === 'portrait' ? '210mm' : '297mm',
+            minHeight: pageSettings.orientation === 'portrait' ? '297mm' : '210mm',
+            paddingTop: `${pageSettings.topMargin}mm`,
+            paddingBottom: `${pageSettings.bottomMargin}mm`,
+            paddingLeft: `${pageSettings.leftMargin}mm`,
+            paddingRight: `${pageSettings.rightMargin}mm`,
+            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)'
+          }}
+        >
           <EditorContent editor={editor} />
         </div>
         <TableCellToolbar editor={editor} />
