@@ -1,5 +1,6 @@
-// const BASE_URL = import.meta.env.VITE_API_URL
+// Base URL of the PDF export backend (https://github.com/HuyPhan1232203/PDF-export-Puppeteer)
+const PDF_API_URL = import.meta.env.VITE_PDF_API_URL ?? 'http://localhost:3000'
 
 export const API_ENDPOINTS = {
-  GENERATE_PDF: `http://localhost:3000/pdf/generate`
+  GENERATE_PDF: `${PDF_API_URL}/pdf/generate`
 }
