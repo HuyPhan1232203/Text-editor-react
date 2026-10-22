@@ -1,6 +1,7 @@
 // utils/printPDF.ts - Export PDF without a backend, using the browser's print dialog
 import { Editor } from '@tiptap/react'
 import { inlineStyles } from './inlineStyles'
+import { repeatTableHeaders } from './tableHeaders'
 
 interface PrintPdfOptions {
   title?: string
@@ -50,6 +51,7 @@ export async function printToPdf (editor: Editor, options: PrintPdfOptions): Pro
     if (next) next.style.breakBefore = 'page'
   })
   content.querySelectorAll(EDITOR_ONLY_SELECTORS).forEach((node) => node.remove())
+  repeatTableHeaders(content)
 
   // App styles (fonts, KaTeX, editor classes) first, so the print styles from inlineStyles win
   const appStyles = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))

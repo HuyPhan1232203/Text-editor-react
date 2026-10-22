@@ -13,7 +13,8 @@ import { TableMap } from '@tiptap/pm/tables'
  * fills the rest of the page, the bottom/top margins and a gray gap, so the content
  * looks like separate A4 sheets. The document (and exported HTML) is unchanged.
  *
- * Tables are split between rows: the spacer is then a table row.
+ * Tables are split between rows: the spacer is then a table row. When the table starts
+ * with a header row, a copy of it is shown at the top of each following page.
  * Limitation: other blocks (paragraphs, images...) are never split across pages;
  * a block taller than a page simply overflows the gap.
  */
@@ -32,7 +33,7 @@ interface PageBreak {
   // Offset of the gray gap from the top of the spacer
   gapTop: number
   // Break between two table rows: the spacer is a <tr>, with its own distance to the page edges
-  row?: { bleedLeft: number, bleedRight: number, columns: number }
+  row?: { bleedLeft: number, bleedRight: number, columns: number, header?: string }
 }
 
 interface TableRows {
@@ -44,6 +45,8 @@ interface TableRows {
   bleedLeft: number
   bleedRight: number
   columns: number
+  // Copy of the header row repeated after each break inside the table
+  header?: { html: string, height: number }
 }
 
 interface PaginationState {
@@ -100,6 +103,15 @@ function createSpacer (pageBreak: PageBreak, state: PaginationState): HTMLElemen
   }
   holder.style.height = `${pageBreak.height}px`
 
+  if (pageBreak.row?.header) {
+    // Repeated header row, at the bottom of the spacer = the top of the next page
+    const header = document.createElement('div')
+
+    header.className = 'page-break-header'
+    header.innerHTML = pageBreak.row.header
+    holder.appendChild(header)
+  }
+
   const gap = document.createElement('div')
 
   gap.className = 'page-break-gap'
@@ -125,6 +137,8 @@ function measureTableRows (
   let firstRect: DOMRect | null = null
   let lastRect: DOMRect | null = null
   let rowIndex = 0
+  let firstGroupRows = 0
+  let firstRowDom: HTMLElement | null = null
 
   table.forEach((_row, rowOffset) => {
     const pos = offset + 1 + rowOffset
@@ -140,15 +154,25 @@ function measureTableRows (
       .some((cell, column) => cell === map.map[(index - 1) * map.width + column])
 
     firstRect ??= rect
+    firstRowDom ??= dom
     lastRect = rect
     if (joined && rows.length > 0) rows[rows.length - 1].height += rect.height
     else rows.push({ pos, height: rect.height })
+    if (rows.length === 1) firstGroupRows++
   })
 
   if (!firstRect || !lastRect || rows.length < 2) return null
 
   const first = firstRect as DOMRect
   const last = lastRect as DOMRect
+  // Repeat the first row only if it is a header row on its own (no rowspan into the next rows)
+  const headerRow = table.firstChild
+  const isHeader = firstGroupRows === 1 && headerRow !== null && headerRow.childCount > 0
+    && Array.from({ length: headerRow.childCount }, (_, i) => headerRow.child(i))
+      .every((cell) => cell.type.spec.tableRole === 'header_cell')
+  const header = isHeader && firstRowDom
+    ? { html: copyHeaderRow(firstRowDom, table.attrs.hideBorders === true), height: rows[0].height }
+    : undefined
 
   return {
     firstOffset: first.top - blockRect.top,
@@ -156,7 +180,8 @@ function measureTableRows (
     rows,
     bleedLeft: Math.round(first.left - pageRect.left),
     bleedRight: Math.round(pageRect.right - first.right),
-    columns: map.width
+    columns: map.width,
+    header
   }
 }
 
@@ -169,17 +194,39 @@ function buildDecorations (doc: Parameters<typeof DecorationSet.create>[0], stat
       Decoration.widget(pageBreak.pos, () => createSpacer(pageBreak, full), {
         side: -1,
         ignoreSelection: true,
-        key: `page-break-${pageBreak.row ? `row-${pageBreak.row.bleedLeft}-${pageBreak.row.bleedRight}-${pageBreak.row.columns}` : 'block'}-${pageBreak.height}-${pageBreak.gapTop}-${state.bleedLeft}-${state.bleedRight}`
+        key: `page-break-${pageBreak.row ? `row-${pageBreak.row.bleedLeft}-${pageBreak.row.bleedRight}-${pageBreak.row.columns}-${hash(pageBreak.row.header ?? '')}` : 'block'}-${pageBreak.height}-${pageBreak.gapTop}-${state.bleedLeft}-${state.bleedRight}`
       })
     )
   )
+}
+
+// Short hash so widget keys change when the repeated header content changes
+function hash (text: string): string {
+  let value = 0
+
+  for (let i = 0; i < text.length; i++) value = (value * 31 + text.charCodeAt(i)) | 0
+  return (value >>> 0).toString(36)
+}
+
+// Static copy of a header row, with the measured cell widths so the columns line up
+function copyHeaderRow (row: HTMLElement, hideBorders: boolean): string {
+  const clone = row.cloneNode(true) as HTMLElement
+  const cells = Array.from(row.children)
+
+  Array.from(clone.children).forEach((cell, index) => {
+    (cell as HTMLElement).style.width = `${cells[index].getBoundingClientRect().width}px`
+    cell.classList.remove('selectedCell')
+  })
+  clone.querySelectorAll('.column-resize-handle').forEach((node) => node.remove())
+
+  return `<table class="${hideBorders ? 'no-border' : ''}"><tbody>${clone.outerHTML}</tbody></table>`
 }
 
 function sameBreaks (a: PageBreak[], b: PageBreak[]): boolean {
   return a.length === b.length
     && a.every((item, i) => item.pos === b[i].pos && item.height === b[i].height && item.gapTop === b[i].gapTop
       && item.row?.bleedLeft === b[i].row?.bleedLeft && item.row?.bleedRight === b[i].row?.bleedRight
-      && item.row?.columns === b[i].row?.columns)
+      && item.row?.columns === b[i].row?.columns && item.row?.header === b[i].row?.header)
 }
 
 function measure (view: EditorView): PaginationMeta | null {
@@ -256,13 +303,19 @@ function measure (view: EditorView): PaginationMeta | null {
 
         if (index > 0 && y + row.height > pageEnd && y > rowPageStart + 1) {
           const nextContentTop = pageEnd + layout.marginBottom + layout.gap + layout.marginTop
-          const spacerHeight = Math.round(nextContentTop - y)
+          // The repeated header takes the first lines of the new page
+          const spacerHeight = Math.round(nextContentTop - y + (table.header?.height ?? 0))
 
           breaks.push({
             pos: row.pos,
             height: spacerHeight,
             gapTop: Math.round(pageEnd + layout.marginBottom - y),
-            row: { bleedLeft: table.bleedLeft, bleedRight: table.bleedRight, columns: table.columns }
+            row: {
+              bleedLeft: table.bleedLeft,
+              bleedRight: table.bleedRight,
+              columns: table.columns,
+              header: table.header?.html
+            }
           })
           y += spacerHeight
           pageEnd += pitch

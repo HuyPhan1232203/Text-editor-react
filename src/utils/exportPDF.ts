@@ -1,6 +1,7 @@
 // utils/exportPdf.ts - Optimized
 import { Editor } from '@tiptap/react'
 import { inlineStyles } from './inlineStyles'
+import { repeatTableHeaders } from './tableHeaders'
 import { API_ENDPOINTS } from '@/config/constants'
 
 type PageFormat = 'A4' | 'A3' | 'Letter'
@@ -46,7 +47,11 @@ export async function exportToPdf (
 
   try {
     // Hidden table borders are a table attribute, rendered as the no-border class
-    const htmlContent = editor.getHTML()
+    const doc = new DOMParser().parseFromString(editor.getHTML(), 'text/html')
+
+    repeatTableHeaders(doc.body)
+
+    const htmlContent = doc.body.innerHTML
 
     const styledHtml = inlineStyles(htmlContent)
 

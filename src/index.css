@@ -656,3 +656,16 @@
   color: #80868b;
   text-decoration: line-through;
 }
+
+/* Header row repeated at the top of each page a table continues on */
+.tiptap .page-break-header {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.tiptap .page-break-header table {
+  margin: 0;
+}
