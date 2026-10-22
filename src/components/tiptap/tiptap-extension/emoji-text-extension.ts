@@ -77,7 +77,8 @@ export const EmojiText = Node.create({
             doc.querySelectorAll('span[data-type="emoji"]').forEach((span) => {
               const name = span.getAttribute('data-name') ?? ''
 
-              span.replaceWith(doc.createTextNode(emojiForShortcode(name) ?? span.textContent ?? `:${name}:`))
+              // Image-only emojis (e.g. :octocat:) have no character and empty text: keep the shortcode
+              span.replaceWith(doc.createTextNode(emojiForShortcode(name) || span.textContent?.trim() || `:${name}:`))
             })
             return doc.body.innerHTML
           }
