@@ -35,7 +35,7 @@ const getSelectionInfo = (editor: Editor): SelectionInfo => {
 }
 
 // Approximate size of the context menu, to keep it inside the viewport
-const MENU_WIDTH = 440
+const MENU_WIDTH = 600
 const MENU_HEIGHT = 56
 
 // The menu is position: fixed, so it uses viewport coordinates

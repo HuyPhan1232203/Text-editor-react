@@ -3,6 +3,7 @@ import type { TableCellToolbarProps } from './types'
 import { useContextMenuHandlers } from './hooks/use-context-menu'
 import { Toolbar, ToolbarSeparator } from '../tiptap-ui-primitive/toolbar'
 import {
+  CellStyleActions,
   CellTypeActions,
   ColumnActions,
   DeleteTableAction,
@@ -142,6 +143,12 @@ export function TableCellToolbar ({ editor }: TableCellToolbarProps) {
             />
             <ToolbarSeparator />
 
+            <CellStyleActions
+              editor={editor}
+              executeWithSelection={(cmd) => cmd()}
+            />
+            <ToolbarSeparator />
+
             <DeleteTableAction
               editor={editor}
               executeWithSelection={(cmd) => cmd()}
@@ -184,6 +191,12 @@ export function TableCellToolbar ({ editor }: TableCellToolbarProps) {
             <ToolbarSeparator />
 
             <CellTypeActions
+              editor={editor}
+              executeWithSelection={executeWithSelection}
+            />
+            <ToolbarSeparator />
+
+            <CellStyleActions
               editor={editor}
               executeWithSelection={executeWithSelection}
             />

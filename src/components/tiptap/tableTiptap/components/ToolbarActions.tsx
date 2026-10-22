@@ -1,12 +1,20 @@
 import { ToolbarGroup } from '@/components/tiptap/tiptap-ui-primitive/toolbar'
 import type { Editor } from '@tiptap/core'
 import { TooltipButton } from './TooltipButton'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Button } from '@/components/ui/button'
+import type { CellVerticalAlign } from '@/components/tiptap/tiptap-extension/table-cell-style-extension'
 import {
+  AlignVerticalJustifyCenter,
+  AlignVerticalJustifyEnd,
+  AlignVerticalJustifyStart,
+  Ban,
   BetweenHorizontalEnd,
   BetweenHorizontalStart,
   BetweenVerticalEnd,
   BetweenVerticalStart,
   Columns3,
+  PaintBucket,
   PanelTop,
   Rows3,
   TableCellsMerge,
@@ -104,6 +112,76 @@ const CellTypeActions = ({ editor, executeWithSelection }: ToolbarActionProps) =
   )
 }
 
+// Light cell backgrounds, similar to the Google Docs palette
+const CELL_COLORS = [
+  '#f3f4f6', '#e5e7eb', '#fee2e2', '#ffedd5', '#fef9c3',
+  '#dcfce7', '#cffafe', '#dbeafe', '#ede9fe', '#fce7f3'
+]
+
+const VERTICAL_ALIGNS: { value: CellVerticalAlign, icon: typeof PaintBucket, tooltip: string }[] = [
+  { value: 'top', icon: AlignVerticalJustifyStart, tooltip: 'Căn trên' },
+  { value: 'middle', icon: AlignVerticalJustifyCenter, tooltip: 'Căn giữa theo chiều dọc' },
+  { value: 'bottom', icon: AlignVerticalJustifyEnd, tooltip: 'Căn dưới' }
+]
+
+const CellStyleActions = ({ editor, executeWithSelection }: ToolbarActionProps) => {
+  const setCell = (name: 'backgroundColor' | 'verticalAlign', value: string | null) =>
+    executeWithSelection(() => editor.chain().focus().setCellAttribute(name, value).run())
+
+  return (
+    <ToolbarGroup>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant='ghost'
+            size='sm'
+            aria-label='Màu nền ô'
+            title='Màu nền ô'
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            <PaintBucket className='w-4 h-4' />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          className='w-auto p-2'
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          <div className='grid grid-cols-5 gap-1.5'>
+            {CELL_COLORS.map((color) => (
+              <button
+                key={color}
+                type='button'
+                aria-label={`Nền ${color}`}
+                title={color}
+                className='w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform'
+                style={{ backgroundColor: color }}
+                onClick={() => setCell('backgroundColor', color)}
+              />
+            ))}
+          </div>
+          <button
+            type='button'
+            className='mt-2 flex w-full items-center justify-center gap-1.5 rounded px-2 py-1 text-xs text-gray-600 hover:bg-gray-100'
+            onClick={() => setCell('backgroundColor', null)}
+          >
+            <Ban className='w-3.5 h-3.5' /> Không màu
+          </button>
+        </PopoverContent>
+      </Popover>
+
+      {VERTICAL_ALIGNS.map(({ value, icon, tooltip }) => (
+        <TooltipButton
+          key={value}
+          icon={icon}
+          tooltip={tooltip}
+          onClick={() => setCell('verticalAlign', value)}
+        />
+      ))}
+    </ToolbarGroup>
+  )
+}
+
 const DeleteTableAction = ({ editor, executeWithSelection }: ToolbarActionProps) => {
   return (
     <ToolbarGroup>
@@ -122,5 +200,6 @@ export {
   RowActions,
   ColumnActions,
   CellTypeActions,
+  CellStyleActions,
   DeleteTableAction
 }

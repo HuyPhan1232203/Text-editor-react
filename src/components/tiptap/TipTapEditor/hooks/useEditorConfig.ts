@@ -23,6 +23,7 @@ import { Pagination } from '@/components/tiptap/tiptap-extension/pagination-exte
 import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
 import { ChecklistExtensions } from '@/components/tiptap/tiptap-extension/checklist-extension'
 import { BorderedTable } from '@/components/tiptap/tiptap-extension/table-border-extension'
+import { StyledTableCell, StyledTableHeader } from '@/components/tiptap/tiptap-extension/table-cell-style-extension'
 import { WebrtcProvider } from 'y-webrtc'
 import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
@@ -122,11 +123,14 @@ export function useEditorConfig () {
         resizable: true,
         HTMLAttributes: { class: 'tiptap-table' }
       }),
+      // Cells with background color and vertical alignment
+      StyledTableCell.configure({ HTMLAttributes: { class: 'tiptap-table-cell' } }),
+      StyledTableHeader.configure({ HTMLAttributes: { class: 'tiptap-table-header' } }),
       TableKit.configure({
         table: false,
-        tableRow: { HTMLAttributes: { class: 'tiptap-table-row' } },
-        tableCell: { HTMLAttributes: { class: 'tiptap-table-cell' } },
-        tableHeader: { HTMLAttributes: { class: 'tiptap-table-header' } }
+        tableCell: false,
+        tableHeader: false,
+        tableRow: { HTMLAttributes: { class: 'tiptap-table-row' } }
       }),
       FontFamily.configure({ types: ['textStyle'] }),
       FontSize.configure({ types: ['textStyle'] }),
