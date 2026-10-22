@@ -44,5 +44,13 @@ export const WELCOME_CONTENT = `
   <li><p>Gõ <code>#</code> + dấu cách ở đầu dòng để tạo tiêu đề, <code>-</code> + dấu cách để tạo danh sách</p></li>
 </ul>
 
+<h2>Về tác giả</h2>
+<img src="/welcome/author.jpg" alt="Phan Nhật Huy" width="129" height="167" data-wrap="left">
+<p><strong>Phan Nhật Huy</strong></p>
+<p>Tác giả và người phát triển Text Editor React.</p>
+<p>🐙 GitHub: <a href="https://github.com/HuyPhan1232203">github.com/HuyPhan1232203</a></p>
+<p>✉️ Email: <a href="mailto:huyphan1232203@gmail.com">huyphan1232203@gmail.com</a></p>
+<p>Góp ý, báo lỗi hay muốn hợp tác — cứ liên hệ nhé!</p>
+
 <p>Mã nguồn mở (MIT) trên GitHub: <a href="${REPO_URL}">${REPO_URL.replace('https://', '')}</a> — nếu thấy hữu ích, cho dự án một ⭐ nhé!</p>
 `
