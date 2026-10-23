@@ -41,6 +41,11 @@ export function roomLink (room: string, key: string | null): string {
 export async function startSharing (ydoc: Y.Doc): Promise<void> {
   const room = randomId(10)
   const key = randomId(24)
+  const link = roomLink(room, key)
+
+  // Copy the link right away, while the click still counts as a user action (Safari needs that)
+  const copied = navigator.clipboard?.writeText(link).then(() => true, () => false) ?? Promise.resolve(false)
+
   const roomDoc = new Y.Doc()
   const persistence = new IndexeddbPersistence(`room:${room}`, roomDoc)
 
@@ -49,7 +54,26 @@ export async function startSharing (ydoc: Y.Doc): Promise<void> {
   await storeState(persistence, true)
   await persistence.destroy()
   roomDoc.destroy()
-  window.location.assign(roomLink(room, key))
+  try {
+    // The room tab opens the Share dialog again, saying whether the link is on the clipboard
+    sessionStorage.setItem(JUST_SHARED_KEY, JSON.stringify({ room, copied: await copied }))
+  } catch {}
+  window.location.assign(link)
+}
+
+const JUST_SHARED_KEY = 'text-editor-react:just-shared'
+
+/** Set once, in the tab that just created this room: whether its link was copied. */
+export function takeJustShared (): { copied: boolean } | null {
+  if (!ROOM_NAME) return null
+  try {
+    const value = JSON.parse(sessionStorage.getItem(JUST_SHARED_KEY) ?? 'null') as { room?: string, copied?: boolean } | null
+
+    sessionStorage.removeItem(JUST_SHARED_KEY)
+    return value?.room === ROOM_NAME ? { copied: Boolean(value.copied) } : null
+  } catch {
+    return null
+  }
 }
 
 export function leaveRoom (): void {
@@ -76,4 +100,65 @@ export function colorFor (name: string): string {
 
   for (const char of name) hash = (hash * 31 + char.charCodeAt(0)) | 0
   return COLORS[Math.abs(hash) % COLORS.length]
+}
+
+const USER_ID_KEY = 'text-editor-react:user-id'
+
+/** A random id per browser, so one person with several tabs shows up once. */
+export function userId (): string {
+  try {
+    let id = localStorage.getItem(USER_ID_KEY)
+
+    if (!id) {
+      id = randomId(12)
+      localStorage.setItem(USER_ID_KEY, id)
+    }
+    return id
+  } catch {
+    return randomId(12)
+  }
+}
+
+// Shared documents opened in this browser, to find them again without the link
+const RECENT_KEY = 'text-editor-react:recent-rooms'
+const MAX_RECENT = 10
+
+export interface RecentRoom {
+  room: string
+  key: string | null
+  title: string
+  openedAt: number
+}
+
+export function recentRooms (): RecentRoom[] {
+  try {
+    const list = JSON.parse(localStorage.getItem(RECENT_KEY) ?? '[]') as RecentRoom[]
+
+    return Array.isArray(list) ? list : []
+  } catch {
+    return []
+  }
+}
+
+function saveRecent (list: RecentRoom[]) {
+  try {
+    localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, MAX_RECENT)))
+  } catch {}
+}
+
+/** Records the current room (most recent first), keeping its last known title. */
+export function rememberRoom (title?: string): void {
+  if (!ROOM_NAME) return
+
+  const list = recentRooms()
+  const existing = list.find((entry) => entry.room === ROOM_NAME)
+
+  saveRecent([
+    { room: ROOM_NAME, key: ROOM_KEY, title: title ?? existing?.title ?? '', openedAt: Date.now() },
+    ...list.filter((entry) => entry.room !== ROOM_NAME)
+  ])
+}
+
+export function forgetRoom (room: string): void {
+  saveRecent(recentRooms().filter((entry) => entry.room !== room))
 }

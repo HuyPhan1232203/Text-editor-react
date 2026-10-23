@@ -759,3 +759,17 @@
 .page-chrome-input:focus::placeholder {
   color: #9ca3af;
 }
+
+.collaboration-caret.is-active .caret-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* A short pulse on the cursor you jumped to from its avatar */
+.collaboration-caret.is-highlighted {
+  animation: caret-pulse 0.6s ease-in-out 3;
+}
+
+@keyframes caret-pulse {
+  50% { box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 35%, transparent); }
+}

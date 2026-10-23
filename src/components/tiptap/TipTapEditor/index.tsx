@@ -6,21 +6,25 @@ import { EditorContentArea } from './components/EditorContentArea'
 import { EditorFooter } from './components/EditorFooter'
 import { EditorSidebar } from './components/EditorSidebar'
 import { SearchBar } from './components/SearchBar'
+import { RoomNotice } from './components/RoomNotice'
+import { useRoomStatus } from './hooks/useRoomStatus'
 import 'katex/dist/katex.min.css'
 import 'tiptap-a4-pagination/styles.css'
 
 export default function TiptapEditor () {
   const { editor, ydoc, provider } = useEditorConfig()
+  const room = useRoomStatus(provider)
   const { pageSettings, setPageSettings } = usePageSettings()
 
   return (
     <EditorContext.Provider value={{ editor }}>
       <div className='flex flex-col h-screen bg-gray-200'>
-        <EditorToolbar editor={editor} pageSettings={pageSettings} ydoc={ydoc} provider={provider} />
+        <EditorToolbar editor={editor} pageSettings={pageSettings} ydoc={ydoc} provider={provider} room={room} />
         <main className='relative flex flex-1 min-h-0'>
           <EditorSidebar editor={editor} pageSettings={pageSettings} />
           <EditorContentArea editor={editor} ydoc={ydoc} pageSettings={pageSettings} />
           <SearchBar editor={editor} />
+          <RoomNotice editor={editor} room={room} />
         </main>
         <EditorFooter
           editor={editor}

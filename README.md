@@ -78,6 +78,8 @@ https://your-host/?room=k3j9x2pq7m#key=4hd9…
 
 Send it to the people you want to write with. Everyone in the room edits the same document, sees the others' cursors with their names, and appears as an avatar next to the Share button. **Leave room** takes you back to your private document, which is kept separately.
 
+A dot next to **Share** shows whether you are connected (green), still connecting (amber) or cannot reach the others (red). A name label appears for a few seconds when someone moves their cursor, and clicking their avatar scrolls to it. The Share dialog also lists the shared documents you opened recently, so you can get back to them without the link.
+
 How it works, and what that means:
 
 - **No server stores the document.** The app has no backend: peers sync directly over WebRTC ([y-webrtc](https://github.com/yjs/y-webrtc)), and each person's browser keeps a copy in IndexedDB. Someone who opens the link while nobody else is online gets the copy from their own last visit (or an empty document on a first visit). The latest version reaches them as soon as another member is online.

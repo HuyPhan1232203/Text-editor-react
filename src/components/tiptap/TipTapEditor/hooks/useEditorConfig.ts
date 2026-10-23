@@ -40,14 +40,22 @@ import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
 import { WELCOME_CONTENT } from '../welcomeContent'
 
-import { colorFor, ROOM_KEY, ROOM_NAME, savedUserName } from '@/lib/share'
+import { caretMovedAt } from '@/lib/caret-activity'
+import { colorFor, rememberRoom, ROOM_KEY, ROOM_NAME, savedUserName, userId } from '@/lib/share'
+
+const LABEL_VISIBLE_MS = 3000
 
 // Live cursor of another collaborator. Inline elements (span), so the caret sits at the
 // text position instead of starting a new line
-function renderCaret (user: { color?: string, name?: string }): HTMLElement {
+function renderCaret (user: { color?: string, name?: string }, clientId: number): HTMLElement {
   const root = document.createElement('span')
 
   root.className = 'collaboration-caret'
+  // Lets the avatars find this cursor, and the name label flash while this person types
+  root.dataset.clientId = String(clientId)
+  // The name stays visible for a while after the cursor moved. Checked here too, since
+  // ProseMirror may recreate the cursor after the class was set on the old one
+  if ((caretMovedAt.get(clientId) ?? 0) + LABEL_VISIBLE_MS > Date.now()) root.classList.add('is-active')
   root.style.color = user.color ?? '#f97316'
 
   const tooltip = document.createElement('span')
@@ -59,6 +67,14 @@ function renderCaret (user: { color?: string, name?: string }): HTMLElement {
   root.appendChild(tooltip)
 
   return root
+}
+
+// In a room with a key, messages from people holding a different key cannot be decrypted;
+// y-webrtc then rejects with an OperationError that is expected and harmless
+if (ROOM_KEY) {
+  window.addEventListener('unhandledrejection', (event) => {
+    if (event.reason instanceof DOMException && event.reason.name === 'OperationError') event.preventDefault()
+  })
 }
 
 export function useEditorConfig () {
@@ -236,7 +252,7 @@ export function useEditorConfig () {
 
     const name = savedUserName() || t('share.anonymous')
 
-    provider.awareness.setLocalStateField('user', { name, color: colorFor(name) })
+    provider.awareness.setLocalStateField('user', { id: userId(), name, color: colorFor(name) })
     editor.registerPlugin(yCursorPlugin(provider.awareness, {
       cursorBuilder: renderCaret,
       selectionBuilder: defaultSelectionBuilder
@@ -246,6 +262,60 @@ export function useEditorConfig () {
       if (!editor.isDestroyed) editor.unregisterPlugin(yCursorPluginKey)
     }
   }, [editor, provider])
+
+  // Show a collaborator's name for a few seconds whenever their cursor moves, like Google Docs
+  useEffect(() => {
+    if (!editor || !provider) return
+
+    const { awareness } = provider
+    const timers = new Map<number, number>()
+    const onChange = ({ added, updated }: { added: number[], updated: number[] }) => {
+      for (const clientId of [...added, ...updated]) {
+        if (clientId === awareness.clientID) continue
+
+        caretMovedAt.set(clientId, Date.now())
+        // The cursor widget is redrawn after this event, so look it up on the next frame
+        requestAnimationFrame(() => {
+          const caret = editor.view.dom.querySelector(`.collaboration-caret[data-client-id="${clientId}"]`)
+
+          if (!caret) return
+          caret.classList.add('is-active')
+          window.clearTimeout(timers.get(clientId))
+          timers.set(clientId, window.setTimeout(() => {
+            editor.view.dom.querySelector(`.collaboration-caret[data-client-id="${clientId}"]`)?.classList.remove('is-active')
+          }, LABEL_VISIBLE_MS))
+        })
+      }
+    }
+
+    awareness.on('change', onChange)
+    return () => {
+      awareness.off('change', onChange)
+      timers.forEach((timer) => window.clearTimeout(timer))
+    }
+  }, [editor, provider])
+
+  // Remember this shared document, with its first line as the title, for the Share dialog
+  useEffect(() => {
+    if (!editor || !ROOM_NAME) return
+
+    let timer = 0
+    const save = () => {
+      window.clearTimeout(timer)
+      timer = window.setTimeout(() => {
+        const title = editor.state.doc.firstChild?.textContent.trim().slice(0, 80)
+
+        rememberRoom(title || undefined)
+      }, 2000)
+    }
+
+    rememberRoom()
+    editor.on('update', save)
+    return () => {
+      window.clearTimeout(timer)
+      editor.off('update', save)
+    }
+  }, [editor])
 
   return { editor, ydoc, provider }
 }
