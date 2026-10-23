@@ -1,6 +1,6 @@
 {
   "name": "tiptap-a4-pagination",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Free A4 / Letter pagination for TipTap 3: content flows across real pages, tables split between rows and repeat their header. No changes to your document or CSS.",
   "keywords": [
     "tiptap",

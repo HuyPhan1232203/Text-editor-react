@@ -28,6 +28,7 @@ import { CharacterCount, Placeholder } from '@tiptap/extensions'
 import { lazyLowlight, loadLowlight } from '@/lib/lowlight-lazy'
 import { SlashCommand } from '@/components/tiptap/tiptap-extension/slash-command-extension'
 import { SearchReplace } from '@/components/tiptap/tiptap-extension/search-replace-extension'
+import { Comment } from '@/components/tiptap/tiptap-extension/comment-extension'
 import { t } from '@/i18n'
 import { DocxDrop } from '@/utils/importDocx'
 import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
@@ -140,6 +141,7 @@ export function useEditorConfig () {
       CharacterCount,
       SlashCommand,
       SearchReplace,
+      Comment,
       Mathematics.configure({
         katexOptions: {
           throwOnError: false,

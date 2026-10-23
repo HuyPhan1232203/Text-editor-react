@@ -13,6 +13,7 @@ export const WELCOME_CONTENT = `
   <li data-type="taskItem" data-checked="true"><p>Open this page for the first time</p></li>
   <li data-type="taskItem" data-checked="false"><p>Type <code>/</code> on an empty line to insert a heading, table, code block or YouTube video</p></li>
   <li data-type="taskItem" data-checked="false"><p>Hover a paragraph and drag the <strong>⋮⋮</strong> handle on its left to move it</p></li>
+  <li data-type="taskItem" data-checked="false"><p>Select some text and press <code>Ctrl/Cmd + Alt + M</code> to leave a <strong>comment</strong> in the margin</p></li>
   <li data-type="taskItem" data-checked="false"><p><strong>Select</strong> some text to bring up the quick formatting bar</p></li>
   <li data-type="taskItem" data-checked="false"><p>Type <code>:rocket:</code> to insert an emoji, or use the 😊 button in the toolbar</p></li>
   <li data-type="taskItem" data-checked="false"><p><strong>Right-click</strong> a cell in the table below to add rows, merge cells or color them</p></li>

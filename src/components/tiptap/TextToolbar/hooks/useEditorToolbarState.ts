@@ -22,6 +22,7 @@ export function useEditorToolbarState (editor: Editor): EditorToolbarState {
       isBlockquote: ctx.editor.isActive('blockquote'),
       isInTable: ctx.editor.isActive('table'),
       isLink: ctx.editor.isActive('link'),
+      hasSelection: !ctx.editor.state.selection.empty,
       canUndo: ctx.editor.can().chain().undo().run(),
       canRedo: ctx.editor.can().chain().redo().run()
     })

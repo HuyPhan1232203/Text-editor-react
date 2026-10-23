@@ -3,6 +3,7 @@ import type { Editor } from '@tiptap/react'
 import type { PageSettings } from '../types'
 import { TextToolbar } from '@/components/tiptap/TextToolbar'
 import { memo } from 'react'
+import type { ReactNode } from 'react'
 import type * as Y from 'yjs'
 import type { WebrtcProvider } from 'y-webrtc'
 import { ShareButton } from './ShareButton'
@@ -14,6 +15,7 @@ export interface EditorToolbarProps {
   ydoc: Y.Doc
   provider: WebrtcProvider | null
   room: RoomStatus
+  zoomControl: ReactNode
 }
 
 export const EditorToolbar = memo(function EditorToolbar ({
@@ -21,7 +23,8 @@ export const EditorToolbar = memo(function EditorToolbar ({
   pageSettings,
   ydoc,
   provider,
-  room
+  room,
+  zoomControl
 }: EditorToolbarProps) {
   return (
     <div className='border-b border-gray-300 bg-white p-3 sticky top-0 z-10 shadow-sm flex items-start gap-3'>
@@ -33,6 +36,7 @@ export const EditorToolbar = memo(function EditorToolbar ({
           leftMargin={mmToPx(pageSettings.leftMargin)}
           rightMargin={mmToPx(pageSettings.rightMargin)}
           orientation={pageSettings.orientation}
+          zoomControl={zoomControl}
         />
       </div>
       <ShareButton ydoc={ydoc} provider={provider} room={room} />

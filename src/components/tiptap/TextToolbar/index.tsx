@@ -4,7 +4,7 @@ import { TextAlignmentButtons } from './components/button/TextAlignmentButtons'
 import { HighlightButtons } from './components/button/HighlightButtons'
 import { ListButtons } from './components/button/ListButtons'
 import { HistoryButtons } from './components/button/HistoryButtons'
-import { LinkButton } from './components/button/LinkButton'
+import { CommentButton, LinkButton } from './components/button/LinkButton'
 import { ExportButton } from './components/button/ExportButton'
 import type { TextToolbarProps } from './types'
 import { HeadingPopover } from '../header/HeadingPopover'
@@ -24,7 +24,8 @@ export function TextToolbar ({
   bottomMargin,
   leftMargin,
   rightMargin,
-  orientation
+  orientation,
+  zoomControl
 }: TextToolbarProps) {
   const state = useEditorToolbarState(editor)
 
@@ -32,6 +33,11 @@ export function TextToolbar ({
 
   return (
     <div className='flex flex-wrap items-center gap-1'>
+      {/* Same order as Google Docs: undo, redo, zoom, then text styles */}
+      <HistoryButtons editor={editor} state={state} />
+      {zoomControl}
+
+      <Divider />
       <HeadingPopover editor={editor} />
 
       <Divider />
@@ -51,6 +57,7 @@ export function TextToolbar ({
       <MathButtons editor={editor} />
       <Divider />
       <LinkButton editor={editor} state={state} />
+      <CommentButton editor={editor} state={state} />
 
       <Divider />
       <TextAlignmentButtons editor={editor} />
@@ -60,9 +67,6 @@ export function TextToolbar ({
 
       <Divider />
       <MediaButtons editor={editor} />
-
-      <Divider />
-      <HistoryButtons editor={editor} state={state} />
 
       <Divider />
       <ExportButton

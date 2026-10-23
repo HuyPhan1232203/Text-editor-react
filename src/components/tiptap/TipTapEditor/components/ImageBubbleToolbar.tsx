@@ -8,6 +8,7 @@ import { t } from '@/i18n'
 
 interface ImageBubbleToolbarProps {
   editor: Editor
+  appendTo?: () => HTMLElement
 }
 
 const WRAP_OPTIONS: { wrap: ImageWrap, icon: typeof PanelLeft, label: string }[] = [
@@ -16,7 +17,7 @@ const WRAP_OPTIONS: { wrap: ImageWrap, icon: typeof PanelLeft, label: string }[]
   { wrap: 'right', icon: PanelRight, label: t('image.wrapRight') }
 ]
 
-function ImageBubbleToolbar ({ editor }: ImageBubbleToolbarProps) {
+function ImageBubbleToolbar ({ editor, appendTo }: ImageBubbleToolbarProps) {
   const currentWrap = useEditorState({
     editor,
     selector: ({ editor }) => (editor.getAttributes('image').wrap ?? 'none') as ImageWrap
@@ -25,6 +26,7 @@ function ImageBubbleToolbar ({ editor }: ImageBubbleToolbarProps) {
   return (
     <BubbleMenu
       editor={editor}
+      appendTo={appendTo}
       pluginKey='imageBubbleMenu'
       updateDelay={100}
       shouldShow={({ editor }) => editor.isActive('image')}

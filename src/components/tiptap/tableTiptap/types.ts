@@ -2,6 +2,8 @@ import type { Editor } from '@tiptap/core'
 
 interface TableCellToolbarProps {
   editor: Editor
+  // Where the menu element is attached (outside the zoomed page, so it keeps its size)
+  appendTo?: () => HTMLElement
 }
 
 interface Position {

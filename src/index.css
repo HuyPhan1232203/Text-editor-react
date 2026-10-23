@@ -773,3 +773,20 @@
 @keyframes caret-pulse {
   50% { box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 35%, transparent); }
 }
+
+/* Comments: commented text, the thread under the cursor, and a comment being written */
+.tiptap .comment-mark {
+  background-color: rgba(251, 191, 36, 0.28);
+  border-bottom: 2px solid rgba(245, 158, 11, 0.7);
+  cursor: pointer;
+}
+
+.tiptap .comment-mark-active,
+.tiptap .comment-draft {
+  background-color: rgba(251, 191, 36, 0.55);
+}
+
+/* With comments, the page moves left to make room for the comment cards on its right */
+.page-wrapper:has(> .comments-panel) {
+  padding-right: 312px;
+}

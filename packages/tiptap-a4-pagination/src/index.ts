@@ -1,4 +1,4 @@
-export { Pagination, paginationKey } from './pagination.js'
+export { elementScale, Pagination, paginationKey } from './pagination.js'
 
 export type { PaginationOptions, PaginationStorage } from './pagination.js'
 

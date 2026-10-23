@@ -178,6 +178,28 @@ const en = {
   'search.toggleReplace': 'Toggle replace',
   'search.close': 'Close (Esc)',
 
+  // Comments
+  'comments.add': 'Add comment (Ctrl+Alt+M)',
+  'comments.panel': 'Comments',
+  'comments.placeholder': 'Add a comment…',
+  'comments.post': 'Comment',
+  'comments.reply': 'Reply…',
+  'comments.replyButton': 'Reply',
+  'comments.cancel': 'Cancel',
+  'comments.resolve': 'Resolve (hide the comment)',
+  'comments.deleteThread': 'Delete comment thread',
+  'comments.delete': 'Delete',
+  'comments.oneReply': '1 reply',
+  'comments.replies': '{n} replies',
+  'comments.justNow': 'Just now',
+  'comments.minutesAgo': '{n} min ago',
+  'comments.hoursAgo': '{n} h ago',
+
+  // Zoom
+  'zoom.label': 'Zoom (Ctrl/Cmd + mouse wheel)',
+  'zoom.fit': 'Fit width',
+  'zoom.choose': 'Zoom levels',
+
   // Sidebar and status bar
   'sidebar.pages': 'Pages',
   'sidebar.outline': 'Outline',
@@ -390,6 +412,26 @@ const vi: Record<MessageKey, string> = {
   'search.caseSensitive': 'Phân biệt hoa thường',
   'search.toggleReplace': 'Hiện/ẩn thay thế',
   'search.close': 'Đóng (Esc)',
+
+  'comments.add': 'Thêm bình luận (Ctrl+Alt+M)',
+  'comments.panel': 'Bình luận',
+  'comments.placeholder': 'Thêm bình luận…',
+  'comments.post': 'Bình luận',
+  'comments.reply': 'Trả lời…',
+  'comments.replyButton': 'Trả lời',
+  'comments.cancel': 'Huỷ',
+  'comments.resolve': 'Đã xử lý (ẩn bình luận)',
+  'comments.deleteThread': 'Xoá luồng bình luận',
+  'comments.delete': 'Xoá',
+  'comments.oneReply': '1 trả lời',
+  'comments.replies': '{n} trả lời',
+  'comments.justNow': 'Vừa xong',
+  'comments.minutesAgo': '{n} phút trước',
+  'comments.hoursAgo': '{n} giờ trước',
+
+  'zoom.label': 'Thu phóng (Ctrl/Cmd + lăn chuột)',
+  'zoom.fit': 'Vừa chiều rộng',
+  'zoom.choose': 'Các mức thu phóng',
 
   'sidebar.pages': 'Trang',
   'sidebar.outline': 'Mục lục',

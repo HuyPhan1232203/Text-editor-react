@@ -1,4 +1,4 @@
-import { LinkIcon } from 'lucide-react'
+import { LinkIcon, MessageSquarePlus } from 'lucide-react'
 import type { ToolbarSectionProps, EditorToolbarState } from '../../types'
 import { ToolbarButton } from '@/components/ToolbarButton'
 import { t } from '@/i18n'
@@ -29,6 +29,19 @@ export function LinkButton ({ editor, state }: LinkButtonProps) {
       icon={LinkIcon}
       label='Link'
       tooltip={t('toolbar.link')}
+    />
+  )
+}
+
+export function CommentButton ({ editor, state }: LinkButtonProps) {
+  return (
+    <ToolbarButton
+      // No focus(): the comment box takes the focus
+      onClick={() => editor.chain().startCommentDraft().run()}
+      disabled={!state.hasSelection}
+      icon={MessageSquarePlus}
+      label='Comment'
+      tooltip={t('comments.add')}
     />
   )
 }

@@ -4,6 +4,7 @@ import { useEditorState } from '@tiptap/react'
 import type { PageSettings } from '../types'
 import { usePageCount, usePageLayout } from '../hooks/usePageLayout'
 import { t } from '@/i18n'
+import { elementScale } from 'tiptap-a4-pagination'
 
 interface StatusBarProps {
   editor: Editor
@@ -22,8 +23,10 @@ export const StatusBar = memo(function StatusBar ({ editor, pageSettings }: Stat
       let cursorTop = 0
 
       try {
-        if (page) {
-          cursorTop = editor.view.coordsAtPos(editor.state.selection.head).top - page.getBoundingClientRect().top
+        if (page instanceof HTMLElement) {
+          // On-screen distance, divided by the zoom to get page pixels
+          cursorTop = (editor.view.coordsAtPos(editor.state.selection.head).top - page.getBoundingClientRect().top)
+            / elementScale(page)
         }
       } catch {}
 

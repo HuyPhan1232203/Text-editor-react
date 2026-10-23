@@ -4,6 +4,7 @@ import type { PageSettings } from '../types'
 import { usePageCount, usePageLayout } from '../hooks/usePageLayout'
 import type { PageLayoutPx } from '../hooks/usePageLayout'
 import { t } from '@/i18n'
+import { elementScale } from 'tiptap-a4-pagination'
 
 interface PageThumbnailsProps {
   editor: Editor
@@ -27,11 +28,14 @@ const scheduleIdle = (callback: () => void) =>
  * offset so they land where they sit on the real page.
  */
 function drawPage (target: HTMLElement, editor: Editor, pageIndex: number, layout: PageLayoutPx) {
-  const page = editor.view.dom.closest('.document-page')
+  const page = editor.view.dom.closest<HTMLElement>('.document-page')
 
   if (!page) return
 
-  const pageTop = page.getBoundingClientRect().top + pageIndex * layout.pitch
+  // Everything below is in page pixels, measured from the top of the first sheet (any zoom)
+  const origin = page.getBoundingClientRect().top
+  const scale = elementScale(page)
+  const pageTop = pageIndex * layout.pitch
   const pageBottom = pageTop + layout.pageHeight
   const contentTop = pageTop + layout.marginTop
   const content = document.createElement('div')
@@ -45,15 +49,17 @@ function drawPage (target: HTMLElement, editor: Editor, pageIndex: number, layou
   for (const block of Array.from(editor.view.dom.children)) {
     if (block.classList.contains('page-break-spacer')) continue
 
-    const rect = block.getBoundingClientRect()
+    const screen = block.getBoundingClientRect()
+    const top = (screen.top - origin) / scale
+    const bottom = (screen.bottom - origin) / scale
 
-    if (rect.bottom <= pageTop) continue
-    if (rect.top >= pageBottom) break
+    if (bottom <= pageTop) continue
+    if (top >= pageBottom) break
 
     if (first) {
       const marginTop = parseFloat(getComputedStyle(block).marginTop || '0')
 
-      content.style.marginTop = `${rect.top - marginTop - contentTop}px`
+      content.style.marginTop = `${top - marginTop - contentTop}px`
       first = false
     }
     content.appendChild(block.cloneNode(true))
@@ -142,7 +148,8 @@ export const PageThumbnails = memo(function PageThumbnails ({ editor, pageSettin
       cancelAnimationFrame(frame)
       frame = requestAnimationFrame(() => {
         const middle = container.getBoundingClientRect().top + container.clientHeight / 2
-        const index = Math.floor((middle - page.getBoundingClientRect().top) / layout.pitch)
+        const pitch = layout.pitch * elementScale(page as HTMLElement)
+        const index = Math.floor((middle - page.getBoundingClientRect().top) / pitch)
 
         setActivePage(Math.min(Math.max(index, 0), pageCount - 1))
       })
@@ -169,7 +176,9 @@ export const PageThumbnails = memo(function PageThumbnails ({ editor, pageSettin
 
     const offset = page.getBoundingClientRect().top - container.getBoundingClientRect().top
 
-    container.scrollTo({ top: container.scrollTop + offset + index * layout.pitch - 16, behavior: 'smooth' })
+    const pitch = layout.pitch * elementScale(page as HTMLElement)
+
+    container.scrollTo({ top: container.scrollTop + offset + index * pitch - 16, behavior: 'smooth' })
   }
 
   return (

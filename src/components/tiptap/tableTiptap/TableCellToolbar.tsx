@@ -13,7 +13,7 @@ import {
 import { BubbleMenu } from '@tiptap/react/menus'
 import { CellSelection } from '@tiptap/pm/tables'
 
-export function TableCellToolbar ({ editor }: TableCellToolbarProps) {
+export function TableCellToolbar ({ editor, appendTo }: TableCellToolbarProps) {
   const [showContextMenu, setShowContextMenu] = useState(false)
   const [contextMenuPosition, setContextMenuPosition] = useState({ top: 0, left: 0 })
   const [updateKey, setUpdateKey] = useState(0)
@@ -100,6 +100,7 @@ export function TableCellToolbar ({ editor }: TableCellToolbarProps) {
       {/* BubbleMenu - Show khi select cells */}
       <BubbleMenu
         editor={editor}
+        appendTo={appendTo}
         updateDelay={100}
         shouldShow={({ state }) => {
           if (showContextMenu) return false

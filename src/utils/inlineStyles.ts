@@ -158,6 +158,12 @@ export function inlineStyles (html: string, chrome: PageChrome = { header: '', f
       background-clip: padding-box;
     }
 
+    /* Comments are editor annotations, not part of the printed document */
+    .comment-mark, .comment-mark-active, .comment-draft {
+      background: none !important;
+      border: 0 !important;
+    }
+
     table.no-border td,
     table.no-border th {
       border: none !important;

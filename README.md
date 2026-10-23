@@ -20,6 +20,7 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 ## Features
 
 - **Slash menu**: type `/` to insert headings, lists, checklists, tables, images, formulas, code blocks, dividers or YouTube videos (filter by typing, arrow keys + Enter)
+- **Comments**: select text and press `Ctrl/Cmd + Alt + M` (or the comment button) to start a thread; cards sit in the right margin next to their text, with replies, resolve and delete. Comments are stored in the document and sync live in shared rooms
 - **Find & replace**: `Ctrl/Cmd + F` (or `+ H` for replace) with highlighted matches, match case, replace one or all in a single undo step
 - **Formatting**: bold, italic, underline, strikethrough, inline code, subscript, superscript, text color, highlight; smart typography (`--` → —, `(c)` → ©)
 - **Typography**: font family, font size, line height, text alignment
@@ -31,6 +32,7 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 - **A4 pages**: content flows across separate A4 sheets like Word, portrait or landscape, margin presets and custom margins in mm
 - **Header, footer and page numbers**: type in the top or bottom margin of any page; the text is shared by all pages, saved with the document, synced in collaboration, and included in the PDF export
 - **Word import**: open a `.docx` (or drop it onto the page) with its headings, lists, tables, links, formatting and images; `mammoth` loads only when used
+- **Zoom**: Google Docs–style zoom box in the toolbar (type a percentage, or pick 50%–200% or Fit width), or `Ctrl/Cmd + mouse wheel` / trackpad pinch
 - **Sidebar**: page thumbnails (click to jump, lazy-rendered for long documents) or a document outline built from the headings
 - **Status bar**: current page, word and character count
 - **Welcome tour**: first-time visitors get an editable demo document that walks through the features
@@ -139,7 +141,7 @@ React 19, TypeScript, TipTap 3 (ProseMirror), Yjs (y-webrtc, y-indexeddb), Radix
 
 - DOCX export
 - Split a single long paragraph across pages
-- Comments in the margin
+- Resolved comments history and @mentions
 - Incremental pagination: re-measure only from the first changed block instead of the whole document on every edit
 
 ## Support & custom work

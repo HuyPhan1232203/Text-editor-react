@@ -1,5 +1,5 @@
 import { BubbleMenu } from '@tiptap/react/menus'
-import { Bold, Italic, AlignLeft, AlignCenter, AlignRight, Underline, LinkIcon } from 'lucide-react'
+import { Bold, Italic, AlignLeft, AlignCenter, AlignRight, Underline, LinkIcon, MessageSquarePlus } from 'lucide-react'
 import type { Editor } from '@tiptap/react'
 import { ToolbarButton } from '@/components/ToolbarButton'
 import { ColorHighlightButton } from '@/components/tiptap/tiptap-ui/color-highlight-button'
@@ -11,9 +11,10 @@ import { t } from '@/i18n'
 
 interface TextBubbleToolbarProps {
   editor: Editor
+  appendTo?: () => HTMLElement
 }
 
-function TextBubbleToolbar ({ editor }: TextBubbleToolbarProps) {
+function TextBubbleToolbar ({ editor, appendTo }: TextBubbleToolbarProps) {
   // Sử dụng hook để track state
   const state = useBubbleMenuState(editor)
 
@@ -35,6 +36,7 @@ function TextBubbleToolbar ({ editor }: TextBubbleToolbarProps) {
   return (
     <BubbleMenu
       editor={editor}
+      appendTo={appendTo}
       updateDelay={100}
       shouldShow={({ state, from, to }) => {
         const { selection } = state
@@ -86,6 +88,12 @@ function TextBubbleToolbar ({ editor }: TextBubbleToolbarProps) {
           icon={LinkIcon}
           label='Link'
           tooltip={t('toolbar.link')}
+        />
+        <ToolbarButton
+          onClick={() => editor.chain().startCommentDraft().run()}
+          icon={MessageSquarePlus}
+          label='Comment'
+          tooltip={t('comments.add')}
         />
         {/* Divider */}
         <div className='w-px h-6 bg-gray-300 mx-1' />

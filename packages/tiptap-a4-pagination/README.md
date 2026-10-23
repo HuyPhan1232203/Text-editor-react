@@ -77,6 +77,7 @@ export function Editor () {
 
 - `createPageLayout({ size?, orientation?, marginTop?, marginBottom?, gap? })` — builds a `PageLayout` from a paper size (`'A4' | 'A5' | 'Letter' | 'Legal'`) and margins in mm. Also returns `pageWidth` and `pageHeight` in px.
 - `computeBreaks(blocks, layout)` — the pure layout algorithm, if you want to reuse it.
+- `elementScale(element)` — how much an element is scaled on screen. Pages zoomed with a CSS `transform: scale()` are measured in their own CSS pixels, so page breaks stay the same at any zoom level; use this helper to convert your own screen measurements.
 
 ### Styling
 

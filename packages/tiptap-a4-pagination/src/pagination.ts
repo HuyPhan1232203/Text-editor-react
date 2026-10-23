@@ -106,13 +106,28 @@ function createSpacer (pageBreak: PageBreak, state: PaginationState): HTMLElemen
   return spacer
 }
 
+/**
+ * How much the page is scaled on screen (zoom with a CSS transform). Measurements are divided
+ * by it, so the layout is computed in the page's own CSS pixels at any zoom level.
+ */
+export function elementScale (element: HTMLElement): number {
+  const width = element.offsetWidth
+
+  return width > 0 ? element.getBoundingClientRect().width / width || 1 : 1
+}
+
+// A rectangle in unscaled CSS pixels (positions stay comparable with other unscaled rects)
+function unscaled (rect: DOMRect, scale: number): DOMRect {
+  return scale === 1 ? rect : new DOMRect(rect.x / scale, rect.y / scale, rect.width / scale, rect.height / scale)
+}
+
 // Static copy of a header row, with the measured cell widths so the columns line up
-function copyHeaderRow (row: HTMLElement, hideBorders: boolean): string {
+function copyHeaderRow (row: HTMLElement, hideBorders: boolean, scale: number): string {
   const clone = row.cloneNode(true) as HTMLElement
   const cells = Array.from(row.children)
 
   Array.from(clone.children).forEach((cell, index) => {
-    (cell as HTMLElement).style.width = `${cells[index].getBoundingClientRect().width}px`
+    (cell as HTMLElement).style.width = `${cells[index].getBoundingClientRect().width / scale}px`
     cell.classList.remove('selectedCell')
   })
   clone.querySelectorAll('.column-resize-handle').forEach((node) => node.remove())
@@ -126,7 +141,8 @@ function measureTable (
   table: PMNode,
   offset: number,
   blockRect: DOMRect,
-  pageRect: DOMRect
+  pageRect: DOMRect,
+  scale: number
 ): TableMetrics | undefined {
   const map = TableMap.get(table)
   const rows: TableMetrics['rows'] = []
@@ -143,7 +159,7 @@ function measureTable (
 
     if (!(dom instanceof HTMLElement)) return
 
-    const rect = dom.getBoundingClientRect()
+    const rect = unscaled(dom.getBoundingClientRect(), scale)
     // A cell from the row above reaching into this row (rowspan) joins the two rows
     const joined = index > 0 && map.map
       .slice(index * map.width, (index + 1) * map.width)
@@ -175,7 +191,7 @@ function measureTable (
     bleedRight: Math.round(pageRect.right - first.right),
     columns: map.width,
     header: isHeader && firstRowDom
-      ? { html: copyHeaderRow(firstRowDom, table.attrs.hideBorders === true), height: rows[0].height }
+      ? { html: copyHeaderRow(firstRowDom, table.attrs.hideBorders === true, scale), height: rows[0].height }
       : undefined
   }
 }
@@ -185,9 +201,10 @@ function measure (view: EditorView, pageSelector: string): PaginationMeta | null
 
   if (!state?.layout) return null
 
-  const page = view.dom.closest(pageSelector)
-  const domRect = view.dom.getBoundingClientRect()
-  const pageRect = page?.getBoundingClientRect() ?? domRect
+  const page = view.dom.closest<HTMLElement>(pageSelector)
+  const scale = elementScale(page ?? view.dom)
+  const domRect = unscaled(view.dom.getBoundingClientRect(), scale)
+  const pageRect = page ? unscaled(page.getBoundingClientRect(), scale) : domRect
   // Top of the page's content area (the first block's top margin may collapse outside the editor)
   const originTop = page
     ? pageRect.top + parseFloat(getComputedStyle(page).paddingTop || '0')
@@ -199,7 +216,7 @@ function measure (view: EditorView, pageSelector: string): PaginationMeta | null
 
     if (!(dom instanceof HTMLElement)) return
 
-    const rect = dom.getBoundingClientRect()
+    const rect = unscaled(dom.getBoundingClientRect(), scale)
     const style = getComputedStyle(dom)
     const isFloat = style.float !== 'none'
 
@@ -211,7 +228,7 @@ function measure (view: EditorView, pageSelector: string): PaginationMeta | null
       marginBottom: parseFloat(style.marginBottom || '0'),
       isFloat,
       table: node.type.name === 'table' && !isFloat
-        ? measureTable(view, node, offset, rect, pageRect)
+        ? measureTable(view, node, offset, rect, pageRect, scale)
         : undefined
     })
   })
