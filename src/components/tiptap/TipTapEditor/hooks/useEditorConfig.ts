@@ -40,8 +40,7 @@ import { IndexeddbPersistence } from 'y-indexeddb'
 import * as Y from 'yjs'
 import { WELCOME_CONTENT } from '../welcomeContent'
 
-// Collaboration is opt-in: open the app with ?room=<name> to share a document over WebRTC
-const ROOM_NAME = new URLSearchParams(window.location.search).get('room')
+import { colorFor, ROOM_KEY, ROOM_NAME, savedUserName } from '@/lib/share'
 
 // Live cursor of another collaborator
 function renderCaret (user: { color?: string, name?: string }): HTMLElement {
@@ -72,14 +71,17 @@ export function useEditorConfig () {
   const [provider, setProvider] = useState<WebrtcProvider | null>(null)
 
   useEffect(() => {
-    if (!ROOM_NAME) return
+    const room = ROOM_NAME
+
+    if (!room) return
 
     let joined: WebrtcProvider | null = null
     let cancelled = false
 
     import('y-webrtc').then(({ WebrtcProvider }) => {
       if (cancelled) return
-      joined = new WebrtcProvider(ROOM_NAME, ydoc)
+      // The key from the link encrypts signaling, so only people with the full link can join
+      joined = new WebrtcProvider(room, ydoc, { password: ROOM_KEY ?? undefined })
       setProvider(joined)
     })
 
@@ -235,7 +237,9 @@ export function useEditorConfig () {
   useEffect(() => {
     if (!editor || !provider) return
 
-    provider.awareness.setLocalStateField('user', { name: 'User', color: '#f97316' })
+    const name = savedUserName() || t('share.anonymous')
+
+    provider.awareness.setLocalStateField('user', { name, color: colorFor(name) })
     editor.registerPlugin(yCursorPlugin(provider.awareness, {
       cursorBuilder: renderCaret,
       selectionBuilder: defaultSelectionBuilder
@@ -246,5 +250,5 @@ export function useEditorConfig () {
     }
   }, [editor, provider])
 
-  return { editor, ydoc }
+  return { editor, ydoc, provider }
 }

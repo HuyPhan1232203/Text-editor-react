@@ -35,7 +35,7 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 - **Status bar**: current page, word and character count
 - **Welcome tour**: first-time visitors get an editable demo document that walks through the features
 - **Autosave**: the document is kept in IndexedDB and page settings in localStorage, so a reload does not lose your work
-- **Collaboration (opt-in)**: open the app with `?room=<name>` to edit the same document with others over WebRTC, with live cursors
+- **Sharing without a server**: click **Share** to get a link; everyone with it edits the same document in real time, with named cursors and avatars of who is online. Peer-to-peer over WebRTC, end-to-end encrypted signaling ([details and limits](#sharing-and-collaboration))
 - **PDF export**: works out of the box through the browser's print dialog ("Save as PDF"), with your page size and margins; optionally one-click download through a Puppeteer backend ([PDF-export-Puppeteer](https://github.com/HuyPhan1232203/PDF-export-Puppeteer))
 
 - **English and Vietnamese UI**: picked from the browser language, switch any time in the footer
@@ -68,15 +68,25 @@ docker run -p 3000:3000 pdf-export
 
 Then copy `.env.example` to `.env`, set `VITE_PDF_API_URL=http://localhost:3000` and restart `pnpm dev`.
 
-### Collaboration
+### Sharing and collaboration
 
-Collaboration is off by default. To share a document, open the same URL with a room name in two browsers:
+Click **Share**, enter your name and **Create share link**. Your current document (with its header and footer) is copied into a new room and you get a link like:
 
 ```
-http://localhost:5173/?room=my-team
+https://your-host/?room=k3j9x2pq7m#key=4hd9…
 ```
 
-Peers find each other through the public y-webrtc signaling servers, so anyone who knows the room name can join. Pick a hard-to-guess name for anything private.
+Send it to the people you want to write with. Everyone in the room edits the same document, sees the others' cursors with their names, and appears as an avatar next to the Share button. **Leave room** takes you back to your private document, which is kept separately.
+
+How it works, and what that means:
+
+- **No server stores the document.** The app has no backend: peers sync directly over WebRTC ([y-webrtc](https://github.com/yjs/y-webrtc)), and each person's browser keeps a copy in IndexedDB. Someone who opens the link while nobody else is online gets the copy from their own last visit (or an empty document on a first visit). The latest version reaches them as soon as another member is online.
+- **The link is the permission.** There are no accounts, and anyone with the full link can edit. The room key is in the URL fragment (`#key=…`), which browsers never send to servers; it encrypts the signaling, so the signaling server cannot read the content and people without the key cannot join, even if they guess the room name.
+- **Signaling server.** Peers find each other through the public y-webrtc signaling server (`wss://y-webrtc-eu.fly.dev`). It only relays encrypted connection offers, but it is a free community service with no uptime guarantee; for production, run your own (`PORT=4444 npx -p y-webrtc y-webrtc-signaling`) and pass it in `signaling` where the `WebrtcProvider` is created (`src/components/tiptap/TipTapEditor/hooks/useEditorConfig.ts`).
+- **Restrictive networks.** Without a TURN server, two peers behind strict corporate firewalls or symmetric NATs may not be able to connect. Add TURN servers through the provider's `peerOpts` if you need that.
+- **Need a real backend?** For always-on persistence, permissions and many users, swap `y-webrtc` for a server provider such as [Hocuspocus](https://tiptap.dev/docs/hocuspocus) or [y-websocket](https://github.com/yjs/y-websocket); the editor side (Yjs + TipTap Collaboration) stays the same.
+
+Older links with only `?room=<name>` (no key) still work, without encryption.
 
 ## Use the pagination in your own editor
 
@@ -127,7 +137,7 @@ React 19, TypeScript, TipTap 3 (ProseMirror), Yjs (y-webrtc, y-indexeddb), Radix
 
 - DOCX export
 - Split a single long paragraph across pages
-- Headers, footers and page numbers
+- Comments in the margin
 - Incremental pagination: re-measure only from the first changed block instead of the whole document on every edit
 
 ## Support & custom work

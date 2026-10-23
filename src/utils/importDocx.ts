@@ -81,7 +81,8 @@ export const DocxDrop = Extension.create({
             if (!file) return false
             event.preventDefault()
 
-            const pos = view.posAtCoords({ left: event.clientX, top: event.clientY })?.pos ?? editor.state.selection.from
+            const dropped = view.posAtCoords({ left: event.clientX, top: event.clientY })
+            const pos = dropped?.pos ?? editor.state.selection.from
 
             importDocx(editor, file, pos).catch((error: unknown) => {
               const message = error instanceof Error ? error.message : 'Unknown error'
