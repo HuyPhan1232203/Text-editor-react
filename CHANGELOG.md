@@ -2,6 +2,18 @@
 
 All notable changes to Text Editor React. The `tiptap-a4-pagination` package has its own version on npm (0.2.0 adds zoom support: pages scaled with a CSS transform keep the same page breaks, and an `elementScale` helper).
 
+## [0.2.1] - 2026-10-23
+
+### Fixed
+
+- Switching the sidebar to Outline and back to Pages showed only the first page thumbnail until the next edit.
+- The text style button kept showing "Paragraph" when the cursor moved into a heading.
+- Text style names (Paragraph, Heading 1–6) are now translated in the Vietnamese UI.
+
+### Docs
+
+- Link to the article on how the pagination works.
+
 ## [0.2.0] - 2026-10-23
 
 ### Added
@@ -26,5 +38,6 @@ All notable changes to Text Editor React. The `tiptap-a4-pagination` package has
 
 First public release: real A4 pages with tables that split across pages and repeat their header row, PDF export without a server, Google Docs paste, images with text wrapping, table tools, checklists, math, emoji, autosave, optional real-time collaboration, page thumbnails, English and Vietnamese UI.
 
+[0.2.1]: https://github.com/HuyPhan1232203/Text-editor-react/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/HuyPhan1232203/Text-editor-react/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/HuyPhan1232203/Text-editor-react/releases/tag/v0.1.0

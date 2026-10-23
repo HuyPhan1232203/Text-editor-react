@@ -12,7 +12,7 @@
 - **Your document and CSS are untouched** — breaks are ProseMirror decorations, so `getHTML()` / `getJSON()` stay clean
 - ~5 KB, no dependencies besides TipTap
 
-[Live demo →](https://text-editor-react-neon.vercel.app/) · Used in [Text Editor React](https://github.com/HuyPhan1232203/Text-editor-react)
+[Live demo →](https://text-editor-react-neon.vercel.app/) · Used in [Text Editor React](https://github.com/HuyPhan1232203/Text-editor-react) · [How it works (article)](https://dev.to/huy_phan_173c933272803418/how-i-built-word-style-a4-pages-for-tiptap-without-touching-the-document-778)
 
 ## Install
 

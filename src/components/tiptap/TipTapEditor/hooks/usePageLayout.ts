@@ -38,7 +38,9 @@ export function usePageLayout (pageSettings: PageSettings): PageLayoutPx {
 
 // Number of pages computed by the pagination extension
 export function usePageCount (editor: Editor | null): number {
-  const [pageCount, setPageCount] = useState(1)
+  // Start from the current count: components mounted later (e.g. the page list after switching
+  // sidebar tabs) must not show a single page until the next edit
+  const [pageCount, setPageCount] = useState<number>(() => editor?.storage.pagination.pageCount ?? 1)
 
   useEffect(() => {
     if (!editor) return

@@ -1,6 +1,6 @@
 // HeadingPopover.tsx
 import { useState } from 'react'
-import { Editor } from '@tiptap/react'
+import { Editor, useEditorState } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Type, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Check } from 'lucide-react'
@@ -11,31 +11,32 @@ interface HeadingPopoverProps {
   editor: Editor
 }
 
+// The language is fixed for the page's lifetime (switching reloads), so labels can be built once
 const headingOptions = [
-  { level: 0, label: 'Paragraph', icon: Type, command: 'paragraph', fontSize: 'text-base' },
-  { level: 1, label: 'Heading 1', icon: Heading1, command: 'heading', fontSize: 'text-xl' },
-  { level: 2, label: 'Heading 2', icon: Heading2, command: 'heading', fontSize: 'text-lg' },
-  { level: 3, label: 'Heading 3', icon: Heading3, command: 'heading', fontSize: 'text-md' },
-  { level: 4, label: 'Heading 4', icon: Heading4, command: 'heading', fontSize: 'text-base' },
-  { level: 5, label: 'Heading 5', icon: Heading5, command: 'heading', fontSize: 'text-sm' },
-  { level: 6, label: 'Heading 6', icon: Heading6, command: 'heading', fontSize: 'text-xs' }
-] as const
+  { level: 0, label: t('heading.paragraph'), icon: Type, command: 'paragraph', fontSize: 'text-base' },
+  { level: 1, label: t('heading.level', { n: 1 }), icon: Heading1, command: 'heading', fontSize: 'text-xl' },
+  { level: 2, label: t('heading.level', { n: 2 }), icon: Heading2, command: 'heading', fontSize: 'text-lg' },
+  { level: 3, label: t('heading.level', { n: 3 }), icon: Heading3, command: 'heading', fontSize: 'text-md' },
+  { level: 4, label: t('heading.level', { n: 4 }), icon: Heading4, command: 'heading', fontSize: 'text-base' },
+  { level: 5, label: t('heading.level', { n: 5 }), icon: Heading5, command: 'heading', fontSize: 'text-sm' },
+  { level: 6, label: t('heading.level', { n: 6 }), icon: Heading6, command: 'heading', fontSize: 'text-xs' }
+]
 
 export function HeadingPopover ({ editor }: HeadingPopoverProps) {
   const [open, setOpen] = useState(false)
 
-  const getCurrentHeading = () => {
-    if (editor.isActive('paragraph')) return { level: 0, label: 'Paragraph', icon: Type }
-    if (editor.isActive('heading', { level: 1 })) return { level: 1, label: 'Heading 1', icon: Heading1 }
-    if (editor.isActive('heading', { level: 2 })) return { level: 2, label: 'Heading 2', icon: Heading2 }
-    if (editor.isActive('heading', { level: 3 })) return { level: 3, label: 'Heading 3', icon: Heading3 }
-    if (editor.isActive('heading', { level: 4 })) return { level: 4, label: 'Heading 4', icon: Heading4 }
-    if (editor.isActive('heading', { level: 5 })) return { level: 5, label: 'Heading 5', icon: Heading5 }
-    if (editor.isActive('heading', { level: 6 })) return { level: 6, label: 'Heading 6', icon: Heading6 }
-    return { level: 0, label: 'Paragraph', icon: Type }
-  }
+  // Re-renders when the cursor moves into another block type (the toolbar around it may not)
+  const currentLevel = useEditorState({
+    editor,
+    selector: ({ editor }) => {
+      for (let level = 1; level <= 6; level++) {
+        if (editor.isActive('heading', { level })) return level
+      }
+      return 0
+    }
+  })
 
-  const currentHeading = getCurrentHeading()
+  const currentHeading = headingOptions.find((option) => option.level === currentLevel) ?? headingOptions[0]
   const CurrentIcon = currentHeading.icon
 
   const handleSelect = (option: typeof headingOptions[number]) => {
