@@ -3,6 +3,7 @@ import { EditorContent } from '@tiptap/react'
 import type { Editor } from '@tiptap/react'
 import TextBubbleToolbar from './TextBubbleToolbar'
 import ImageBubbleToolbar from './ImageBubbleToolbar'
+import LinkBubbleMenu from './LinkBubbleMenu'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import type { PageSettings } from '../types'
 import { PAGE_GAP_PX } from '../constants'
@@ -158,6 +159,7 @@ export const EditorContentArea = memo(function EditorContentArea ({
             they are positioned next to the (zoomed) text on screen */}
         <TextBubbleToolbar editor={editor} appendTo={menuParent} />
         <ImageBubbleToolbar editor={editor} appendTo={menuParent} />
+        <LinkBubbleMenu editor={editor} appendTo={menuParent} />
         <TableCellToolbar editor={editor} appendTo={menuParent} />
         <DragHandle editor={editor}>
           <div className='drag-handle-grip' title={t('editor.dragHandle')} aria-label={t('editor.dragHandle')}>

@@ -31,6 +31,7 @@ import { SearchReplace } from '@/components/tiptap/tiptap-extension/search-repla
 import { Comment } from '@/components/tiptap/tiptap-extension/comment-extension'
 import { t } from '@/i18n'
 import { DocxDrop } from '@/utils/importDocx'
+import { openableUrl } from '@/lib/link-url'
 import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
 import { ChecklistExtensions } from '@/components/tiptap/tiptap-extension/checklist-extension'
 import { EmojiText } from '@/components/tiptap/tiptap-extension/emoji-text-extension'
@@ -211,6 +212,19 @@ export function useEditorConfig () {
     editorProps: {
       attributes: {
         class: 'tiptap-editor-content focus:outline-none'
+      },
+      // Ctrl/Cmd + click opens a link in a new tab (a plain click places the cursor, as in Docs)
+      handleClick: (view, pos, event) => {
+        if (!event.metaKey && !event.ctrlKey) return false
+
+        const $pos = view.state.doc.resolve(pos)
+        // At the start of a link the mark is on the character after the click position
+        const link = [...$pos.marks(), ...($pos.nodeAfter?.marks ?? [])].find((mark) => mark.type.name === 'link')
+        const url = openableUrl(link?.attrs.href as string | undefined)
+
+        if (!url) return false
+        window.open(url, '_blank', 'noopener,noreferrer')
+        return true
       }
     }
   })

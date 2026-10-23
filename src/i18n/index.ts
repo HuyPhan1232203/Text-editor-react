@@ -61,6 +61,12 @@ const en = {
   'color.purple': 'Purple',
   'color.pink': 'Pink',
 
+  // Links
+  'link.open': 'Open link in a new tab (or Ctrl/Cmd + click the link)',
+  'link.copy': 'Copy link',
+  'link.edit': 'Edit link',
+  'link.remove': 'Remove link',
+
   // Emoji picker
   'emoji.search': 'Search emoji…',
   'emoji.notFound': 'No emoji found',
@@ -305,6 +311,11 @@ const vi: Record<MessageKey, string> = {
   'color.blue': 'Xanh dương',
   'color.purple': 'Tím',
   'color.pink': 'Hồng',
+
+  'link.open': 'Mở link trong tab mới (hoặc Ctrl/Cmd + bấm vào link)',
+  'link.copy': 'Sao chép link',
+  'link.edit': 'Sửa link',
+  'link.remove': 'Bỏ link',
 
   'emoji.search': 'Tìm emoji…',
   'emoji.notFound': 'Không tìm thấy emoji',
