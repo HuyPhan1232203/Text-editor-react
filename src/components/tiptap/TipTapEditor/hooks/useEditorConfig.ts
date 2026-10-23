@@ -42,23 +42,20 @@ import { WELCOME_CONTENT } from '../welcomeContent'
 
 import { colorFor, ROOM_KEY, ROOM_NAME, savedUserName } from '@/lib/share'
 
-// Live cursor of another collaborator
+// Live cursor of another collaborator. Inline elements (span), so the caret sits at the
+// text position instead of starting a new line
 function renderCaret (user: { color?: string, name?: string }): HTMLElement {
-  const root = document.createElement('div')
+  const root = document.createElement('span')
 
   root.className = 'collaboration-caret'
   root.style.color = user.color ?? '#f97316'
 
-  const line = document.createElement('div')
-
-  line.className = 'caret-line'
-
-  const tooltip = document.createElement('div')
+  const tooltip = document.createElement('span')
 
   tooltip.className = 'caret-tooltip'
   tooltip.textContent = user.name ?? 'User'
+  tooltip.style.backgroundColor = user.color ?? '#f97316'
 
-  root.appendChild(line)
   root.appendChild(tooltip)
 
   return root

@@ -385,57 +385,37 @@
   display: flex;
 }
 .collaboration-caret {
-  position: absolute;
-  z-index: 1000;
+  /* Inline and zero-width, so it sits exactly at the text position without shifting text */
+  position: relative;
+  margin-left: -1px;
+  margin-right: -1px;
+  border-left: 2px solid currentColor;
+  word-break: normal;
   pointer-events: auto;
-  display: flex;
-  align-items: flex-end;
 }
 
-/* Line mỏng - luôn hiển thị */
-.caret-line {
-  width: 2px;
-  height: 1.2em;  /* Cao hơn line-height chữ một chút */
-  border-radius: 1px;
-  background: currentColor;  /* Dùng màu từ user.color */
-  flex-shrink: 0;
-}
-
-/* Tooltip tên - ẨN MẶC ĐỊNH */
+/* Name label, shown on hover */
 .caret-tooltip {
   position: absolute;
   bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.85);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 500;
+  left: -2px;
+  margin-bottom: 2px;
+  padding: 1px 6px;
+  border-radius: 3px 3px 3px 0;
+  color: #fff;
+  font: 500 11px/1.4 system-ui, sans-serif;
+  font-style: normal;
   white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.15s ease;
-  pointer-events: none;
-  margin-bottom: 4px;
+  transition: opacity 0.15s ease;
 }
 
-/* HOVER: hiện tooltip */
 .collaboration-caret:hover .caret-tooltip {
   opacity: 1;
   visibility: visible;
-}
-
-/* Tùy chọn: thêm triangle nhỏ */
-.caret-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 4px solid transparent;
-  border-top-color: rgba(0,0,0,0.85);
 }
 
 .animate-in {
