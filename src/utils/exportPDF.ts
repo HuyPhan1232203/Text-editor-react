@@ -2,6 +2,8 @@
 import { Editor } from '@tiptap/react'
 import { inlineStyles } from './inlineStyles'
 import { repeatTableHeaders } from './tableHeaders'
+import { exportChrome } from '@/lib/page-chrome'
+import { downloadBlob } from './download'
 import { API_ENDPOINTS } from '@/config/constants'
 
 type PageFormat = 'A4' | 'A3' | 'Letter'
@@ -53,7 +55,7 @@ export async function exportToPdf (
 
     const htmlContent = doc.body.innerHTML
 
-    const styledHtml = inlineStyles(htmlContent)
+    const styledHtml = inlineStyles(htmlContent, exportChrome(editor))
 
     // Backend nhận multipart: HTML gửi dạng file đính kèm, margins là chuỗi JSON
     const formData = new FormData()
@@ -93,20 +95,4 @@ export async function exportToPdf (
     console.error('Export PDF error:', errorMessage)
     return { success: false, error: errorMessage }
   }
-}
-
-// Helper function để download blob
-function downloadBlob (blob: Blob, filename: string): void {
-  const url = window.URL.createObjectURL(blob)
-  const link = document.createElement('a')
-
-  link.href = url
-  link.download = filename
-
-  document.body.appendChild(link)
-  link.click()
-
-  // Cleanup
-  document.body.removeChild(link)
-  window.URL.revokeObjectURL(url)
 }

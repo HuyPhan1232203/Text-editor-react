@@ -29,6 +29,8 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 - **Media**: links, emoji as plain text characters (picker or typing `:heart:`), inline math with KaTeX, YouTube embeds, code blocks with syntax highlighting (grammars lazy-loaded)
 - **Drag & drop blocks**: grab the ⋮⋮ handle left of any paragraph, heading, table or image to move it
 - **A4 pages**: content flows across separate A4 sheets like Word, portrait or landscape, margin presets and custom margins in mm
+- **Header, footer and page numbers**: type in the top or bottom margin of any page; the text is shared by all pages, saved with the document, synced in collaboration, and included in the PDF export
+- **Word import**: open a `.docx` (or drop it onto the page) with its headings, lists, tables, links, formatting and images; `mammoth` loads only when used
 - **Sidebar**: page thumbnails (click to jump, lazy-rendered for long documents) or a document outline built from the headings
 - **Status bar**: current page, word and character count
 - **Welcome tour**: first-time visitors get an editable demo document that walks through the features

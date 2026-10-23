@@ -16,6 +16,7 @@ import { TextColorPicker } from './components/picker/TextColorPicker'
 import { MediaButtons } from './components/button/MediaButton'
 import { EmojiButton } from './components/button/EmojiButton'
 import { MathButtons } from './components/button/MathButton'
+import { DocxButtons } from './components/button/DocxButtons'
 
 export function TextToolbar ({
   editor,
@@ -72,6 +73,7 @@ export function TextToolbar ({
         rightMargin={rightMargin}
         orientation={orientation}
       />
+      <DocxButtons editor={editor} />
     </div>
   )
 }

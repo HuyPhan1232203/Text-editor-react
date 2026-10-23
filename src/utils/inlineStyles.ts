@@ -1,17 +1,35 @@
 import { COPYRIGHT } from '@/config/constants'
+import type { PageChrome } from '@/lib/page-chrome'
+import { pageLabel } from '@/lib/page-chrome'
 
-export function inlineStyles (html: string): string {
+// A CSS string literal ("...") holding arbitrary text
+const cssString = (text: string) => `"${text.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, ' ').replace(/</g, '\\3C ')}"`
+
+// "Page {n} of {total}" with live page counters, in the current language
+function pageCounterContent (): string {
+  const [before, rest = ''] = pageLabel('\u0001', '\u0002').split('\u0001')
+  const [between, after = ''] = rest.split('\u0002')
+
+  return `${cssString(before)} counter(page) ${cssString(between)} counter(pages) ${cssString(after)}`
+}
+
+export function inlineStyles (html: string, chrome: PageChrome = { header: '', footer: COPYRIGHT }): string {
   const styleSheet = `
   <style>
-    /* --- Footer on every printed page (replaces the browser's date/URL header and footer) --- */
+    /* --- Header and footer on every printed page (replace the browser's date/URL header and footer) --- */
     @page {
+      @top-left {
+        content: ${cssString(chrome.header)};
+        font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
+        color: #6b7280;
+      }
       @bottom-left {
-        content: "${COPYRIGHT}";
+        content: ${cssString(chrome.footer)};
         font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
         color: #6b7280;
       }
       @bottom-right {
-        content: "Trang " counter(page) " / " counter(pages);
+        content: ${pageCounterContent()};
         font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
         color: #6b7280;
       }
@@ -128,6 +146,16 @@ export function inlineStyles (html: string): string {
       overflow-wrap: anywhere;
       word-break: break-word;
       white-space: normal;
+    }
+
+    /* The editor CSS (.tiptap table ...) makes cells position: relative and clips the table.
+       When printing, each positioned cell then paints its background over the shared
+       collapsed borders, so the inner grid lines vanish; overflow: hidden cuts the right edge. */
+    .tiptap table { overflow: visible; }
+    .tiptap table td,
+    .tiptap table th {
+      position: static;
+      background-clip: padding-box;
     }
 
     table.no-border td,

@@ -29,6 +29,7 @@ import { lazyLowlight, loadLowlight } from '@/lib/lowlight-lazy'
 import { SlashCommand } from '@/components/tiptap/tiptap-extension/slash-command-extension'
 import { SearchReplace } from '@/components/tiptap/tiptap-extension/search-replace-extension'
 import { t } from '@/i18n'
+import { DocxDrop } from '@/utils/importDocx'
 import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
 import { ChecklistExtensions } from '@/components/tiptap/tiptap-extension/checklist-extension'
 import { EmojiText } from '@/components/tiptap/tiptap-extension/emoji-text-extension'
@@ -135,6 +136,7 @@ export function useEditorConfig () {
         allowBase64: true,
         resize: { enabled: true, alwaysPreserveAspectRatio: true, minWidth: 40, minHeight: 40 }
       }),
+      DocxDrop,
       FileHandler.configure({
         allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
         onPaste: (editor, files, htmlContent) => {
@@ -244,5 +246,5 @@ export function useEditorConfig () {
     }
   }, [editor, provider])
 
-  return editor
+  return { editor, ydoc }
 }

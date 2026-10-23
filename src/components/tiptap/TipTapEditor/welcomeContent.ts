@@ -17,6 +17,8 @@ export const WELCOME_CONTENT = `
   <li data-type="taskItem" data-checked="false"><p>Type <code>:rocket:</code> to insert an emoji, or use the 😊 button in the toolbar</p></li>
   <li data-type="taskItem" data-checked="false"><p><strong>Right-click</strong> a cell in the table below to add rows, merge cells or color them</p></li>
   <li data-type="taskItem" data-checked="false"><p>Paste a screenshot (Ctrl/Cmd + V), then click it to wrap text around it</p></li>
+  <li data-type="taskItem" data-checked="false"><p>Click in the top margin of a page to add a <strong>header</strong>, or the bottom margin for a footer</p></li>
+  <li data-type="taskItem" data-checked="false"><p>Drop a Word file (.docx) onto the page to open it</p></li>
   <li data-type="taskItem" data-checked="false"><p>Click <strong>Export PDF</strong> and choose “Save as PDF”</p></li>
 </ul>
 

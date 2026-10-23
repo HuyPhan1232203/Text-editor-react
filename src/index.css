@@ -754,3 +754,28 @@
 .tiptap pre .hljs-symbol,
 .tiptap pre .hljs-meta { color: #e36209; }
 .tiptap pre .hljs-deletion { color: #b31d28; }
+
+/* Header / footer in the page margins: invisible until hovered or edited */
+.page-chrome-input {
+  border: 1px dashed transparent;
+  border-radius: 3px;
+  background: transparent;
+  padding: 0 4px;
+  font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
+  color: #6b7280;
+  outline: none;
+}
+
+.page-chrome-input::placeholder {
+  color: transparent;
+}
+
+.page-chrome-input:hover,
+.page-chrome-input:focus {
+  border-color: #93c5fd;
+}
+
+.page-chrome-input:hover::placeholder,
+.page-chrome-input:focus::placeholder {
+  color: #9ca3af;
+}

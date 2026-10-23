@@ -2,6 +2,7 @@
 import { Editor } from '@tiptap/react'
 import { inlineStyles } from './inlineStyles'
 import { repeatTableHeaders } from './tableHeaders'
+import { exportChrome } from '@/lib/page-chrome'
 
 interface PrintPdfOptions {
   title?: string
@@ -66,7 +67,7 @@ export async function printToPdf (editor: Editor, options: PrintPdfOptions): Pro
     html, body { background: #fff; }
   </style>`
 
-  const html = inlineStyles(content.outerHTML)
+  const html = inlineStyles(content.outerHTML, exportChrome(editor))
     .replace('<head>', `<head><title>${title}</title>${appStyles}`)
     .replace('</head>', `${pageStyle}</head>`)
 

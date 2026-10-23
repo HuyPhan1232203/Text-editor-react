@@ -10,14 +10,18 @@ import { usePageCount, usePageLayout } from '../hooks/usePageLayout'
 import { DragHandle } from '@tiptap/extension-drag-handle-react'
 import { GripVertical } from 'lucide-react'
 import { t } from '@/i18n'
+import type * as Y from 'yjs'
+import { PageChromeOverlay } from './PageChromeOverlay'
 
 export interface EditorContentAreaProps {
   editor: Editor
+  ydoc: Y.Doc
   pageSettings: PageSettings
 }
 
 export const EditorContentArea = memo(function EditorContentArea ({
   editor,
+  ydoc,
   pageSettings
 }: EditorContentAreaProps) {
   const handleContainerClick = useCallback(() => {
@@ -46,7 +50,7 @@ export const EditorContentArea = memo(function EditorContentArea ({
         <TextBubbleToolbar editor={editor} />
         <ImageBubbleToolbar editor={editor} />
         <div
-          className='document-page bg-white' style={{
+          className='document-page relative bg-white' style={{
             width: pageSettings.orientation === 'portrait' ? '210mm' : '297mm',
             minHeight: `${pageCount * layout.pitch - PAGE_GAP_PX}px`,
             paddingTop: `${pageSettings.topMargin}mm`,
@@ -62,6 +66,7 @@ export const EditorContentArea = memo(function EditorContentArea ({
               <GripVertical className='h-4 w-4' />
             </div>
           </DragHandle>
+          <PageChromeOverlay ydoc={ydoc} pageCount={pageCount} layout={layout} pageSettings={pageSettings} />
         </div>
         <TableCellToolbar editor={editor} />
       </div>
