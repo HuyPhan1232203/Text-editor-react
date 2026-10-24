@@ -66,23 +66,25 @@ function onConnection (conn) {
     }
     if (!message || typeof message.type !== 'string') return
 
+    // Malformed input from any client must never crash the server for everyone
+    const names = Array.isArray(message.topics) ? message.topics.filter((name) => typeof name === 'string') : []
+
     switch (message.type) {
       case 'subscribe':
-        for (const name of message.topics ?? []) {
-          if (typeof name !== 'string') continue
+        for (const name of names) {
           if (!topics.has(name)) topics.set(name, new Set())
           topics.get(name).add(conn)
           subscribed.add(name)
         }
         break
       case 'unsubscribe':
-        for (const name of message.topics ?? []) {
+        for (const name of names) {
           topics.get(name)?.delete(conn)
           subscribed.delete(name)
         }
         break
       case 'publish': {
-        const subscribers = topics.get(message.topic)
+        const subscribers = typeof message.topic === 'string' ? topics.get(message.topic) : undefined
 
         if (!subscribers) break
         message.clients = subscribers.size
