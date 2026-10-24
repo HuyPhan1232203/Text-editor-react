@@ -1,15 +1,7 @@
 import type { Editor } from '@tiptap/react'
-import type { ReactNode } from 'react'
 
 export interface TextToolbarProps {
   editor: Editor
-  topMargin: number
-  bottomMargin: number
-  leftMargin: number
-  rightMargin: number
-  orientation: 'landscape' | 'portrait'
-  // Zoom box, shown after undo / redo like Google Docs
-  zoomControl?: ReactNode
 }
 
 export interface ToolbarSectionProps {
@@ -30,6 +22,9 @@ export interface EditorToolbarState {
   isSubscript: boolean
   isSuperscript: boolean
   isCodeBlock: boolean
+  isBulletList: boolean
+  isOrderedList: boolean
+  isTaskList: boolean
   isBlockquote: boolean
   isInTable: boolean
   isLink: boolean

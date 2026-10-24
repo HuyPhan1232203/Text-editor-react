@@ -2,6 +2,10 @@
 // When unset, PDF export uses the browser's print dialog instead.
 export const PDF_API_URL: string | undefined = import.meta.env.VITE_PDF_API_URL || undefined
 
+// Signaling servers peers use to find each other when sharing (VITE_SIGNALING_URLS, comma-separated)
+export const SIGNALING_URLS: string[] | undefined = (import.meta.env.VITE_SIGNALING_URLS as string | undefined)
+  ?.split(',').map((url) => url.trim()).filter(Boolean)
+
 export const API_ENDPOINTS = {
   GENERATE_PDF: `${PDF_API_URL}/pdf/generate`
 }

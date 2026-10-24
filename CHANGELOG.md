@@ -2,6 +2,30 @@
 
 All notable changes to Text Editor React. The `tiptap-a4-pagination` package has its own version on npm (0.2.0 adds zoom support: pages scaled with a CSS transform keep the same page breaks, and an `elementScale` helper).
 
+## [0.3.0] - 2026-10-24
+
+### Changed
+
+- **New interface design**: Inter for the interface and Source Serif 4 for documents, a cool gray workspace and one blue accent.
+  - A top bar with the product name and author, the save state, find, Share and Export PDF.
+  - A single-row formatting toolbar: bordered text style and font menus, a `− 11 +` font size stepper, line spacing, one highlight button with a color dot, an alignment menu, an **Insert** menu (quote, code block, divider, formulas, YouTube, open a Word document) and a **…** menu (inline code, subscript, superscript, clear formatting).
+  - Sidebar with a segmented Pages / Outline switch; thumbnails outlined in the accent color.
+  - Status bar with page setup, counts, zoom (`−  100%  +`) and a VI / EN switch.
+  - The slash menu groups blocks into "Basic blocks" and "Insert" and shows the Markdown shortcut of each.
+- On a narrow screen the page fits the width on the first visit.
+- Find & replace scrolls the current match into view on any page (it stayed selected off screen while typing in the search box).
+
+### Fixed
+
+- Selecting to the end of a line and pressing Ctrl/Cmd+F added a trailing space to the search.
+- Closing the search box kept the replace text for next time.
+- Double-clicking Replace all replaced twice.
+- The search box overflowed narrow screens.
+
+### Added
+
+- `VITE_SIGNALING_URLS` to share through your own signaling servers.
+
 ## [0.2.2] - 2026-10-23
 
 ### Fixed
@@ -44,6 +68,7 @@ All notable changes to Text Editor React. The `tiptap-a4-pagination` package has
 
 First public release: real A4 pages with tables that split across pages and repeat their header row, PDF export without a server, Google Docs paste, images with text wrapping, table tools, checklists, math, emoji, autosave, optional real-time collaboration, page thumbnails, English and Vietnamese UI.
 
+[0.3.0]: https://github.com/HuyPhan1232203/Text-editor-react/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/HuyPhan1232203/Text-editor-react/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/HuyPhan1232203/Text-editor-react/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/HuyPhan1232203/Text-editor-react/compare/v0.1.0...v0.2.0

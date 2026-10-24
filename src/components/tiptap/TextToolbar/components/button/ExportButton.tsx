@@ -1,10 +1,9 @@
-import { File } from 'lucide-react'
+import { Download } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { exportToPdf } from '@/utils/exportPDF'
 import { printToPdf } from '@/utils/printPDF'
 import { PDF_API_URL } from '@/config/constants'
 import type { Editor } from '@tiptap/react'
-import { Button } from '@/components/ui/button'
 import { t } from '@/i18n'
 
 interface ExportButtonProps {
@@ -45,7 +44,7 @@ export function ExportButton ({
     if (!PDF_API_URL) {
       try {
         await printToPdf(editor, {
-          title: 'my-document',
+          title: 'document',
           topMargin,
           bottomMargin,
           leftMargin,
@@ -59,7 +58,7 @@ export function ExportButton ({
     }
 
     const result = await exportToPdf(editor, {
-      fileName: 'my-document.pdf',
+      fileName: 'document.pdf',
       pageFormat: 'A4',
       pageSettings: {
         topMargin,
@@ -76,9 +75,15 @@ export function ExportButton ({
   }
 
   return (
-    <Button onClick={handleExportPDF} disabled={exporting} variant='ghost' title={t('export.title')}>
-      <File className='w-4 h-4 mr-2' />
+    <button
+      type='button'
+      onClick={handleExportPDF}
+      disabled={exporting}
+      title={t('export.title')}
+      className='flex h-9 items-center gap-2 rounded-lg bg-[#2F5BEA] px-3.5 text-[13px] font-medium text-white hover:bg-[#1F3FB0] disabled:opacity-60'
+    >
+      <Download size={16} strokeWidth={2} aria-hidden='true' />
       {t('export.button')}
-    </Button>
+    </button>
   )
 }

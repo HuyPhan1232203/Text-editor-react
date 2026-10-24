@@ -9,7 +9,6 @@ import { SearchBar } from './components/SearchBar'
 import { RoomNotice } from './components/RoomNotice'
 import { useRoomStatus } from './hooks/useRoomStatus'
 import { useZoom } from './hooks/useZoom'
-import { ZoomControl } from './components/ZoomControl'
 import { useState } from 'react'
 import 'katex/dist/katex.min.css'
 import 'tiptap-a4-pagination/styles.css'
@@ -23,12 +22,11 @@ export default function TiptapEditor () {
 
   return (
     <EditorContext.Provider value={{ editor }}>
-      <div className='flex flex-col h-screen bg-gray-200'>
+      <div className='flex h-screen flex-col bg-[#ECEEF1]'>
         <EditorToolbar
           editor={editor} pageSettings={pageSettings} ydoc={ydoc}
           provider={provider}
           room={room}
-          zoomControl={<ZoomControl zoom={zoom} scale={scale} onZoomChange={setZoom} />}
         />
         <main className='relative flex flex-1 min-h-0'>
           <EditorSidebar editor={editor} pageSettings={pageSettings} />
@@ -47,6 +45,9 @@ export default function TiptapEditor () {
           editor={editor}
           pageSettings={pageSettings}
           onSettingsChange={setPageSettings}
+          zoom={zoom}
+          scale={scale}
+          onZoomChange={setZoom}
         />
 
       </div>

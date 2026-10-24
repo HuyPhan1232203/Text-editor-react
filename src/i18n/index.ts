@@ -30,8 +30,10 @@ const en = {
   'heading.paragraph': 'Paragraph',
   'heading.level': 'Heading {n}',
   'toolbar.font': 'Font',
-  'toolbar.fontDefault': 'Default',
+  'toolbar.fontDefault': 'Source Serif',
   'toolbar.fontSize': 'Font size',
+  'toolbar.fontSizeUp': 'Increase font size',
+  'toolbar.fontSizeDown': 'Decrease font size',
   'toolbar.fontSizeCustom': 'Custom (e.g. 22pt)',
   'toolbar.lineHeight': 'Line spacing',
   'toolbar.lineHeightDefault': 'Default',
@@ -48,6 +50,18 @@ const en = {
   'toolbar.highlightBlue': 'Blue highlight',
   'toolbar.highlightPink': 'Pink highlight',
   'toolbar.highlightOrange': 'Orange highlight',
+  'toolbar.highlight': 'Highlight color',
+  'toolbar.highlightNone': 'No highlight',
+  'toolbar.alignment': 'Alignment',
+  'toolbar.insert': 'Insert',
+  'toolbar.more': 'More formatting',
+  'toolbar.code': 'Inline code',
+  'toolbar.clearFormatting': 'Clear formatting',
+  'header.openRepo': 'Text Editor React on GitHub',
+  'header.savedNow': 'Saved just now',
+  'header.savedMinutes': 'Saved {n} min ago',
+  'header.savedLocal': 'Saved in this browser',
+  'header.find': 'Find in document (Ctrl/Cmd+F)',
 
   // Colors
   'color.black': 'Black',
@@ -131,6 +145,7 @@ const en = {
   'page.save': 'Save',
   'page.summary': 'Margins: top {top}mm · bottom {bottom}mm · left {left}mm · right {right}mm · {orientation}',
   'page.list': 'Pages',
+  'page.summaryShort': 'A4 · {orientation} · Margins {margins} mm',
   'page.number': 'Page {n}',
 
   // Editor
@@ -144,6 +159,10 @@ const en = {
   // Slash menu
   'slash.menu': 'Insert block',
   'slash.empty': 'No matching blocks',
+  'slash.basicBlocks': 'Basic blocks',
+  'slash.insertGroup': 'Insert',
+  'slash.hintNavigate': '↑↓ to navigate',
+  'slash.hintInsert': '↵ to insert · esc to close',
   'slash.text': 'Text',
   'slash.textHint': 'Plain paragraph',
   'slash.heading1': 'Heading 1',
@@ -207,9 +226,12 @@ const en = {
   'zoom.label': 'Zoom (Ctrl/Cmd + mouse wheel)',
   'zoom.fit': 'Fit width',
   'zoom.choose': 'Zoom levels',
+  'zoom.in': 'Zoom in',
+  'zoom.out': 'Zoom out',
 
   // Sidebar and status bar
   'sidebar.pages': 'Pages',
+  'sidebar.view': 'Sidebar view',
   'sidebar.outline': 'Outline',
   'outline.empty': 'Headings you add to the document appear here.',
   'status.page': 'Page {n} of {total}',
@@ -251,6 +273,7 @@ const en = {
   'status.characters': '{n} characters',
 
   // Language
+  'language.label': 'Interface language',
   'language.switch': 'Tiếng Việt',
   'language.switchTitle': 'Chuyển sang tiếng Việt'
 }
@@ -282,8 +305,10 @@ const vi: Record<MessageKey, string> = {
   'heading.paragraph': 'Đoạn văn',
   'heading.level': 'Tiêu đề {n}',
   'toolbar.font': 'Font chữ',
-  'toolbar.fontDefault': 'Mặc định',
+  'toolbar.fontDefault': 'Source Serif',
   'toolbar.fontSize': 'Cỡ chữ',
+  'toolbar.fontSizeUp': 'Tăng cỡ chữ',
+  'toolbar.fontSizeDown': 'Giảm cỡ chữ',
   'toolbar.fontSizeCustom': 'Tùy chỉnh (vd: 22pt)',
   'toolbar.lineHeight': 'Khoảng cách dòng',
   'toolbar.lineHeightDefault': 'Mặc định',
@@ -300,6 +325,18 @@ const vi: Record<MessageKey, string> = {
   'toolbar.highlightBlue': 'Highlight màu xanh dương',
   'toolbar.highlightPink': 'Highlight màu hồng',
   'toolbar.highlightOrange': 'Highlight màu cam',
+  'toolbar.highlight': 'Màu highlight',
+  'toolbar.highlightNone': 'Bỏ highlight',
+  'toolbar.alignment': 'Căn lề',
+  'toolbar.insert': 'Chèn',
+  'toolbar.more': 'Định dạng khác',
+  'toolbar.code': 'Code inline',
+  'toolbar.clearFormatting': 'Xoá định dạng',
+  'header.openRepo': 'Text Editor React trên GitHub',
+  'header.savedNow': 'Đã lưu',
+  'header.savedMinutes': 'Đã lưu {n} phút trước',
+  'header.savedLocal': 'Đã lưu trong trình duyệt này',
+  'header.find': 'Tìm trong tài liệu (Ctrl/Cmd+F)',
 
   'color.black': 'Đen',
   'color.darkGray': 'Xám đậm',
@@ -376,6 +413,7 @@ const vi: Record<MessageKey, string> = {
   'page.save': 'Lưu',
   'page.summary': 'Lề trên {top}mm · dưới {bottom}mm · trái {left}mm · phải {right}mm · {orientation}',
   'page.list': 'Danh sách trang',
+  'page.summaryShort': 'A4 · {orientation} · Lề {margins} mm',
   'page.number': 'Trang {n}',
 
   'editor.placeholder': "Gõ '/' để chèn nội dung…",
@@ -387,6 +425,10 @@ const vi: Record<MessageKey, string> = {
 
   'slash.menu': 'Chèn khối',
   'slash.empty': 'Không có khối phù hợp',
+  'slash.basicBlocks': 'Khối cơ bản',
+  'slash.insertGroup': 'Chèn',
+  'slash.hintNavigate': '↑↓ để chọn',
+  'slash.hintInsert': '↵ để chèn · esc để đóng',
   'slash.text': 'Văn bản',
   'slash.textHint': 'Đoạn văn thường',
   'slash.heading1': 'Tiêu đề 1',
@@ -447,8 +489,11 @@ const vi: Record<MessageKey, string> = {
   'zoom.label': 'Thu phóng (Ctrl/Cmd + lăn chuột)',
   'zoom.fit': 'Vừa chiều rộng',
   'zoom.choose': 'Các mức thu phóng',
+  'zoom.in': 'Phóng to',
+  'zoom.out': 'Thu nhỏ',
 
   'sidebar.pages': 'Trang',
+  'sidebar.view': 'Chế độ thanh bên',
   'sidebar.outline': 'Mục lục',
   'outline.empty': 'Các tiêu đề trong tài liệu sẽ hiện ở đây.',
   'status.page': 'Trang {n}/{total}',
@@ -489,6 +534,7 @@ const vi: Record<MessageKey, string> = {
   'status.words': '{n} từ',
   'status.characters': '{n} ký tự',
 
+  'language.label': 'Ngôn ngữ giao diện',
   'language.switch': 'English',
   'language.switchTitle': 'Switch to English'
 }

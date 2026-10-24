@@ -41,11 +41,11 @@ export const StatusBar = memo(function StatusBar ({ editor, pageSettings }: Stat
   const currentPage = Math.min(Math.max(Math.floor(cursorTop / layout.pitch) + 1, 1), pageCount)
 
   return (
-    <div className='flex items-center gap-3 text-xs tabular-nums text-gray-600' aria-live='off'>
+    <div className='flex items-center gap-3 text-xs tabular-nums text-[#5F6670]' aria-live='off'>
       <span>{t('status.page', { n: currentPage, total: pageCount })}</span>
-      <span className='text-gray-300'>|</span>
+      <span aria-hidden='true' className='h-3 w-px bg-[#E3E5E8]' />
       <span>{words === 1 ? t('status.word') : t('status.words', { n: words.toLocaleString() })}</span>
-      <span className='text-gray-300'>|</span>
+      <span aria-hidden='true' className='h-3 w-px bg-[#E3E5E8]' />
       <span>{t('status.characters', { n: characters.toLocaleString() })}</span>
     </div>
   )

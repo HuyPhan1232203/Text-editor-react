@@ -25,6 +25,9 @@ export interface SlashItem {
   icon: LucideIcon
   // Extra words the filter matches (English and Vietnamese)
   keywords: string
+  group: 'basic' | 'insert'
+  // Markdown shortcut that does the same while typing
+  shortcut?: string
   run: (editor: Editor, range: Range) => void
 }
 
@@ -40,6 +43,7 @@ export function promptYoutube (editor: Editor, range?: Range) {
 export const SLASH_ITEMS: SlashItem[] = [
   {
     title: 'slash.text',
+    group: 'basic',
     description: 'slash.textHint',
     icon: Pilcrow,
     keywords: 'paragraph text van ban',
@@ -47,6 +51,8 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.heading1',
+    group: 'basic',
+    shortcut: '#',
     description: 'slash.heading1Hint',
     icon: Heading1,
     keywords: 'h1 title heading tieu de',
@@ -54,6 +60,8 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.heading2',
+    group: 'basic',
+    shortcut: '##',
     description: 'slash.heading2Hint',
     icon: Heading2,
     keywords: 'h2 subtitle heading tieu de',
@@ -61,6 +69,8 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.heading3',
+    group: 'basic',
+    shortcut: '###',
     description: 'slash.heading3Hint',
     icon: Heading3,
     keywords: 'h3 heading tieu de',
@@ -68,6 +78,8 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.bulletList',
+    group: 'basic',
+    shortcut: '-',
     description: 'slash.bulletListHint',
     icon: List,
     keywords: 'ul bullet unordered danh sach',
@@ -75,6 +87,8 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.orderedList',
+    group: 'basic',
+    shortcut: '1.',
     description: 'slash.orderedListHint',
     icon: ListOrdered,
     keywords: 'ol numbered ordered danh sach so',
@@ -82,6 +96,8 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.taskList',
+    group: 'basic',
+    shortcut: '[]',
     description: 'slash.taskListHint',
     icon: CheckSquare,
     keywords: 'todo task checkbox checklist viec',
@@ -89,6 +105,8 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.quote',
+    group: 'basic',
+    shortcut: '>',
     description: 'slash.quoteHint',
     icon: Quote,
     keywords: 'blockquote quote trich dan',
@@ -96,6 +114,8 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.codeBlock',
+    group: 'insert',
+    shortcut: '```',
     description: 'slash.codeBlockHint',
     icon: Code2,
     keywords: 'code snippet pre ma',
@@ -103,6 +123,7 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.table',
+    group: 'insert',
     description: 'slash.tableHint',
     icon: Table,
     keywords: 'table grid bang',
@@ -111,6 +132,7 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.image',
+    group: 'insert',
     description: 'slash.imageHint',
     icon: Image,
     keywords: 'image picture photo upload anh hinh',
@@ -118,6 +140,7 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.math',
+    group: 'insert',
     description: 'slash.mathHint',
     icon: Sigma,
     keywords: 'math formula latex equation cong thuc toan',
@@ -131,6 +154,8 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.divider',
+    group: 'insert',
+    shortcut: '---',
     description: 'slash.dividerHint',
     icon: Minus,
     keywords: 'hr divider line separator duong ke',
@@ -138,6 +163,7 @@ export const SLASH_ITEMS: SlashItem[] = [
   },
   {
     title: 'slash.youtube',
+    group: 'insert',
     description: 'slash.youtubeHint',
     icon: Youtube,
     keywords: 'youtube video embed',

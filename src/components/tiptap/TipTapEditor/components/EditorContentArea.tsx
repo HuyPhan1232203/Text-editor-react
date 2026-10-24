@@ -14,7 +14,7 @@ import { t } from '@/i18n'
 import type * as Y from 'yjs'
 import { PageChromeOverlay } from './PageChromeOverlay'
 import { CommentsPanel } from './CommentsPanel'
-import { MAX_ZOOM, MIN_ZOOM } from '../hooks/useZoom'
+import { MAX_ZOOM } from '../hooks/useZoom'
 import type { Zoom } from '../hooks/useZoom'
 
 export interface EditorContentAreaProps {
@@ -28,7 +28,8 @@ export interface EditorContentAreaProps {
 }
 
 // Horizontal padding of the scroll area (p-8), left out when fitting the page to the width
-const SCROLL_PADDING_X = 64
+const SCROLL_PADDING_X = 48
+const FIT_MIN_SCALE = 0.25
 
 export const EditorContentArea = memo(function EditorContentArea ({
   editor,
@@ -103,7 +104,8 @@ export const EditorContentArea = memo(function EditorContentArea ({
   }, [editor])
 
   const scale = zoom === 'fit'
-    ? Math.min(Math.max(size.width ? size.available / size.width : 1, MIN_ZOOM / 100), MAX_ZOOM / 100)
+    // Fit may go below the typed minimum, so a page fits a phone screen
+    ? Math.min(Math.max(size.width ? size.available / size.width : 1, FIT_MIN_SCALE), MAX_ZOOM / 100)
     : zoom / 100
 
   useEffect(() => onScaleChange(scale), [scale, onScaleChange])
@@ -149,7 +151,7 @@ export const EditorContentArea = memo(function EditorContentArea ({
   if (!editor) return null
 
   return (
-    <div ref={scrollRef} className='editor-scroll-container flex-1 overflow-auto p-8'>
+    <div ref={scrollRef} className='editor-scroll-container flex-1 overflow-auto bg-[#ECEEF1] px-6 pb-14 pt-10'>
       <div
         ref={sizerRef}
         className='relative mx-auto'
@@ -179,8 +181,7 @@ export const EditorContentArea = memo(function EditorContentArea ({
               paddingTop: `${pageSettings.topMargin}mm`,
               paddingBottom: `${pageSettings.bottomMargin}mm`,
               paddingLeft: `${pageSettings.leftMargin}mm`,
-              paddingRight: `${pageSettings.rightMargin}mm`,
-              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)'
+              paddingRight: `${pageSettings.rightMargin}mm`
             }}
           >
             <EditorContent editor={editor} />

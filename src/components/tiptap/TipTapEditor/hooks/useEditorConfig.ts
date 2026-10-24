@@ -32,6 +32,7 @@ import { Comment } from '@/components/tiptap/tiptap-extension/comment-extension'
 import { t } from '@/i18n'
 import { DocxDrop } from '@/utils/importDocx'
 import { openableUrl } from '@/lib/link-url'
+import { SIGNALING_URLS } from '@/config/constants'
 import { ImageWrapExtension } from '@/components/tiptap/tiptap-extension/image-wrap-extension'
 import { ChecklistExtensions } from '@/components/tiptap/tiptap-extension/checklist-extension'
 import { EmojiText } from '@/components/tiptap/tiptap-extension/emoji-text-extension'
@@ -96,7 +97,11 @@ export function useEditorConfig () {
     import('y-webrtc').then(({ WebrtcProvider }) => {
       if (cancelled) return
       // The key from the link encrypts signaling, so only people with the full link can join
-      joined = new WebrtcProvider(room, ydoc, { password: ROOM_KEY ?? undefined })
+      joined = new WebrtcProvider(room, ydoc, {
+        password: ROOM_KEY ?? undefined,
+        // Your own signaling servers if configured, else the y-webrtc default
+        ...(SIGNALING_URLS?.length ? { signaling: SIGNALING_URLS } : {})
+      })
       setProvider(joined)
     })
 

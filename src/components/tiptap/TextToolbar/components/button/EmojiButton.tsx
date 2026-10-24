@@ -3,6 +3,7 @@ import { Editor } from '@tiptap/react'
 import { Smile } from 'lucide-react'
 import tippy, { type Instance as TippyInstance } from 'tippy.js'
 import 'tippy.js/dist/tippy.css'
+import { ICON_BUTTON, ICON_SIZE, ICON_STROKE } from '../../styles'
 import type { EmojiItem } from '@tiptap/extension-emoji'
 import { t } from '@/i18n'
 
@@ -255,11 +256,11 @@ export function EmojiButton ({ editor }: EmojiButtonProps) {
     <button
       ref={buttonRef}
       type='button'
-      className='p-2 rounded hover:bg-gray-100 transition-colors'
+      className={ICON_BUTTON}
       title={t('toolbar.emoji')}
       aria-label={t('toolbar.emoji')}
     >
-      <Smile className='w-5 h-5' />
+      <Smile size={ICON_SIZE} strokeWidth={ICON_STROKE} aria-hidden='true' />
     </button>
   )
 }

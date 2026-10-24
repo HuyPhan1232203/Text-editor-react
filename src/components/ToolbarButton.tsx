@@ -1,5 +1,6 @@
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
 import type { LucideIcon } from 'lucide-react'
+import { ICON_ACTIVE, ICON_BUTTON, ICON_SIZE, ICON_STROKE } from '@/components/tiptap/TextToolbar/styles'
 
 interface ToolbarButtonProps {
   onClick: () => void
@@ -20,17 +21,14 @@ export function ToolbarButton ({
 }: ToolbarButtonProps) {
   const button = (
     <button
+      type='button'
       onClick={onClick}
       disabled={disabled}
-      className={`
-        p-2 rounded-lg transition-all flex items-center justify-center
-        ${isActive ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-      `}
+      className={`${ICON_BUTTON} ${isActive ? ICON_ACTIVE : ''}`}
       aria-label={label}
       aria-pressed={isActive}
     >
-      <Icon className='w-4 h-4' />
+      <Icon size={ICON_SIZE} strokeWidth={ICON_STROKE} />
     </button>
   )
 

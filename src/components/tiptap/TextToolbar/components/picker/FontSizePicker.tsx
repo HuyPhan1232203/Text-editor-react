@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Editor, useEditorState } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { Check, ChevronDown } from 'lucide-react'
+import { Check, Minus, Plus } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
 import { cn } from '@/lib/utils'
 import { t } from '@/i18n'
@@ -59,25 +59,45 @@ export function FontSizePicker ({ editor }: FontSizePickerProps) {
 
   const isCustomSize = !FONT_SIZES.includes(currentSize as any)
 
+  // Next size in the list (or 1pt more / less for a custom size)
+  const stepSize = (direction: 1 | -1) => {
+    const value = parseFloat(currentSize)
+    const sizes = FONT_SIZES.map((size) => parseFloat(size))
+    const next = direction === 1
+      ? sizes.find((size) => size > value) ?? value + 1
+      : [...sizes].reverse().find((size) => size < value) ?? Math.max(value - 1, 1)
+
+    handleSizeSelect(`${next}pt`)
+  }
+
+  const stepButton = 'flex h-full w-7 items-center justify-center text-[#3D434B] hover:bg-[#F1F3F5]'
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <PopoverTrigger asChild>
-            <Button
-              variant='ghost'
-              size='sm'
-              className='h-8 min-w-17.5 justify-between gap-1 px-2 text-sm font-normal hover:bg-accent'
-            >
-              <span className='truncate font-medium'>{currentSize}</span>
-              <ChevronDown className='h-3.5 w-3.5 opacity-50' />
-            </Button>
-          </PopoverTrigger>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{t('toolbar.fontSize')}</p>
-        </TooltipContent>
-      </Tooltip>
+      <div className='flex h-[34px] items-center overflow-hidden rounded-md border border-[#E3E5E8] bg-white'>
+        <button type='button' className={stepButton} onClick={() => stepSize(-1)} aria-label={t('toolbar.fontSizeDown')}>
+          <Minus size={14} strokeWidth={2} aria-hidden='true' />
+        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <PopoverTrigger asChild>
+              <button
+                type='button'
+                className='h-full min-w-[30px] px-1 text-center text-[13px] tabular-nums text-[#1B1D21] hover:bg-[#F1F3F5]'
+                aria-label={`${t('toolbar.fontSize')}: ${currentSize}`}
+              >
+                {parseFloat(currentSize)}
+              </button>
+            </PopoverTrigger>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{t('toolbar.fontSize')}</p>
+          </TooltipContent>
+        </Tooltip>
+        <button type='button' className={stepButton} onClick={() => stepSize(1)} aria-label={t('toolbar.fontSizeUp')}>
+          <Plus size={14} strokeWidth={2} aria-hidden='true' />
+        </button>
+      </div>
 
       <PopoverContent className='w-52 p-0' align='start' sideOffset={4}>
         <div className='flex flex-col'>

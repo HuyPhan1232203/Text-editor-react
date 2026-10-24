@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Editor } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { Check, ChevronDown } from 'lucide-react'
+import { ArrowUpDown, Check } from 'lucide-react'
+import { GHOST_TRIGGER, ICON_SIZE, ICON_STROKE } from '../../styles'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
 import { cn } from '@/lib/utils'
 import { t } from '@/i18n'
@@ -65,14 +66,14 @@ export function LineHeightPicker ({ editor }: LineHeightPickerProps) {
       <Tooltip>
         <TooltipTrigger asChild>
           <PopoverTrigger asChild>
-            <Button
-              variant='ghost'
-              size='sm'
-              className='h-8 min-w-17.5 justify-between gap-1 px-2 text-sm font-normal hover:bg-accent'
+            <button
+              type='button'
+              className={GHOST_TRIGGER}
+              aria-label={`${t('toolbar.lineHeight')}: ${currentLabel}`}
             >
-              <span className='truncate font-medium'>{currentLabel}</span>
-              <ChevronDown className='h-3.5 w-3.5 opacity-50' />
-            </Button>
+              <ArrowUpDown size={ICON_SIZE} strokeWidth={ICON_STROKE} aria-hidden='true' />
+              <span className='tabular-nums'>{currentLabel}</span>
+            </button>
           </PopoverTrigger>
         </TooltipTrigger>
         <TooltipContent>

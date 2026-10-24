@@ -27,6 +27,10 @@ const EDITOR_ONLY_SELECTORS = [
   '.ProseMirror-trailingBreak'
 ].join(',')
 
+function escapeHtml (text: string): string {
+  return text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`)
+}
+
 /**
  * Print only the document (not the toolbar) through a hidden iframe.
  * The browser's print dialog lets the user "Save as PDF".
@@ -67,9 +71,11 @@ export async function printToPdf (editor: Editor, options: PrintPdfOptions): Pro
     html, body { background: #fff; }
   </style>`
 
+  // The title is user text (a collaborator's, in a shared room): escape it. Replacer functions
+  // keep `$` sequences in the inserted text literal.
   const html = inlineStyles(content.outerHTML, exportChrome(editor))
-    .replace('<head>', `<head><title>${title}</title>${appStyles}`)
-    .replace('</head>', `${pageStyle}</head>`)
+    .replace('<head>', () => `<head><title>${escapeHtml(title)}</title>${appStyles}`)
+    .replace('</head>', () => `${pageStyle}</head>`)
 
   const iframe = document.createElement('iframe')
 

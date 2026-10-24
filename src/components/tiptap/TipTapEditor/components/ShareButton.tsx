@@ -133,10 +133,13 @@ export const ShareButton = memo(function ShareButton ({ ydoc, provider, room }: 
       )}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button className='bg-blue-600 text-white hover:bg-blue-700'>
-            <Share2 className='mr-2 h-4 w-4' />
+          <button
+            type='button'
+            className='flex h-9 items-center gap-2 rounded-lg border border-[#E3E5E8] bg-white px-3 text-[13px] font-medium text-[#1B1D21] hover:bg-[#F7F8F9]'
+          >
+            <Share2 size={16} strokeWidth={1.75} aria-hidden='true' />
             {t('share.button')}
-          </Button>
+          </button>
         </DialogTrigger>
         <DialogContent
           onOpenAutoFocus={(event) => {

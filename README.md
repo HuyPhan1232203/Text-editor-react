@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
 [![CI](https://github.com/HuyPhan1232203/Text-editor-react/actions/workflows/ci.yml/badge.svg)](https://github.com/HuyPhan1232203/Text-editor-react/actions/workflows/ci.yml)
 
-A Word-like rich text editor for the web, built with React and TipTap: an A4 page you type on, page margins, tables, math, autosave, optional real-time collaboration and PDF export.
+A Word / Google Docs–like editor for the web, built with React and TipTap. Real A4 pages, tables that split across pages, comments, link sharing with real-time editing, and PDF export — all in the browser, no backend needed.
 
 **[Live demo →](https://text-editor-react-neon.vercel.app/)** · [How the pagination works](https://dev.to/huy_phan_173c933272803418/how-i-built-word-style-a4-pages-for-tiptap-without-touching-the-document-778)
 
@@ -19,28 +19,33 @@ A Word-like rich text editor for the web, built with React and TipTap: an A4 pag
 
 ## Features
 
-- **Slash menu**: type `/` to insert headings, lists, checklists, tables, images, formulas, code blocks, dividers or YouTube videos (filter by typing, arrow keys + Enter)
-- **Comments**: select text and press `Ctrl/Cmd + Alt + M` (or the comment button) to start a thread; cards sit in the right margin next to their text, with replies, resolve and delete. Comments are stored in the document and sync live in shared rooms
-- **Find & replace**: `Ctrl/Cmd + F` (or `+ H` for replace) with highlighted matches, match case, replace one or all in a single undo step
-- **Formatting**: bold, italic, underline, strikethrough, inline code, subscript, superscript, text color, highlight; smart typography (`--` → —, `(c)` → ©)
-- **Typography**: font family, font size, line height, text alignment
-- **Structure**: paragraph and headings H1–H6, bullet and numbered lists, checklists (pasting a Google Docs checklist keeps its checkboxes)
-- **Tables**: insert tables, resize columns, add or delete rows and columns, merge and split cells, cell background color and vertical alignment, hide borders per table; long tables split between rows and repeat their header row on each page
-- **Images**: paste, drop or upload images, resize them by dragging and wrap text around them (left / right)
-- **Media**: links, emoji as plain text characters (picker or typing `:heart:`), inline math with KaTeX, YouTube embeds, code blocks with syntax highlighting (grammars lazy-loaded)
-- **Drag & drop blocks**: grab the ⋮⋮ handle left of any paragraph, heading, table or image to move it
-- **A4 pages**: content flows across separate A4 sheets like Word, portrait or landscape, margin presets and custom margins in mm
-- **Header, footer and page numbers**: type in the top or bottom margin of any page; the text is shared by all pages, saved with the document, synced in collaboration, and included in the PDF export
-- **Word import**: open a `.docx` (or drop it onto the page) with its headings, lists, tables, links, formatting and images; `mammoth` loads only when used
-- **Zoom**: Google Docs–style zoom box in the toolbar (type a percentage, or pick 50%–200% or Fit width), or `Ctrl/Cmd + mouse wheel` / trackpad pinch
-- **Sidebar**: page thumbnails (click to jump, lazy-rendered for long documents) or a document outline built from the headings
-- **Status bar**: current page, word and character count
-- **Welcome tour**: first-time visitors get an editable demo document that walks through the features
-- **Autosave**: the document is kept in IndexedDB and page settings in localStorage, so a reload does not lose your work
-- **Sharing without a server**: click **Share** to get a link; everyone with it edits the same document in real time, with named cursors and avatars of who is online. Peer-to-peer over WebRTC, end-to-end encrypted signaling ([details and limits](#sharing-and-collaboration))
-- **PDF export**: works out of the box through the browser's print dialog ("Save as PDF"), with your page size and margins; optionally one-click download through a Puppeteer backend ([PDF-export-Puppeteer](https://github.com/HuyPhan1232203/PDF-export-Puppeteer))
+### Pages and layout
+- **Real A4 pages**: content flows across separate sheets like Word, portrait or landscape, margin presets and custom margins in mm
+- **Tables split across pages** between rows (never inside a `rowspan`) and repeat their header row on each page
+- **Header, footer and page numbers**: type in the top or bottom margin of any page; shared by all pages, saved with the document and printed in the PDF
+- **Zoom** 50%–200% or fit to width from the status bar, or `Ctrl/Cmd + mouse wheel` / trackpad pinch; page breaks stay identical at every level. Phones open fitted to the width
+- **Sidebar** with page thumbnails (click to jump, lazy-rendered) or a document outline built from the headings
 
-- **English and Vietnamese UI**: picked from the browser language, switch any time in the footer
+### Writing
+- **Slash menu**: type `/` to insert headings, lists, checklists, tables, images, formulas, code blocks, dividers or YouTube videos, with the matching Markdown shortcut shown next to each
+- **Toolbar** like Google Docs: text style, font, font size stepper, line spacing, bold / italic / underline / strikethrough, text color, highlight, links, alignment, lists, images, tables, an **Insert** menu (quote, code block, divider, formulas, YouTube, open a Word document) and a **…** menu (inline code, subscript, superscript, clear formatting)
+- **Links** open from a small menu (address, copy, edit, remove) or with `Ctrl/Cmd + click`
+- **Find & replace**: `Ctrl/Cmd + F` / `+ H` or the search button; matches are highlighted and scrolled into view on any page, with match case and replace all in one undo step
+- **Images**: paste, drop or upload, resize by dragging, wrap text left or right
+- **Tables**: resize columns, add or delete rows and columns, merge and split cells, cell colors and vertical alignment, hide borders
+- **More**: checklists, KaTeX math (lazy-loaded), code blocks with syntax highlighting (lazy-loaded), emoji as plain text (`:heart:`), smart typography (`--` → —), block drag handle, word and character count
+
+### Working together
+- **Comments**: select text and press `Ctrl/Cmd + Alt + M`; cards sit in the margin next to their text, with replies, resolve and delete (undoable)
+- **Share** with one click: the link (with an encryption key in the URL fragment) is copied to your clipboard; everyone with it edits in real time with named cursors, avatars of who is online and a connection status. Peer-to-peer over WebRTC, no server stores the document ([details and limits](#sharing-and-collaboration))
+
+### In and out
+- **PDF export** through the browser's print dialog, keeping the page breaks, header, footer and page numbers; optionally one-click download through a Puppeteer backend ([PDF-export-Puppeteer](https://github.com/HuyPhan1232203/PDF-export-Puppeteer))
+- **Paste from Google Docs** keeping headings, lists, checklists, tables and indents
+- **Open Word documents** (`.docx`) from the Insert menu or by dropping them onto the page
+- **Autosave** to IndexedDB, so a reload never loses your work
+- **English and Vietnamese UI**, switch with VI / EN in the status bar
+- **Welcome tour**: first-time visitors get an editable demo document
 
 ## Getting started
 
@@ -57,7 +62,7 @@ Open http://localhost:5173.
 
 ### PDF export
 
-No setup needed: click **Xuất PDF** and choose **Save as PDF** in the print dialog. Only the page is printed, using the orientation and margins from page settings.
+No setup needed: click **Export PDF** and choose **Save as PDF** in the print dialog. Only the page is printed, using the orientation and margins from page settings.
 
 For a one-click download instead, run the optional backend and point the editor to it:
 
@@ -86,7 +91,7 @@ How it works, and what that means:
 
 - **No server stores the document.** The app has no backend: peers sync directly over WebRTC ([y-webrtc](https://github.com/yjs/y-webrtc)), and each person's browser keeps a copy in IndexedDB. Someone who opens the link while nobody else is online gets the copy from their own last visit (or an empty document on a first visit). The latest version reaches them as soon as another member is online.
 - **The link is the permission.** There are no accounts, and anyone with the full link can edit. The room key is in the URL fragment (`#key=…`), which browsers never send to servers; it encrypts the signaling, so the signaling server cannot read the content and people without the key cannot join, even if they guess the room name.
-- **Signaling server.** Peers find each other through the public y-webrtc signaling server (`wss://y-webrtc-eu.fly.dev`). It only relays encrypted connection offers, but it is a free community service with no uptime guarantee; for production, run your own (`PORT=4444 npx -p y-webrtc y-webrtc-signaling`) and pass it in `signaling` where the `WebrtcProvider` is created (`src/components/tiptap/TipTapEditor/hooks/useEditorConfig.ts`).
+- **Signaling server.** Peers find each other through the public y-webrtc signaling server (`wss://y-webrtc-eu.fly.dev`). It only relays encrypted connection offers, but it is a free community service with no uptime guarantee; for production, run your own (`PORT=4444 npx -p y-webrtc y-webrtc-signaling`) and set `VITE_SIGNALING_URLS=wss://your-server` (comma-separated for several) at build time.
 - **Restrictive networks.** Without a TURN server, two peers behind strict corporate firewalls or symmetric NATs may not be able to connect. Add TURN servers through the provider's `peerOpts` if you need that.
 - **Need a real backend?** For always-on persistence, permissions and many users, swap `y-webrtc` for a server provider such as [Hocuspocus](https://tiptap.dev/docs/hocuspocus) or [y-websocket](https://github.com/yjs/y-websocket); the editor side (Yjs + TipTap Collaboration) stays the same.
 
@@ -122,20 +127,21 @@ src/
 ├── components/
 │   ├── tiptap/
 │   │   ├── TipTapEditor/     # Editor shell, hooks (config, page settings, autosave)
-│   │   ├── TextToolbar/      # Formatting toolbar and pickers
+│   │   ├── TextToolbar/      # Formatting toolbar, pickers, Insert and … menus
 │   │   ├── tableTiptap/      # Table creation popover and cell toolbar
 │   │   ├── header/           # Heading picker
 │   │   ├── tiptap-node/      # Custom nodes (image upload)
 │   │   └── tiptap-extension/ # Custom extensions
 │   ├── PageSettingDialog.tsx # Orientation and margins
 │   └── ui/                   # Radix-based UI primitives
-├── config/                   # API endpoints
+├── lib/                      # Sharing, comments, page header / footer, lazy loaders
+├── config/                   # PDF backend, signaling servers
 └── utils/                    # PDF export, style inlining, unit conversion
 ```
 
 ## Tech stack
 
-React 19, TypeScript, TipTap 3 (ProseMirror), Yjs (y-webrtc, y-indexeddb), Radix UI, Tailwind CSS 4, SCSS, KaTeX, rolldown-vite.
+React 19, TypeScript, TipTap 3 (ProseMirror), Yjs (y-webrtc, y-indexeddb), Radix UI, Tailwind CSS 4, KaTeX, lowlight, mammoth, rolldown-vite. Interface in Inter, documents in Source Serif 4.
 
 ## Roadmap
 

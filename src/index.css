@@ -6,16 +6,29 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Interface: Inter on a cool gray ground; documents: Source Serif 4 */
+:root {
+  --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-doc: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+}
+
+body {
+  font-family: var(--font-ui);
+  color: #1B1D21;
+  background: #ECEEF1;
+}
+
 /* Document Editor Styles - DOCX-like appearance */
 .document-page {
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(20, 24, 31, 0.06), 0 8px 24px rgba(20, 24, 31, 0.08);
   page-break-after: always;
   break-inside: avoid;
 }
 
 /* Tiptap Editor Content */
 .tiptap-editor-content {
-  font-family: 'Calibri', 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-doc);
   font-size: 11pt;
   line-height: 1.5;
   color: #000;
@@ -41,7 +54,7 @@
   font-weight: 400;
   margin: 16pt 0 4pt 0;
   color: #000;
-  font-family: 'Calibri', 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-doc);
 }
 
 .tiptap h1 { font-size: 20pt; margin-top: 20pt; margin-bottom: 6pt; }
@@ -741,7 +754,7 @@
   border-radius: 3px;
   background: transparent;
   padding: 0 4px;
-  font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
+  font: 8pt var(--font-ui);
   color: #6b7280;
   outline: none;
 }

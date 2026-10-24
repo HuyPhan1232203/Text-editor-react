@@ -4,7 +4,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Settings } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue
@@ -88,8 +88,8 @@ export function PageSettingsDialog ({ settings, onSettingsChange }: PageSettings
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>
-          <Settings className='w-4 h-4 mr-2' />
+        <Button variant='outline' size='sm' className='h-[30px] gap-1.5 border-[#E3E5E8] px-2.5 text-xs font-medium text-[#1B1D21]'>
+          <SlidersHorizontal className='h-3.5 w-3.5' strokeWidth={1.75} aria-hidden='true' />
           {t('page.setup')}
         </Button>
       </DialogTrigger>

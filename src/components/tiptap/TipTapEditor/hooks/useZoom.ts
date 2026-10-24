@@ -19,10 +19,10 @@ function loadZoom (): Zoom {
 
     const value = Number(saved)
 
-    return value >= MIN_ZOOM && value <= MAX_ZOOM ? value : 100
-  } catch {
-    return 100
-  }
+    if (saved && value >= MIN_ZOOM && value <= MAX_ZOOM) return value
+  } catch {}
+  // First visit on a narrow screen (phone, small tablet): fit the page to the width
+  return window.innerWidth < 900 ? 'fit' : 100
 }
 
 /** Zoom level of the page view, remembered in this browser. */

@@ -11,7 +11,7 @@ interface PageThumbnailsProps {
   pageSettings: PageSettings
 }
 
-const THUMBNAIL_WIDTH = 120
+const THUMBNAIL_WIDTH = 112
 // Wait for typing to pause before redrawing thumbnails
 const REFRESH_DELAY_MS = 300
 // Editor-only elements that must not show up in thumbnails
@@ -185,7 +185,7 @@ export const PageThumbnails = memo(function PageThumbnails ({ editor, pageSettin
     <nav
       ref={listRef}
       aria-label={t('page.list')}
-      className='flex flex-1 min-h-0 flex-col items-center gap-5 overflow-y-auto py-6'
+      className='flex flex-1 min-h-0 flex-col items-center gap-4 overflow-y-auto px-4 pb-6 pt-3'
     >
       {Array.from({ length: pageCount }, (_, index) => (
         <button
@@ -198,8 +198,8 @@ export const PageThumbnails = memo(function PageThumbnails ({ editor, pageSettin
         >
           <div
             data-index={index}
-            className={`relative overflow-hidden bg-white shadow-sm transition-shadow ${
-              index === activePage ? 'ring-2 ring-blue-500' : 'ring-1 ring-gray-300 group-hover:ring-gray-400'
+            className={`relative overflow-hidden rounded bg-white shadow-[0_1px_3px_rgba(20,24,31,0.12)] transition-shadow ${
+              index === activePage ? 'outline-2 outline-offset-[3px] outline-[#2F5BEA]' : 'group-hover:shadow-[0_2px_8px_rgba(20,24,31,0.16)]'
             }`}
             style={{ width: THUMBNAIL_WIDTH, height: layout.pageHeight * scale }}
           >
@@ -217,7 +217,7 @@ export const PageThumbnails = memo(function PageThumbnails ({ editor, pageSettin
               aria-hidden
             />
           </div>
-          <span className={`text-xs ${index === activePage ? 'text-blue-600 font-medium' : 'text-gray-500'}`}>
+          <span className={`text-xs ${index === activePage ? 'font-semibold text-[#2F5BEA]' : 'text-[#5F6670]'}`}>
             {index + 1}
           </span>
         </button>

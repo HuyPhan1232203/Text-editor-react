@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Editor, useEditorState } from '@tiptap/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { Check, X } from 'lucide-react'
+import { Baseline, Check, X } from 'lucide-react'
+import { ICON_BUTTON } from '../../styles'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/tiptap/tiptap-ui-primitive/tooltip'
 import { t } from '@/i18n'
 
@@ -50,24 +51,14 @@ export function TextColorPicker ({ editor }: TextColorPickerProps) {
       <Tooltip>
         <TooltipTrigger asChild>
           <PopoverTrigger asChild>
-            <Button
-              variant='ghost'
-              size='sm'
-              className='h-8 w-8 p-0 relative'
+            <button
+              type='button'
+              className={`${ICON_BUTTON} flex-col gap-px`}
+              aria-label={t('toolbar.textColor')}
             >
-              {/* ✅ Icon chữ A thay vì Palette */}
-              <span
-                className='text-lg font-bold'
-                style={{ color: currentColor }}
-              >
-                A
-              </span>
-              {/* Thanh màu bên dưới */}
-              <div
-                className='absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded'
-                style={{ backgroundColor: currentColor }}
-              />
-            </Button>
+              <Baseline size={16} strokeWidth={2} aria-hidden='true' className='-mb-0.5' />
+              <span aria-hidden='true' className='h-[3px] w-4 rounded-sm' style={{ backgroundColor: currentColor }} />
+            </button>
           </PopoverTrigger>
 
         </TooltipTrigger>

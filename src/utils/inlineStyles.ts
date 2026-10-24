@@ -20,24 +20,24 @@ export function inlineStyles (html: string, chrome: PageChrome = { header: '', f
     @page {
       @top-left {
         content: ${cssString(chrome.header)};
-        font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
+        font: 8pt 'Inter', system-ui, sans-serif;
         color: #6b7280;
       }
       @bottom-left {
         content: ${cssString(chrome.footer)};
-        font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
+        font: 8pt 'Inter', system-ui, sans-serif;
         color: #6b7280;
       }
       @bottom-right {
         content: ${pageCounterContent()};
-        font: 8pt 'Calibri', 'Segoe UI', system-ui, sans-serif;
+        font: 8pt 'Inter', system-ui, sans-serif;
         color: #6b7280;
       }
     }
 
     /* --- Base giống index.css --- */
     body {
-      font-family: 'Calibri', 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
       font-size: 11pt;
       line-height: 1.5;
       color: #000;
@@ -75,7 +75,7 @@ export function inlineStyles (html: string, chrome: PageChrome = { header: '', f
       font-weight: 400;
       margin: 16pt 0 4pt 0;
       color: #000;
-      font-family: 'Calibri', 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
       page-break-after: avoid;
       break-after: avoid;
     }
