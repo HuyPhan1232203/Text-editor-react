@@ -79,7 +79,11 @@ function onConnection (conn) {
         break
       case 'unsubscribe':
         for (const name of names) {
-          topics.get(name)?.delete(conn)
+          const subscribers = topics.get(name)
+
+          subscribers?.delete(conn)
+          // A topic nobody listens to is dropped, so the map does not grow forever
+          if (subscribers?.size === 0) topics.delete(name)
           subscribed.delete(name)
         }
         break
